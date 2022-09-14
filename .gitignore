@@ -1,0 +1,16 @@
+*.a
+*.o
+*.swp
+*.swo
+*.DSYM
+.DS_Store
+.vscode
+
+minishell
+
+out
+test*
+zoui
+truc
+aled
+*.txt
