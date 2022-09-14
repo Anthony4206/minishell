@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:08:31 by mmidon            #+#    #+#             */
-/*   Updated: 2022/09/14 15:14:58 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/09/14 16:12:34 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,9 @@ int	ft_find_content(char *str, char *limiter, t_token *token)
 	char	*stock;
 	
 	i = 0;
-	printf("str %s\n",str);
-	while (str[i] && (ft_strchr(limiter, str[i] || i != 0)) == NULL)
+	while (str[i] && (ft_strchr(limiter, str[i])== NULL || i == 0))
+		i++;
+	if (str[i] == '\'' || str[i] == '"')
 		i++;
 	if (i)
 	{
@@ -37,9 +38,7 @@ int	ft_find_content(char *str, char *limiter, t_token *token)
 		free(stock);
 		free(tmp);
 	}
-	if (token->string == STRING_UNQUOTED)
-		return (i);
-	return(i + 2);
+	return (i);
 }
 
 char	*ft_add_string(char *str, t_token *token)
