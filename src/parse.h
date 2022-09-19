@@ -2,6 +2,7 @@
 # define PARSE_H
 
 # include "structs.h"
+# include "tree.h"
 
 typedef enum	 e_node
 {
@@ -15,5 +16,7 @@ typedef enum	 e_node
 	NODE_PARENTHESIS,
 	NODE_DATA
 }				t_node_type;
+
+int	ft_parse(t_ctx *ctx, t_ast_node tree);
 
 #endif

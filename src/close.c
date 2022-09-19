@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   close.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:14:45 by mmidon            #+#    #+#             */
-/*   Updated: 2022/09/14 11:16:29 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/09/19 12:03:52 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	ft_free_struct(t_ctx *ctx)
 	}
 }
 
-void	ft_return_err(char *arg, char *msg)
+int	ft_return_err(char *arg, char *msg)
 {
 	char	*ret;
 
@@ -48,7 +48,7 @@ void	ft_return_err(char *arg, char *msg)
 		ft_putstr_fd(ret, 2);
 		free(ret);
 	}
-	exit(EXIT_FAILURE);
+	return (0);
 }
 
 void	ft_sig_handler(int sig)

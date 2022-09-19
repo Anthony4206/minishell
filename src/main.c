@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/09/14 12:44:43 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/09/19 13:18:30 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#include "parse.h"
+#include "tree.h"
 #include "structs.h"
 #include "close.h"
 #include "libft.h"
@@ -68,10 +70,12 @@ void	ft_show_list(t_token *list)
 int	main(int argc, char **argv, char **envp)
 {
 	t_ctx	ctx;
+	t_tree	*tree;
 	char	*line_read;
 
 	(void)(argc + argv);
 	ctx = ft_init(envp);
+	tree = NULL;
 	while (1)
 	{
 		line_read = readline("minishell$ ");
@@ -83,6 +87,7 @@ int	main(int argc, char **argv, char **envp)
 				return (0);
 			ft_add_history(line_read);
 			ft_lexer(&ctx, line_read);
+			ft_parse(&ctx, *tree);
 			ft_free_struct(&ctx);
 		}
 		free(line_read);

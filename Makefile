@@ -1,7 +1,8 @@
 NAME			= minishell
 
 SRC				= src/main.c src/lexer.c src/lexer_utils.c src/token_list.c \
-					src/close.c
+					src/close.c src/tree_init.c src/tree_utils.c src/ast_destroy.c \
+					src/parse.c
 
 SRC_B			= 
 
@@ -10,7 +11,7 @@ OBJ_B			= ${SRC_B:.c=.o}
 
 INCLUDE 		= -I./include/ 
 
-RL              = -L/usr/local/Cellar/readline/8.1.2/lib -lreadline
+RL              = -L/Users/alevasse/.brew/opt/readline/lib -lreadline #-L/usr/local/Cellar/readline/8.1.2/lib -lreadline
 
 HEAD			= include/libft.h
 
