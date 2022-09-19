@@ -16,13 +16,4 @@ typedef enum	 e_node
 	NODE_DATA
 }				t_node_type;
 
-typedef struct s_ast_node
-{
-	int			type;
-	char		*node_content;
-	s_ast_node	*left;
-	s_ast_node	*right;
-}	t_ast_node;
-
-
 #endif

@@ -99,5 +99,5 @@ void	ft_lexer(t_ctx *ctx, char *line)
 		else
 			tmp = ft_chr_token(ctx, tmp);
 	}
-	ft_show_list(ctx->start_lexer);
+//	ft_show_list(ctx->start_lexer);
 }

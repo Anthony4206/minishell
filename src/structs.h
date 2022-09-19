@@ -3,18 +3,20 @@
 
 # include <unistd.h>
 
+typedef int (*orderFun)(void *, void *);
+
 typedef	enum e_token_type
 {
-	TOK_INFILE_REDIR = 1,
-	TOK_OUTFILE_REDIR,
-	TOK_HERE_DOC,
-	TOK_APP_OUT_REDIR,
-	TOK_STRING,
-	TOK_AND,
-	TOK_OR,
-	TOK_PIPE,
-	TOK_L_PARENTHESIS,
-	TOK_R_PARENTHESIS
+	TOK_INFILE_REDIR = 1, // '<'
+	TOK_OUTFILE_REDIR, // '>'
+	TOK_HERE_DOC, // ">>"
+	TOK_APP_OUT_REDIR, // "<<"
+	TOK_STRING, // text 'text' "text"
+	TOK_AND, // "&&"
+	TOK_OR, // "||"
+	TOK_PIPE, // '|'
+	TOK_L_PARENTHESIS, // '('
+	TOK_R_PARENTHESIS // ')'
 }	t_token_type;
 
 typedef enum e_string_type
