@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/09/21 09:37:19 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/09/21 13:50:20 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	main(int argc, char **argv, char **envp)
 				return (0);
 			ft_add_history(line_read);
 			if (ft_lexer(&ctx, line_read) < 0)
-				printf("TMP ERROR [handle it with readline]"); ////////////handle errors in a better way one day maybe
+				printf("TMP ERROR [handle it with readline]\n"); ////////////handle errors in a better way one day maybe
 			ft_parse(&ctx, tree);
 			ft_free_struct(&ctx);
 		}

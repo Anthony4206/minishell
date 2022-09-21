@@ -2,7 +2,7 @@ NAME			= minishell
 
 SRC				= src/main.c src/lexer.c src/lexer_utils.c src/token_list.c \
 					src/close.c src/tree_init.c src/tree_utils.c src/ast_destroy.c \
-					src/parse.c
+					src/parse.c src/parenthesis.c
 
 SRC_B			= 
 
