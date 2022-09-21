@@ -12,7 +12,7 @@
 	<commamd parenthesis> ::=   '(' <command line> ')'  '||'    <command parenthesis>
                         	|   '(' <command line> ')'  '&&'    <command parenthesis>
                         	|   '(' <command line> ')'  '|'		<command parenthesis>
-                        	|   '(' <command line> ')'			<command parenthesis>
+                        	|   '(' <command line> ')'  <command parenthesis>
                         	|   '(' <command line> ')'
 							|   <command line>
     
@@ -47,11 +47,13 @@
 void	ft_show_tree(t_tree *tree)
 {
 	t_ast_node *cpy;
+	int i;
 
+	i = 1;
 	cpy = tree->root;
 	while (cpy)
 	{
-		printf("type : %d	", cpy->type);
+		printf("type : %d | %d	", cpy->type, i);
 		if (cpy->node_content)
 			printf("%s\n", cpy->node_content);
 		else
@@ -67,9 +69,13 @@ void	ft_show_tree(t_tree *tree)
 			else
 				printf("\n");
 			cpy = ptr->right;
+			i++;
 		}
 		else if (cpy->right)
+		{
 			cpy = cpy->right;
+			i++;
+		}
 		else
 			return ;
 	}

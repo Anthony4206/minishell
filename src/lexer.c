@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:05:32 by mmidon            #+#    #+#             */
-/*   Updated: 2022/09/14 15:12:45 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/09/21 12:30:02 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ char	*ft_chr_token(t_ctx *ctx, char *str)
 	return (str);
 }
 
-void	ft_lexer(t_ctx *ctx, char *line)
+int	ft_lexer(t_ctx *ctx, char *line)
 {
 	char *tmp;
 
@@ -99,5 +99,6 @@ void	ft_lexer(t_ctx *ctx, char *line)
 		else
 			tmp = ft_chr_token(ctx, tmp);
 	}
+	return (ft_parse_parenth(ctx->start_lexer));
 //	ft_show_list(ctx->start_lexer);
 }
