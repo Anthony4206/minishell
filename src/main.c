@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/09/19 13:18:30 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/09/21 08:03:50 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	main(int argc, char **argv, char **envp)
 				return (0);
 			ft_add_history(line_read);
 			ft_lexer(&ctx, line_read);
-			ft_parse(&ctx, *tree);
+			ft_parse(&ctx, tree);
 			ft_free_struct(&ctx);
 		}
 		free(line_read);

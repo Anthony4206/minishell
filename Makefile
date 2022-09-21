@@ -11,14 +11,14 @@ OBJ_B			= ${SRC_B:.c=.o}
 
 INCLUDE 		= -I./include/ 
 
-RL              = -L/Users/alevasse/.brew/opt/readline/lib -lreadline #-L/usr/local/Cellar/readline/8.1.2/lib -lreadline
+RL              = -L/Users/${USER}/.brew/opt/readline/lib -lreadline #-L/usr/local/Cellar/readline/8.1.2/lib -lreadline
 
 HEAD			= include/libft.h
 
 LIBS 			= ./libft/
 				
 CC 				= gcc -g
-CFLAGS 			= -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS 			= -Wall -Wextra -Werror -fsanitize=address
 
 AR 				= ar rcs
 RM 				= rm -f

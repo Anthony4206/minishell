@@ -17,6 +17,7 @@ typedef enum	 e_node
 	NODE_DATA
 }				t_node_type;
 
-int	ft_parse(t_ctx *ctx, t_ast_node tree);
+int	ft_parse(t_ctx *ctx, t_tree *tree);
+int ast_add_node(t_tree *tree, char *element, int type);
 
 #endif
