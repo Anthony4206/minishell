@@ -3,7 +3,7 @@
 #include "libft.h"
 #include "structs.h"
 
-/*static t_token *ft_find_peer(t_token *l_parenthesis)
+t_token *ft_find_peer(t_token *l_parenthesis)
 {
 	int	i;
 
@@ -26,22 +26,18 @@ static int	ft_parse_duplicate(t_token *lexer)
 
 
 	ptr = lexer;
-	while (ptr)
+	while (ptr && ptr->next)
 	{
 		if (ptr->type == TOK_L_PARENTHESIS && ptr->next->type == ptr->type)
 		{
 			tmp1 = ft_find_peer(ptr->next);
+			if (tmp1->next->type == TOK_R_PARENTHESIS)
+				return (-1);
 		}
-		if (tmp1->next->type == TOK_R_PARENTHESIS)
-		{
-			printf("next\n");
-			return (-1);
-		}
-		else
-			ptr = ptr->next;
+		ptr = ptr->next;
 	}
 	return (0);
-}*/
+}
 
 int	ft_parse_parenth(t_token *lexer)
 {
@@ -61,7 +57,7 @@ int	ft_parse_parenth(t_token *lexer)
 		ptr = ptr->next;
 	}
 	//printf("l %d	r %d\n", count_parenth[0], count_parenth[1]);
-	if (count_parenth1 != count_parenth2 /*|| ft_parse_duplicate(lexer) < 0*/)
+	if (count_parenth1 != count_parenth2 || ft_parse_duplicate(lexer) < 0)
 	{
 		printf("tmp error [parenthesis]\n");
 		return (-1);

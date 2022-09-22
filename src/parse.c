@@ -46,6 +46,7 @@
 
 void	ft_show_tree(t_tree *tree)
 {
+	t_ast_node	*ptr;
 	t_ast_node *cpy;
 	int i;
 
@@ -60,15 +61,16 @@ void	ft_show_tree(t_tree *tree)
 			printf("\n");
 		if (cpy->left)
 		{
-			t_ast_node	*ptr;
 			ptr = cpy;
 			cpy = cpy->left;
-			printf("type : %d	", cpy->type);
+			printf("type[L] : %d	", cpy->type);
 			if (cpy->node_content)
 				printf("%s\n", cpy->node_content);
 			else
+			{
 				printf("\n");
-			cpy = ptr->right;
+				cpy = ptr->right;
+			}
 			i++;
 		}
 		else if (cpy->right)
