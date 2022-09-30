@@ -5,7 +5,7 @@
 #include "tree.h"
 #include "ast_destroy.h"
 
-static void	ast_destroy_node(t_ast_node  *node)
+static void	ast_destroy_node(t_ast_node *node)
 {
 	if (node->node_content)
 		free(node->node_content);

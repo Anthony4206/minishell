@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:14:45 by mmidon            #+#    #+#             */
-/*   Updated: 2022/09/19 12:03:52 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/09/22 10:12:05 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,12 @@
 #include "libft.h"
 #include "structs.h"
 
-void rl_replace_line (const char *text, int clear_undo);
+void	rl_replace_line(const char *text, int clear_undo);
 
 void	ft_free_struct(t_ctx *ctx)
 {
 	t_token	*ptr;
-	
+
 	while (ctx->start_lexer)
 	{
 		ptr = ctx->start_lexer->next;

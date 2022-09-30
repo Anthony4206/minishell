@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:05:32 by mmidon            #+#    #+#             */
-/*   Updated: 2022/09/21 13:51:36 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/09/22 10:13:20 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	ft_show_list(t_token *list);
 
 int	ft_count_quotes(char *str)
 {
-	int state;
+	int	state;
 	int	count_squotes;
 	int	count_dquotes;
 	int	i;
@@ -90,7 +90,7 @@ char	*ft_chr_token(t_ctx *ctx, char *str)
 
 int	ft_lexer(t_ctx *ctx, char *line)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = line;
 	while (*tmp)
@@ -101,5 +101,4 @@ int	ft_lexer(t_ctx *ctx, char *line)
 			tmp = ft_chr_token(ctx, tmp);
 	}
 	return (ft_parse_parenth(ctx->start_lexer));
-//	ft_show_list(ctx->start_lexer);
 }

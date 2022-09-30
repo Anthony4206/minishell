@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/09/21 13:50:20 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/09/30 10:54:22 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,32 @@
 #include "close.h"
 #include "libft.h"
 #include "lexer.h"
+#include "builtin.h" 
 
-void rl_replace_line (const char *text, int clear_undo);
+void	rl_replace_line(const char *text, int clear_undo);
 
-t_ctx	ft_init(char **envp)
+char	**ft_dup(char	**envp)
+{
+	char	**dup;
+	int	i = 0;
+
+	while (envp[i++]);
+	dup = malloc(sizeof(char *) * (i + i));
+	i = -1;
+	while (envp[++i])
+		dup[i] = ft_strdup(envp[i]);
+	dup[i] = 0;
+	return (dup);
+}
+
+t_ctx	*ft_init(char **envp)
 {
 	struct sigaction	sa;
-	t_ctx				ret;
+	t_ctx				*ret;
 
-	ret.start_lexer = NULL;
-	ret.env = envp;
+	ret = malloc(sizeof(t_ctx));
+	ret->start_lexer = NULL;
+	ret->env = ft_dup(envp);
 	sa.sa_handler = ft_sig_handler;
 	if (sigemptyset(&sa.sa_mask) == -1)
 		ft_return_err("sigemptyset", strerror(errno));
@@ -69,7 +85,7 @@ void	ft_show_list(t_token *list)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_ctx	ctx;
+	t_ctx	*ctx;
 	t_tree	*tree;
 	char	*line_read;
 
@@ -86,10 +102,12 @@ int	main(int argc, char **argv, char **envp)
 			if (!ft_strcmp(line_read, "exit"))
 				return (0);
 			ft_add_history(line_read);
-			if (ft_lexer(&ctx, line_read) < 0)
-				printf("TMP ERROR [handle it with readline]\n"); ////////////handle errors in a better way one day maybe
+			ctx->env = built_export(line_read, ctx->env);
+			built_env(ctx->env);
+			/*if (ft_lexer(&ctx, line_read) < 0)
+				printf("TMP ERROR [handle readline]\n");/////
 			ft_parse(&ctx, tree);
-			ft_free_struct(&ctx);
+			ft_free_struct(&ctx);*/
 		}
 		free(line_read);
 	}

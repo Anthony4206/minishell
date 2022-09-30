@@ -47,8 +47,8 @@
 void	ft_show_tree(t_tree *tree)
 {
 	t_ast_node	*ptr;
-	t_ast_node *cpy;
-	int i;
+	t_ast_node	*cpy;
+	int			i;
 
 	i = 1;
 	cpy = tree->root;
@@ -83,15 +83,15 @@ void	ft_show_tree(t_tree *tree)
 	}
 }
 
-t_tree	*ast_cmd_parenth(t_token *lexer)
+t_tree	*ast_fill(t_token *lexer)
 {
 	t_tree	*ret;
 
 	ret = malloc(sizeof(t_tree));
 	ret->root = NULL;
-	while(lexer)
+	while (lexer)
 	{
-		ast_add_node(ret, lexer->content, lexer->type);
+		ast_add_node(ret, lexer->content, lexer->type, lexer);
 		lexer = lexer->next;
 	}
 	ft_show_tree(ret);
@@ -102,6 +102,6 @@ int	ft_parse(t_ctx *ctx, t_tree *tree)
 {
 	if (!ctx->start_lexer)
 		return (ft_return_err("empty lexer", strerror(errno)));
-	tree = ast_cmd_parenth(ctx->start_lexer);
+	tree = ast_fill(ctx->start_lexer);
 	return (1);
 }

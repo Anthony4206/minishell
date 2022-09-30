@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 15:33:40 by alevasse          #+#    #+#             */
-/*   Updated: 2022/08/26 11:09:53 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/09/22 10:07:06 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int			ft_isdigit(int c);
 int			ft_isalnum(int c);
 int			ft_isascii(int c);
 int			ft_isprint(int c);
-int 		ft_isspace(int c);
+int			ft_isspace(int c);
 
 int			ft_strlen(const char *s);
 char		*ft_strcpy(char *dst, const char *src);

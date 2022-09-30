@@ -5,28 +5,12 @@
 #include "libft.h"
 #include "tree.h"
 #include "close.h"
+#include "structs.h" 
 
-static void	ast_rec_add_node(t_ast_node *cur, t_ast_node *new)
-{
-	if(new->type == TOK_L_PARENTHESIS)
-	{
-		if (!cur->left)
-			cur->left = new;
-		else
-			ast_rec_add_node(cur->left, new);
-	}
-	else
-	{
-		if (!cur->right)
-			cur->right = new;
-		else
-			ast_rec_add_node(cur->right, new);
-	}
-}
-
-static  t_ast_node *ast_create_node(int data_size, char *element, int type)
+static	t_ast_node	*ast_create_node(char *element, int type)
 {
 	t_ast_node	*node;
+	int			data_size;
 
 	node = malloc(sizeof(t_ast_node));
 	if (!node)
@@ -52,15 +36,33 @@ static  t_ast_node *ast_create_node(int data_size, char *element, int type)
 	return (node);
 }
 
-int	ast_add_node(t_tree *tree, char *element, int type)
+static void	ast_rec_add_node(t_ast_node *cur, t_ast_node *new, t_token *lexer)
+{
+	if (new->type == TOK_L_PARENTHESIS)
+	{
+		if (!cur->left)
+			cur->left = new;
+		else
+			ast_rec_add_node(cur->left, new, lexer);
+	}
+	else
+	{
+		if (!cur->right)
+			cur->right = new;
+		else
+			ast_rec_add_node(cur->right, new, lexer);
+	}
+}
+
+int	ast_add_node(t_tree *tree, char *element, int type, t_token *lexer)
 {
 	t_ast_node	*node;
 
 	if (!tree)
 		return (ft_return_err("tree", strerror(errno)));
-	node = ast_create_node(tree->data_size, element, type);
+	node = ast_create_node(element, type);
 	if (tree->root)
-		ast_rec_add_node(tree->root, node);
+		ast_rec_add_node(tree->root, node, lexer);
 	else
 		tree->root = node;
 	return (1);

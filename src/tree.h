@@ -14,6 +14,7 @@ typedef struct s_ast_node
 typedef struct s_tree
 {
 	size_t				data_size;
+	char				**env;
 	t_ast_node			*root;
 	t_ast_node			*ptr;
 }						t_tree;

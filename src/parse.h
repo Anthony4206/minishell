@@ -4,7 +4,7 @@
 # include "structs.h"
 # include "tree.h"
 
-typedef enum	 e_node
+typedef enum e_node
 {
 	NODE_INFILE_DIR = 1,
 	NODE_OUTFILE_DIR,
@@ -18,6 +18,6 @@ typedef enum	 e_node
 }				t_node_type;
 
 int	ft_parse(t_ctx *ctx, t_tree *tree);
-int ast_add_node(t_tree *tree, char *element, int type);
+int	ast_add_node(t_tree *tree, char *element, int type, t_token *lexer);
 
 #endif
