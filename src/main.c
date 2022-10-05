@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/09/30 10:54:22 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/05 09:20:55 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,12 +102,14 @@ int	main(int argc, char **argv, char **envp)
 			if (!ft_strcmp(line_read, "exit"))
 				return (0);
 			ft_add_history(line_read);
-			ctx->env = built_export(line_read, ctx->env);
-			built_env(ctx->env);
+			built_cd(line_read, ctx->env);
+			built_pwd(ctx->env);
+			system("pwd");
 			/*if (ft_lexer(&ctx, line_read) < 0)
-				printf("TMP ERROR [handle readline]\n");/////
+				printf("TMP ERROR [handle readline]\n");////
 			ft_parse(&ctx, tree);
 			ft_free_struct(&ctx);*/
+		//system("leaks minishell");
 		}
 		free(line_read);
 	}
