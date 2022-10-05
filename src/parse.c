@@ -1,107 +1,163 @@
 #include <string.h>
-#include <stdio.h>
 #include <errno.h>
+#include <stdio.h>
 
-#include "parse.h"
 #include "libft.h"
 #include "close.h"
 #include "tree.h"
+#include "parse.h"
 
 /**
  *
-	<commamd parenthesis> ::=   '(' <command line> ')'  '||'    <command parenthesis>
-                        	|   '(' <command line> ')'  '&&'    <command parenthesis>
-                        	|   '(' <command line> ')'  '|'		<command parenthesis>
-                        	|   '(' <command line> ')'  <command parenthesis>
-                        	|   '(' <command line> ')'
-							|   <command line>
-    
-    <command line>	::= 	<job> <command line>
-						|	<job>
+<complete_cmd> ::=  <and_or> <newline>
 
-	<job>			::=		<command>   '|'     <job>
-						|	<command>   '||'    <job>
-						|	<command>   '&&'    <job>
-						|	<command>   '|'
-						|	<command>   '||'
-						|	<command>   '&&'
-						|	<command>
+<and_or>		::=  <pipeline> '&&' <and_or> 
+				|	<pipeline> '||' <and_or>
+				|	<pipeline>  
 
-	<command>		::=		<simple command> '<' <filename>
-						|	'<' <filename>
-						|	<simple command> '>' <filename>
-						|	'>' <filename>
-						|	<simple command> '>>' <filename>
-						|	'>>' <filename>
-						|	<simple command> '<<' <EOF>
-						|	'<<' <EOF>
-						|	<simple command>
+<pipeline>		::=  <command> '|' <pipeline>
+					<command>
 
-	<simple command>::=		<pathname> <token list>
+<command>		::=  <simple_cmd> 
+				|	'(' <and_or> ')'
 
-	<token list>	::=		<token> <token list>
-						|	(EMPTY)
+<simple_cmd>	::= <token_list> <redir_list> <token_list>
+				|	<token_list> <redir_list>
+				|	<token_list>
+
+<redir_list>	::=	<redirect> <redir_list>
+				|	<redirect>
+
+<redirect>		::= '<' <token>
+				| 	'>' <token>
+				|	'<<' <token>
+				|	'>>' <token>
+
+<token_list>	::= <token> <token_list>
+				|	EMPTY
  *
 **/
 
-void	ft_show_tree(t_tree *tree)
+t_token	*ast_scanner_peek(t_token *next)
 {
-	t_ast_node	*ptr;
-	t_ast_node	*cpy;
-	int			i;
+	t_token	*ptr;
 
-	i = 1;
-	cpy = tree->root;
-	while (cpy)
+	if (next->next)
+		ptr = next->next;
+	else
+		ptr = next;
+	printf("%s\n", next->content);
+	while (next->next)
 	{
-		printf("type : %d | %d	", cpy->type, i);
-		if (cpy->node_content)
-			printf("%s\n", cpy->node_content);
-		else
-			printf("\n");
-		if (cpy->left)
-		{
-			ptr = cpy;
-			cpy = cpy->left;
-			printf("type[L] : %d	", cpy->type);
-			if (cpy->node_content)
-				printf("%s\n", cpy->node_content);
-			else
-			{
-				printf("\n");
-				cpy = ptr->right;
-			}
-			i++;
-		}
-		else if (cpy->right)
-		{
-			cpy = cpy->right;
-			i++;
-		}
-		else
-			return ;
+		next = next->next;
+		printf("%s\n", next->content);
+		if (next->type == TOK_AND)
+			return (next);
 	}
+	return (ptr);
 }
 
-t_tree	*ast_fill(t_token *lexer)
+t_token	*ast_scanner_next(t_token *lexer)
 {
-	t_tree	*ret;
+	t_token	*ret;
 
-	ret = malloc(sizeof(t_tree));
-	ret->root = NULL;
-	while (lexer)
-	{
-		ast_add_node(ret, lexer->content, lexer->type, lexer);
-		lexer = lexer->next;
-	}
-	ft_show_tree(ret);
+	ret = lexer;
+	lexer = lexer->next;
 	return (ret);
 }
 
-int	ft_parse(t_ctx *ctx, t_tree *tree)
+t_ast_node	*ast_cmd_node_new(char *str)
 {
-	if (!ctx->start_lexer)
-		return (ft_return_err("empty lexer", strerror(errno)));
-	tree = ast_fill(ctx->start_lexer);
-	return (1);
+	t_ast_node	*node;
+
+	node = malloc(sizeof(t_ast_node));
+	if (!node)
+		return (NULL);
+	node->node_type = NODE_DATA;
+	node->data.content = str;
+	return (node);
+}
+
+t_ast_node	*ast_pair_node_new(t_ast_node *left, t_ast_node *right, t_node_type type)
+{
+	t_ast_node	*node;
+
+	node = malloc(sizeof(t_ast_node));
+	if (!node)
+		return (NULL);
+	node->node_type = type;
+	node->data.pair.left = left;
+	node->data.pair.right = right;
+	return (node);	
+}
+
+t_ast_node	*ast_error_node_new(char *msg)
+{
+	t_ast_node	*node;
+
+	node = malloc(sizeof(t_ast_node));
+	if (!node)
+		return (NULL);
+	node->node_type = NODE_ERROR;
+	node->data.content = msg;
+	return (node);
+}
+
+t_ast_node	*ast_parse(t_token *lexer, t_token *next, t_token *ptr)
+{
+	printf("entering PARSE\n");
+	if (!lexer)
+		return (NULL);
+	ptr = next;
+	next = ast_scanner_peek(lexer);
+	if (next->type == TOK_STRING)
+	{
+		printf ("STRING\n");
+		return (ast_parse_string(next));
+	}
+	else if (next->type == TOK_AND)
+	{
+		printf ("AND\n");
+		return (ast_parse_pair(lexer, next, ptr));
+	}
+	return (ast_error_node_new("syntax error\n"));
+}
+
+t_ast_node	*ast_parse_string(t_token *lexer)
+{
+	t_token	*next;
+
+	next = ast_scanner_next(lexer);
+	return (ast_cmd_node_new(next->content));
+}
+
+t_ast_node	*ast_parse_pair(t_token *lexer, t_token *next, t_token *ptr)
+{
+	t_token	*part;
+	t_token *tmp;
+	t_ast_node	*left;
+	t_ast_node	*right;
+
+	part = lexer;
+	tmp = part;
+	while (tmp->next->type != TOK_AND)
+		tmp = next;
+	tmp->next = 0;
+	tmp = part;
+	left = ast_parse(tmp, next, ptr);
+	lexer = next;
+	right = ast_parse(lexer->next, next, ptr);
+	return (ast_pair_node_new(left, right, NODE_AND));
+}
+
+t_ast_node	*ft_parse(t_token *lexer)
+{
+	t_token *next;
+	t_token *ptr;
+	t_ast_node	*ret;
+
+	next = lexer;
+	ptr = lexer;
+	ret = ast_parse(lexer, next, ptr);
+	return (ret);
 }

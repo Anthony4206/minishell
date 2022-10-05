@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/05 09:20:55 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/05 10:59:13 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,15 +83,27 @@ void	ft_show_list(t_token *list)
 	}
 }
 
+void    ft_visit(t_ast_node *tree)
+{
+    if (tree->node_type == NODE_AND)
+    {
+        printf("Pair(\n");
+        ft_visit(tree->data.pair.left);
+        ft_visit(tree->data.pair.right);
+        printf(")\n");
+    }
+    else if (tree->node_type == NODE_DATA)
+        printf("Word(\"%s\")\n", tree->data.content);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_ctx	*ctx;
-	t_tree	*tree;
+	t_ast_node	*exec_tree;
 	char	*line_read;
 
 	(void)(argc + argv);
 	ctx = ft_init(envp);
-	tree = NULL;
 	while (1)
 	{
 		line_read = readline("minishell$ ");
@@ -102,13 +114,11 @@ int	main(int argc, char **argv, char **envp)
 			if (!ft_strcmp(line_read, "exit"))
 				return (0);
 			ft_add_history(line_read);
-			built_cd(line_read, ctx->env);
-			built_pwd(ctx->env);
-			system("pwd");
-			/*if (ft_lexer(&ctx, line_read) < 0)
+			if (ft_lexer(ctx, line_read) < 0)
 				printf("TMP ERROR [handle readline]\n");////
-			ft_parse(&ctx, tree);
-			ft_free_struct(&ctx);*/
+			exec_tree = ft_parse(ctx->start_lexer);
+			ft_visit(exec_tree);
+			ft_free_struct(ctx);
 		//system("leaks minishell");
 		}
 		free(line_read);
