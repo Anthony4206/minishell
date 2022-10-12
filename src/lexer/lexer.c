@@ -14,9 +14,8 @@
 
 #include "libft.h"
 #include "lexer_utils.h"
-#include "close.h"
+#include "../close.h"
 #include "token_list.h"
-#include "structs.h"
 #include "parenthesis.h"
 
 void	ft_show_list(t_token *list);
@@ -58,7 +57,7 @@ int	ft_count_quotes(char *str)
 
 int	ft_parse_quotes(char *str)
 {
-	int		i;
+	int	i;
 
 	i = ft_count_quotes(str);
 	if (i == -1)

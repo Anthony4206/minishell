@@ -19,13 +19,12 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-#include "parse.h"
-#include "tree.h"
-#include "structs.h"
+#include "parser/parse.h"
+#include "parser/tree.h"
 #include "close.h"
 #include "libft.h"
-#include "lexer.h"
-#include "builtin.h" 
+#include "lexer/lexer.h"
+#include "builtins/builtin.h" 
 
 void	rl_replace_line(const char *text, int clear_undo);
 
@@ -83,7 +82,7 @@ void	ft_show_list(t_token *list)
 	}
 }
 
-void    ft_visit(t_ast_node *tree)
+/*void    ft_visit(t_ast_node *tree)
 {
     if (tree->node_type == NODE_AND)
     {
@@ -92,15 +91,15 @@ void    ft_visit(t_ast_node *tree)
         ft_visit(tree->data.pair.right);
         printf(")\n");
     }
-    else if (tree->node_type == NODE_DATA)
+    else if (tree->node_type == NODE_DATA || tree->node_type == NODE_ERROR)
         printf("Word(\"%s\")\n", tree->data.content);
-}
+}*/
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_ctx	*ctx;
-	t_ast_node	*exec_tree;
-	char	*line_read;
+	t_ctx		*ctx;
+//	t_ast_node	*exec_tree;
+	char		*line_read;
 
 	(void)(argc + argv);
 	ctx = ft_init(envp);
@@ -116,8 +115,9 @@ int	main(int argc, char **argv, char **envp)
 			ft_add_history(line_read);
 			if (ft_lexer(ctx, line_read) < 0)
 				printf("TMP ERROR [handle readline]\n");////
-			exec_tree = ft_parse(ctx->start_lexer);
-			ft_visit(exec_tree);
+			ft_show_list(ctx->start_lexer);
+//			exec_tree = ast_parse(ctx->start_lexer);
+//			ft_visit(exec_tree);
 			ft_free_struct(ctx);
 		//system("leaks minishell");
 		}

@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "structs.h"
+#include "lexer.h"
 
 t_token	*ft_lst_new_token(void)
 {

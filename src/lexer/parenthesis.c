@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 #include "libft.h"
-#include "structs.h"
+#include "lexer.h"
 
 t_token	*ft_find_peer(t_token *l_parenthesis)
 {

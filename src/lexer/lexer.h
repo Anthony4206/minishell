@@ -15,9 +15,49 @@
 
 # include <stdlib.h>
 
-# include "structs.h"
+typedef enum e_token_type
+{
+	TOK_REDIR = 1, // '<' '>' ">>" "<<"
+	TOK_STRING, // text 'text' "text"
+	TOK_AND, // "&&"
+	TOK_OR, // "||"
+	TOK_PIPE, // '|'
+	TOK_L_PARENTHESIS, // '('
+	TOK_R_PARENTHESIS, // ')'
+	TOK_ERROR
+}	t_token_type;
 
-size_t	*ft_parse_quotes(char *str);
+typedef enum e_string_type
+{
+	STRING_UNQUOTED = 1,
+	STRING_QUOTED,
+	STRING_DQUOTED
+} t_string_type;
+
+typedef enum e_redir_type
+{
+	REDIR_INFILE = 1,
+	REDIR_OUTFILE,
+	REDIR_HERE_DOC,
+	REDIR_APP_OUTFILE
+} t_redir_type;
+
+typedef struct s_token
+{
+	t_token_type	type;
+	char			*content;
+	t_string_type	string;
+	t_redir_type	redir;
+	struct s_token	*next;
+}					t_token;
+
+typedef struct s_ctx
+{
+	t_token	*start_lexer;
+	char	**env;
+}			t_ctx;
+
+int		ft_parse_quotes(char *str);
 char	*ft_chr_token(t_ctx *ctx, char *str);
 int		ft_lexer(t_ctx *ctx, char *line);
 int		ft_count_quotes(char *str);

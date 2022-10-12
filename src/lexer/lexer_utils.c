@@ -14,7 +14,6 @@
 
 #include "libft.h"
 #include "lexer.h"
-#include "structs.h"
 
 int	ft_find_content(char *str, char *limiter, t_token *token)
 {
@@ -47,7 +46,7 @@ char	*ft_add_string(char *str, t_token *token)
 
 	i = 0;
 	ft_parse_quotes(str);
-	while (str[i] && !ft_isspace(str[i]) && !ft_strchr("<>()|", str[i]))
+	while (str[i] && !ft_isspace(str[i]) && !ft_strchr("<>()&|", str[i]))
 	{
 		if (str[i] == '\'')
 		{
@@ -65,7 +64,7 @@ char	*ft_add_string(char *str, t_token *token)
 		{
 			token->type = TOK_STRING;
 			token->string = STRING_UNQUOTED;
-			i += ft_find_content(str + i, "\"'<>()| \t\n\r\v\f", token);
+			i += ft_find_content(str + i, "\"'<>()&| \t\n\r\v\f", token);
 		}
 	}
 	return (str + i);
@@ -74,13 +73,29 @@ char	*ft_add_string(char *str, t_token *token)
 char	*ft_add_two_char(char *str, t_token *token)
 {
 	if (ft_strncmp(str, "<<", 2) == 0)
-		return (token->type = TOK_HERE_DOC, str + 2);
+	{
+		token->type = TOK_REDIR;
+		token->redir = REDIR_HERE_DOC;
+		return (str + 2);
+	}
 	else if (ft_strncmp(str, "<", 1) == 0)
-		return (token->type = TOK_INFILE_REDIR, str + 1);
+	{
+		token->type = TOK_REDIR;
+		token->redir = REDIR_INFILE;
+		return (str + 1);
+	}
 	else if (ft_strncmp(str, ">>", 2) == 0)
-		return (token->type = TOK_APP_OUT_REDIR, str + 2);
+	{
+		token->type = TOK_REDIR;
+		token->redir = REDIR_APP_OUTFILE;
+		return (str + 2);
+	}
 	else if (ft_strncmp(str, ">", 1) == 0)
-		return (token->type = TOK_OUTFILE_REDIR, str + 1);
+	{
+		token->type = TOK_REDIR;
+		token->redir = REDIR_OUTFILE;
+		return (str + 1);
+	}
 	else if (ft_strncmp(str, "||", 2) == 0)
 		return (token->type = TOK_OR, str + 2);
 	else if (ft_strncmp(str, "|", 1) == 0)

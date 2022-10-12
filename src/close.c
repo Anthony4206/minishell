@@ -14,7 +14,7 @@
 #include <readline/history.h>
 
 #include "libft.h"
-#include "structs.h"
+# include "lexer/lexer.h"
 
 void	rl_replace_line(const char *text, int clear_undo);
 

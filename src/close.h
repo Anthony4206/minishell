@@ -13,7 +13,7 @@
 #ifndef CLOSE_H
 # define CLOSE_H
 
-# include "structs.h"
+#include "lexer/lexer.h"
 
 void	ft_free_struct(t_ctx *ctx);
 int		ft_return_err(char *arg, char *msg);
