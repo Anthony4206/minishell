@@ -43,7 +43,6 @@
 
 t_ast_node	*ast_parse(t_token *lexer)
 {
-	printf("test %s\n", lexer->content); 
 	t_token		*next;
 
 	if (!lexer)

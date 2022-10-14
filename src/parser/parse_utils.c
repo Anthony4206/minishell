@@ -27,7 +27,7 @@ char    **ft_init_redir(t_token *lexer, char **redir)
             lexer = lexer->next;
         else if (lexer->type == TOK_REDIR && lexer->next->type == TOK_STRING)
         {
-            redir[i] = ft_calloc(sizeof(char) * (ft_strlen(lexer->next->content) + 1), 1);
+            redir[i] = ft_calloc(sizeof(char) * (ft_strlen(lexer->next->content) + 2), 1);
             ft_strlcat(redir[i], ft_type_redir(lexer->redir), -1);
             ft_strlcat(redir[i++], lexer->next->content, -1);
             lexer = lexer->next->next;
