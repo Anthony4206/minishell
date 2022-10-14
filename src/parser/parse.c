@@ -43,13 +43,14 @@
 
 t_ast_node	*ast_parse(t_token *lexer)
 {
+	printf("test %s\n", lexer->content); 
 	t_token		*next;
 
 	if (!lexer)
 		return (NULL);
 	next = ast_scanner_peek(lexer, TOK_AND);
 	if (next->type == TOK_STRING  || next->type == TOK_REDIR)
-		return (ast_parse_command(next));
+		return (ast_parse_command(lexer));
 	else if (next->type == TOK_AND || next->type == TOK_OR)
 		return (ast_parse_pair(lexer, next));
 	return (ast_error_node_new("syntax error\n"));
@@ -57,10 +58,10 @@ t_ast_node	*ast_parse(t_token *lexer)
 
 t_ast_node	*ast_parse_command(t_token *lexer)
 {
-	t_token	*next;
+//	t_token	*next;
 
-	next = ast_scanner_next(lexer);
-	return (ast_cmd_node_new(next));
+//	next = ast_scanner_next(lexer);
+	return (ast_cmd_node_new(lexer));
 }
 
 t_ast_node	*ast_parse_pair(t_token *lexer, t_token *next)
@@ -70,8 +71,10 @@ t_ast_node	*ast_parse_pair(t_token *lexer, t_token *next)
 	t_ast_node	*right;
 
 	tmp = lexer;
+	while (tmp && tmp->next->type != TOK_AND)
+		tmp = tmp->next;
 	tmp->next = 0;
-	left = ast_parse(tmp);
+	left = ast_parse(lexer);
 	lexer = next;
 	if (lexer->next)
 		right = ast_parse(lexer->next);
