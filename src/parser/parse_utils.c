@@ -28,7 +28,7 @@ char    **ft_init_redir(t_token *lexer, char **redir)
     i = 0;
     if (!redir)
         return (NULL);
-    while (lexer && (lexer->type == TOK_STRING || lexer->type == TOK_REDIR))
+    while (lexer && !ft_is_pair(lexer->type))
     {
         if (lexer->type == TOK_STRING)
             lexer = lexer->next;
