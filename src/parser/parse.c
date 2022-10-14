@@ -7,6 +7,7 @@
 #include "tree.h"
 #include "parse.h"
 #include "parse_utils.h"
+#include "parse_node.h"
 #include "../lexer/lexer.h"
 
 /**
@@ -40,32 +41,6 @@
  *
 **/
 
-/*int	ft_is_node(t_token *curr_tok, t_token_type tok_type, char *content)
-{
-	if (curr_tok == NULL)
-		return (0);
-	if (curr_tok->type == tok_type)
-	{
-		if (content)
-		{
-			
-		}
-		curr_tok = curr_tok->next;
-		return (1);	
-	}
-	curr_tok = curr_tok->next;
-	return (0);
-}
-
-t_command	*ast_parse_pipeline(t_token *lexer)
-{
-	t_command	*ret;
-
-	ret = ft_lst_new();
-
-	return (ret);
-}*/
-
 t_ast_node	*ast_parse(t_token *lexer)
 {
 	t_token		*next;
@@ -75,21 +50,17 @@ t_ast_node	*ast_parse(t_token *lexer)
 	next = ast_scanner_peek(lexer, TOK_AND | TOK_OR);
 	if (next->type == TOK_STRING  || next->type == TOK_REDIR)
 		return (ast_parse_command(next));
-	else if (next->type == TOK_AND)
+	else if (next->type == TOK_AND || next->type == TOK_OR)
 		return (ast_parse_pair(lexer, next));
 	return (ast_error_node_new("syntax error\n"));
 }
 
 t_ast_node	*ast_parse_command(t_token *lexer)
 {
-//	t_token	*next;
-	char	**argv;
-	char	**redir;
+	t_token	*next;
 
-	argv = ft_add_arg(lexer);
-	redir = ft_add_redir(lexer);
-//	next = ast_scanner_next(lexer);
-	return (ast_cmd_node_new(next->content));
+	next = ast_scanner_next(lexer);
+	return (ast_cmd_node_new(next));
 }
 
 t_ast_node	*ast_parse_pair(t_token *lexer, t_token *next)

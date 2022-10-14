@@ -82,8 +82,11 @@ void	ft_show_list(t_token *list)
 	}
 }
 
-/*void    ft_visit(t_ast_node *tree)
+void    ft_visit(t_ast_node *tree)
 {
+	int	i;
+
+	i = -1;
     if (tree->node_type == NODE_AND)
     {
         printf("Pair(\n");
@@ -91,14 +94,20 @@ void	ft_show_list(t_token *list)
         ft_visit(tree->data.pair.right);
         printf(")\n");
     }
-    else if (tree->node_type == NODE_DATA || tree->node_type == NODE_ERROR)
-        printf("Word(\"%s\")\n", tree->data.content);
-}*/
+    else if (tree->node_type == NODE_DATA)
+	{
+		while (tree->data.content.tok_list[++i])
+        	printf("Word(\"%s\")\n", tree->data.content.tok_list[i]);
+        	printf("Word(\"%s\")\n", tree->data.content.redirect[i]);
+	}
+	else
+        printf("Word(\"%s\")\n", tree->data.error.msg);
+}
 
 int	main(int argc, char **argv, char **envp)
 {
 	t_ctx		*ctx;
-//	t_ast_node	*exec_tree;
+	t_ast_node	*exec_tree;
 	char		*line_read;
 
 	(void)(argc + argv);
@@ -115,11 +124,11 @@ int	main(int argc, char **argv, char **envp)
 			ft_add_history(line_read);
 			if (ft_lexer(ctx, line_read) < 0)
 				printf("TMP ERROR [handle readline]\n");////
-			ft_show_list(ctx->start_lexer);
-//			exec_tree = ast_parse(ctx->start_lexer);
-//			ft_visit(exec_tree);
+//			ft_show_list(ctx->start_lexer);
+			exec_tree = ast_parse(ctx->start_lexer);
+			ft_visit(exec_tree);
 			ft_free_struct(ctx);
-		//system("leaks minishell");
+			//system("leaks minishell");
 		}
 		free(line_read);
 	}

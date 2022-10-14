@@ -1,8 +1,11 @@
+#include <stdio.h>
 #include "libft.h"
+#include "parse_node.h"
+#include "parse_utils.h"
 #include "../lexer/lexer.h"
 #include "tree.h"
 
-t_token	*ast_scanner_peek(t_token *next, int tok)
+t_token	*ast_scanner_peek(t_token *next, t_token_type tok)
 {
 	while (next->next)
 	{
@@ -32,6 +35,7 @@ t_ast_node	*ast_cmd_node_new(t_token *lexer)
 	node->node_type = NODE_DATA;
 	node->data.content.tok_list = ft_add_arg(lexer);
 	node->data.content.redirect = ft_add_redir(lexer);
+	printf("%s\n", node->data.content.tok_list[0]);
 	return (node);
 }
 
@@ -57,6 +61,6 @@ t_ast_node	*ast_error_node_new(char *msg)
 	if (!node)
 		return (NULL);
 	node->node_type = NODE_ERROR;
-	node->data.content = msg;
+	node->data.error.msg = msg;
 	return (node);
 }

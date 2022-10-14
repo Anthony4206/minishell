@@ -3,7 +3,8 @@ NAME			= minishell
 SRC				=	src/main.c	src/close.c \
 					src/lexer/lexer.c src/lexer/lexer_utils.c src/lexer/token_list.c src/lexer/parenthesis.c \
 					src/builtins/echo.c src/builtins/pwd.c src/builtins/env.c src/builtins/cd.c \
-					src/builtins/export.c src/builtins/unset.c src/builtins/exit.c					#src/parser/parse.c src/parser/parse_node.c src/parser/parse_utils.c \#
+					src/builtins/export.c src/builtins/unset.c src/builtins/exit.c \
+					src/parser/parse.c src/parser/parse_node.c src/parser/parse_utils.c \
 
 
 SRC_B			= 

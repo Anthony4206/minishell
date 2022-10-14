@@ -33,10 +33,16 @@ typedef	struct s_pair_content
 	t_ast_node	*right;
 }				t_pair_content;
 
+typedef	struct s_error_content
+{
+	char		*msg;
+}				t_error_content;
+
 typedef union	u_node_content
 {
 	t_pair_content		pair;
 	t_cmd_content		content;
+	t_error_content		error;
 }						t_node_content;
 
 typedef struct s_ast_node
