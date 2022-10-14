@@ -2,6 +2,13 @@
 #include "libft.h"
 #include "../lexer/lexer.h"
 
+int	ft_is_pair(int tested)
+{
+	if (tested == TOK_AND || tested == TOK_OR)
+		return (1);
+	return (0);
+}
+
 char    *ft_type_redir(int type)
 {
     if (type == REDIR_INFILE)

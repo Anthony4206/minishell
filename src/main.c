@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/14 15:35:54 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/14 17:21:15 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,9 @@ void	ft_show_list(t_token *list)
 void    ft_visit(t_ast_node *tree)
 {
 	int	i;
+	int	j;
 
+	j = -1;
 	i = -1;
 //	printf("%d", tree->node_type);
     if (tree->node_type == NODE_AND)
@@ -99,10 +101,14 @@ void    ft_visit(t_ast_node *tree)
 	{
 		while (tree->data.content.tok_list[++i])
 		{
+			++j;
 			if (tree->data.content.tok_list)
+			{
         		printf("Word/arg(\"%s\")\n", tree->data.content.tok_list[i]);
+				free(tree->data.content.tok_list[i]);
+			}
 			if (tree->data.content.redirect)
-        		printf("Word/redir(\"%s\")\n", tree->data.content.redirect[0]);
+        		printf("Word/redir(\"%s\")\n", tree->data.content.redirect[j]);
 		}
 	}
 	else

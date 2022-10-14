@@ -5,12 +5,12 @@
 #include "../lexer/lexer.h"
 #include "tree.h"
 
-t_token	*ast_scanner_peek(t_token *next, t_token_type tok)
+t_token	*ast_scanner_peek(t_token *next)
 {
 	while (next->next)
 	{
 		next = next->next;
-		if (next->type == tok)
+		if (next->type == TOK_AND || next->type == TOK_OR)
 			return (next);
 	}
 	return (next);
@@ -38,8 +38,7 @@ t_ast_node	*ast_cmd_node_new(t_token *lexer)
 	return (node);
 }
 
-t_ast_node	*ast_pair_node_new
-    (t_ast_node *left, t_ast_node *right, t_node_type type)
+t_ast_node	*ast_pair_node_new(t_ast_node *left, t_ast_node *right, t_node_type type)
 {
 	t_ast_node	*node;
 
@@ -49,6 +48,7 @@ t_ast_node	*ast_pair_node_new
 	node->node_type = type;
 	node->data.pair.left = left;
 	node->data.pair.right = right;
+	printf("test\n");
 	return (node);	
 }
 
