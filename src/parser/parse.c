@@ -47,7 +47,7 @@ t_ast_node	*ast_parse(t_token *lexer)
 
 	if (!lexer)
 		return (NULL);
-	next = ast_scanner_peek(lexer, TOK_AND | TOK_OR);
+	next = ast_scanner_peek(lexer, TOK_AND);
 	if (next->type == TOK_STRING  || next->type == TOK_REDIR)
 		return (ast_parse_command(next));
 	else if (next->type == TOK_AND || next->type == TOK_OR)

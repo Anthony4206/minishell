@@ -87,6 +87,7 @@ void    ft_visit(t_ast_node *tree)
 	int	i;
 
 	i = -1;
+//	printf("%d", tree->node_type);
     if (tree->node_type == NODE_AND)
     {
         printf("Pair(\n");
@@ -97,8 +98,12 @@ void    ft_visit(t_ast_node *tree)
     else if (tree->node_type == NODE_DATA)
 	{
 		while (tree->data.content.tok_list[++i])
-        	printf("Word(\"%s\")\n", tree->data.content.tok_list[i]);
-        	printf("Word(\"%s\")\n", tree->data.content.redirect[i]);
+		{
+			if (tree->data.content.tok_list)
+        		printf("Word/arg(\"%s\")\n", tree->data.content.tok_list[i]);
+			if (tree->data.content.redirect)
+        		printf("Word/redir(\"%s\")\n", tree->data.content.redirect[i]);
+		}
 	}
 	else
         printf("Word(\"%s\")\n", tree->data.error.msg);

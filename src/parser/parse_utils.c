@@ -35,6 +35,7 @@ char    **ft_init_redir(t_token *lexer, char **redir)
         else
             return (NULL);
     }
+    redir[i] = 0;
     return (redir);
 }
 
@@ -79,6 +80,7 @@ char    **ft_init_arg(t_token *lexer, char **arg)
         else
             return (NULL);
     }
+    arg[i] = 0;
     return (arg);
 }
 
