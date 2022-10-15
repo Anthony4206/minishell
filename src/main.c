@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/15 14:39:12 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/15 14:59:06 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,10 @@ void    ft_visit(t_ast_node *tree)
 		}
 	}
 	else
+	{
+		printf("code %d\n", tree->node_type); 
         printf("Word(\"%s\")\n", tree->data.error.msg);
+	}
 }
 
 int	main(int argc, char **argv, char **envp)

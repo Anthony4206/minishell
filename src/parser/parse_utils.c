@@ -20,7 +20,6 @@ char    *ft_type_redir(int type)
     else
         return ("3");
 }
-void    ft_show_list(t_token *list);
  
 char    **ft_init_redir(t_token *lexer, char **redir)
 {
@@ -106,9 +105,14 @@ char    **ft_add_arg(t_token *lexer)
             i++;
             tmp = tmp->next;
         }
-        else if (tmp->type == TOK_REDIR && tmp->next->type == TOK_STRING)
+        else if (tmp->type == TOK_REDIR)
         {
-            tmp = tmp->next->next;           
+			if (!tmp->next)
+				return (NULL);
+			if (tmp->next->type == TOK_STRING)
+            	tmp = tmp->next->next;
+			else
+				return (NULL);
         }
         else
             return (NULL);

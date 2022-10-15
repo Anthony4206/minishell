@@ -40,12 +40,15 @@
 				|	EMPTY
  *
 **/
+
 t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 {
 	t_token		*tmp;
 	t_ast_node	*left;
 	t_ast_node	*right;
 
+	if (next->next->type == TOK_R_PARENTHESIS)
+		return (ast_error_node_new("syntax error near unexpected token `)'"));
 	while (next && next->type != TOK_R_PARENTHESIS)
 		next = next->next;
 	if (next->next)
@@ -55,8 +58,13 @@ t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 		tmp = tmp->next;
 	tmp->next = 0;
 	tmp = lexer->next;
+	while (lexer != next)
+	{
+		if (lexer->type == TOK_STRING && lexer->next->type == TOK_L_PARENTHESIS)
+			return (ast_error_node_new("syntax error near unexpected token `()'"));
+		lexer = next;
+	}
 	left = ast_parse(tmp);
-	lexer = next;
 	if (lexer->next)
 	{
 		if (lexer->type == TOK_REDIR)
@@ -77,9 +85,7 @@ t_ast_node	*ast_parse(t_token *lexer)
 		return (NULL);
 	next = ast_scanner_peek(lexer);
 	if (next->type == TOK_STRING  || next->type == TOK_REDIR)
-	{
 		return (ast_parse_command(lexer));
-	}
 	else if (next->type == TOK_AND || next->type == TOK_OR)
 		return (ast_parse_pair(lexer, next));
 	else if (next->type == TOK_L_PARENTHESIS)
