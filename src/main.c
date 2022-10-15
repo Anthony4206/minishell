@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/15 11:07:00 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/15 14:39:12 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,24 +86,31 @@ void    ft_visit(t_ast_node *tree)
 {
 	int	i;
 	int	j;
+	int	a;
 
 	i = -1;
 //	printf("%d", tree->node_type);
     if (tree->node_type == NODE_AND)
     {
         printf("Pair(\n");
+		printf("left -->	"); 
         ft_visit(tree->data.pair.left);
 		if (tree->data.pair.right)
+		{
+			printf("right -->	"); 
         	ft_visit(tree->data.pair.right);
+		}
         printf(")\n");
     }
     else if (tree->node_type == NODE_DATA)
 	{
+		a = 0;
+		j = -1;
 		while (tree->data.content.tok_list[++i])
 		{
-			j = -1;
 			if (tree->data.content.tok_list)
 			{
+				a = 1;
         		printf("Word/arg(\"%s\")\n", tree->data.content.tok_list[i]);
 				free(tree->data.content.tok_list[i]);
 			}
@@ -112,8 +119,14 @@ void    ft_visit(t_ast_node *tree)
 				while (tree->data.content.redirect[++j])
         			printf("Word/redir[%d](\"%s\")\n", j,tree->data.content.redirect[j]);
 			}
+			j = -1;
 		}
-		//printf("aled\n"); 
+		j = -1;
+		if (tree->data.content.redirect[0] && !a)
+		{
+			while (tree->data.content.redirect[++j])
+				printf("Word/redir[%d](\"%s\")\n", j,tree->data.content.redirect[j]);
+		}
 	}
 	else
         printf("Word(\"%s\")\n", tree->data.error.msg);

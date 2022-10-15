@@ -44,9 +44,6 @@ char    **ft_init_redir(t_token *lexer, char **redir)
             return (NULL);
     }
     redir[i] = 0;
-	int k = -1;
-	while (redir[++k])
-		printf("%s\n", redir[k]); 
     return (redir);
 }
 

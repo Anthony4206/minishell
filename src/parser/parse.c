@@ -40,7 +40,6 @@
 				|	EMPTY
  *
 **/
-
 t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 {
 	t_token		*tmp;
@@ -56,13 +55,15 @@ t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 		tmp = tmp->next;
 	tmp->next = 0;
 	tmp = lexer->next;
-	/*while (next){
-		printf("next %d\n", next->type); 
-		next = next->next;}*/
 	left = ast_parse(tmp);
 	lexer = next;
 	if (lexer->next)
-		right = ast_parse(lexer);
+	{
+		if (lexer->type == TOK_REDIR)
+			right = ast_parse(lexer);
+		else
+			right = ast_parse(lexer->next);
+	}
 	else
 		right = NULL;
 	return (ast_pair_node_new(left, right, NODE_AND));
@@ -75,12 +76,8 @@ t_ast_node	*ast_parse(t_token *lexer)
 	if (!lexer)
 		return (NULL);
 	next = ast_scanner_peek(lexer);
-	printf("type %s\n", next->content); 
-	printf("type %d\n\n", next->type); 
 	if (next->type == TOK_STRING  || next->type == TOK_REDIR)
 	{
-		printf("lex %s\n", lexer->content); 
-		printf("lex %d\n\n", lexer->type); 
 		return (ast_parse_command(lexer));
 	}
 	else if (next->type == TOK_AND || next->type == TOK_OR)

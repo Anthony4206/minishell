@@ -35,7 +35,6 @@ t_ast_node	*ast_cmd_node_new(t_token *lexer)
 	node->node_type = NODE_DATA;
 	node->data.content.tok_list = ft_add_arg(lexer);
 	node->data.content.redirect = ft_add_redir(lexer);
-	printf("%s\n", node->data.content.redirect[0]); 
 	return (node);
 }
 
