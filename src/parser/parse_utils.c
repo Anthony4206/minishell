@@ -20,7 +20,8 @@ char    *ft_type_redir(int type)
     else
         return ("3");
 }
-
+void    ft_show_list(t_token *list);
+ 
 char    **ft_init_redir(t_token *lexer, char **redir)
 {
     int i;
@@ -43,6 +44,9 @@ char    **ft_init_redir(t_token *lexer, char **redir)
             return (NULL);
     }
     redir[i] = 0;
+	int k = -1;
+	while (redir[++k])
+		printf("%s\n", redir[k]); 
     return (redir);
 }
 

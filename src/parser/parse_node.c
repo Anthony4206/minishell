@@ -9,7 +9,7 @@ t_token	*ast_scanner_peek(t_token *next)
 {
 	while (next->next)
 	{
-		if (next->type == TOK_AND || next->type == TOK_OR || next->type == TOK_L_PARENTHESIS)
+		if (next->type == TOK_AND || next->type == TOK_OR || next->type == TOK_L_PARENTHESIS || next->type == TOK_REDIR)
 			return (next);
 		next = next->next;
 	}
@@ -35,6 +35,7 @@ t_ast_node	*ast_cmd_node_new(t_token *lexer)
 	node->node_type = NODE_DATA;
 	node->data.content.tok_list = ft_add_arg(lexer);
 	node->data.content.redirect = ft_add_redir(lexer);
+	printf("%s\n", node->data.content.redirect[0]); 
 	return (node);
 }
 

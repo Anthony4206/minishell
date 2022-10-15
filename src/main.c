@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/15 10:02:43 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/15 11:07:00 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ void    ft_visit(t_ast_node *tree)
     {
         printf("Pair(\n");
         ft_visit(tree->data.pair.left);
-        ft_visit(tree->data.pair.right);
+		if (tree->data.pair.right)
+        	ft_visit(tree->data.pair.right);
         printf(")\n");
     }
     else if (tree->node_type == NODE_DATA)
@@ -112,6 +113,7 @@ void    ft_visit(t_ast_node *tree)
         			printf("Word/redir[%d](\"%s\")\n", j,tree->data.content.redirect[j]);
 			}
 		}
+		//printf("aled\n"); 
 	}
 	else
         printf("Word(\"%s\")\n", tree->data.error.msg);
