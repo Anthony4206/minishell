@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:05:32 by mmidon            #+#    #+#             */
-/*   Updated: 2022/09/22 10:13:20 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/15 17:20:29 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,7 @@ int	ft_parse_quotes(char *str)
 
 	i = ft_count_quotes(str);
 	if (i == -1)
-	{
-		printf("error: unclosed quote\n");
 		return (-1);
-	}
 	return (0);
 }
 
@@ -82,7 +79,11 @@ char	*ft_chr_token(t_ctx *ctx, char *str)
 	else if (str[0] == '(' || str[0] == ')')
 		str = ft_add_caractere(str, token);
 	else
+	{
 		str = ft_add_string(str, token);
+	}
+	if (!str)
+		return (NULL);
 	ft_token_add_back(&ctx->start_lexer, token);
 	return (str);
 }
@@ -97,7 +98,11 @@ int	ft_lexer(t_ctx *ctx, char *line)
 		if (ft_isspace(*tmp))
 			tmp++;
 		else
+		{
 			tmp = ft_chr_token(ctx, tmp);
+			if (!tmp)
+				return (-1);
+		}
 	}
 	return (ft_parse_parenth(ctx->start_lexer));
 }

@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:08:31 by mmidon            #+#    #+#             */
-/*   Updated: 2022/09/22 10:14:52 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/15 17:22:45 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ char	*ft_add_string(char *str, t_token *token)
 	int	i;
 
 	i = 0;
-	ft_parse_quotes(str);
-	while (str[i] && !ft_isspace(str[i]) && !ft_strchr("<>()&|", str[i]))
+	if (ft_parse_quotes(str))
+		return (NULL);
+	while (str[i] && !ft_isspace(str[i]) && !ft_strchr("<>()|", str[i] && ft_strncmp(str + i, "&&", 2)))
 	{
 		if (str[i] == '\'')
 		{

@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/15 14:59:06 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/15 17:06:32 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,11 +154,14 @@ int	main(int argc, char **argv, char **envp)
 				return (0);
 			ft_add_history(line_read);
 			if (ft_lexer(ctx, line_read) < 0)
-				printf("TMP ERROR [handle readline]\n");////
-//			ft_show_list(ctx->start_lexer);
-			exec_tree = ast_parse(ctx->start_lexer);
-			ft_visit(exec_tree);
-			ft_free_struct(ctx);
+				printf("syntax error\n");
+			else
+			{
+	//			ft_show_list(ctx->start_lexer);
+				exec_tree = ast_parse(ctx->start_lexer);
+				ft_visit(exec_tree);
+				ft_free_struct(ctx);
+			}
 			//system("leaks minishell");
 		}
 		free(line_read);
