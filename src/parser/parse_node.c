@@ -9,9 +9,9 @@ t_token	*ast_scanner_peek(t_token *next)
 {
 	while (next->next)
 	{
-		next = next->next;
-		if (next->type == TOK_AND || next->type == TOK_OR)
+		if (next->type == TOK_AND || next->type == TOK_OR || next->type == TOK_L_PARENTHESIS)
 			return (next);
+		next = next->next;
 	}
 	return (next);
 }
@@ -48,7 +48,6 @@ t_ast_node	*ast_pair_node_new(t_ast_node *left, t_ast_node *right, t_node_type t
 	node->node_type = type;
 	node->data.pair.left = left;
 	node->data.pair.right = right;
-	printf("test\n");
 	return (node);	
 }
 

@@ -41,6 +41,35 @@
  *
 **/
 
+t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
+{
+	t_token		*tmp;
+	t_ast_node	*left;
+	t_ast_node	*right;
+
+	while (next && next->type != TOK_R_PARENTHESIS)
+		next = next->next;
+	if (next->next)
+		next = next->next;
+	else
+		next = NULL;
+	tmp = lexer;
+	while (tmp->next && tmp->next->type != TOK_R_PARENTHESIS)
+		tmp = tmp->next;
+	tmp->next = 0;
+	tmp = lexer->next;
+	/*while (next){
+		printf("next %d\n", next->type); 
+		next = next->next;}*/
+	left = ast_parse(tmp);
+	lexer = next;
+	if (lexer->next)
+		right = ast_parse(lexer->next);
+	else
+		right = NULL;
+	return (ast_pair_node_new(left, right, NODE_AND));
+}
+
 t_ast_node	*ast_parse(t_token *lexer)
 {
 	t_token		*next;
@@ -52,6 +81,8 @@ t_ast_node	*ast_parse(t_token *lexer)
 		return (ast_parse_command(lexer));
 	else if (next->type == TOK_AND || next->type == TOK_OR)
 		return (ast_parse_pair(lexer, next));
+	else if (next->type == TOK_L_PARENTHESIS)
+		return (ast_parse_parenth(lexer, next));
 	return (ast_error_node_new("syntax error\n"));
 }
 

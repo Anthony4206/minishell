@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/14 17:31:10 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/15 10:02:43 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void    ft_visit(t_ast_node *tree)
 			if (tree->data.content.redirect)
 			{
 				while (tree->data.content.redirect[++j])
-        			printf("Word/redir(\"%s\")\n", tree->data.content.redirect[j]);
+        			printf("Word/redir[%d](\"%s\")\n", j,tree->data.content.redirect[j]);
 			}
 		}
 	}
