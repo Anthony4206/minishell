@@ -13,7 +13,7 @@ t_token	*ast_redir_peek(t_token *next)
 			return (next);
 		next = next->next;
 	}
-	return (NULL);
+	return (next);
 }
 
 t_token	*ast_scanner_peek(t_token *next)
