@@ -9,6 +9,7 @@
 #include "parse_utils.h"
 #include "parse_node.h"
 #include "../lexer/lexer.h"
+#include "../lexer/parenthesis.h" 
 
 /**
  *
@@ -41,20 +42,33 @@
  *
 **/
 
+int	ft_peek(t_token *lexer, t_token_type tok)
+{
+	while (lexer && lexer->type != TOK_AND && lexer->type != TOK_OR)
+	{
+		if (lexer->type == tok)
+			return (1);
+		lexer = lexer->next;
+	}
+	return (0);
+}
+
 t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 {
+	t_token		*end_of_parenth;
 	t_token		*tmp;
 	t_ast_node	*left;
 	t_ast_node	*right;
 
 	if (next->next->type == TOK_R_PARENTHESIS)
 		return (ast_error_node_new("syntax error near unexpected token `)'"));
-	while (next && next->type != TOK_R_PARENTHESIS)
+	end_of_parenth = ft_find_peer(next);
+	while (next && next != end_of_parenth)
 		next = next->next;
 	if (next->next)
 		next = next->next;
 	tmp = lexer;
-	while (tmp->next && tmp->next->type != TOK_R_PARENTHESIS)
+	while (tmp->next && tmp->next != end_of_parenth)
 		tmp = tmp->next;
 	tmp->next = 0;
 	tmp = lexer->next;
@@ -77,10 +91,14 @@ t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 	return (ast_pair_node_new(left, right, NODE_AND));
 }
 
+void ft_show_list(t_token *lexer);
+
 t_ast_node	*ast_parse(t_token *lexer)
 {
 	t_token		*next;
 
+	ft_show_list(lexer);
+	printf("\n"); 
 	if (!lexer)
 		return (NULL);
 	next = ast_scanner_peek(lexer);
@@ -93,12 +111,26 @@ t_ast_node	*ast_parse(t_token *lexer)
 	return (ast_error_node_new("syntax error 2\n"));
 }
 
+void	ft_show_list(t_token *lexer);
+
 t_ast_node	*ast_parse_command(t_token *lexer)
 {
-//	t_token	*next;
+	t_token	*tmp;
+	//t_token	*next;
+	t_token	*head;
 
-//	next = ast_scanner_next(lexer);
-	return (ast_cmd_node_new(lexer));
+	if (ft_peek(lexer, TOK_PIPE))
+	{
+		head = lexer;
+		tmp = lexer;
+		while (lexer->next && lexer->next->type != TOK_PIPE)
+			lexer = lexer->next;
+		tmp = lexer->next;
+		lexer->next = 0;
+		lexer = head;
+		return (ast_cmd_node_new(tmp->next, ast_parse_command(lexer)));
+	}
+	return (ast_cmd_node_new(lexer, NULL));
 }
 
 t_ast_node	*ast_parse_pair(t_token *lexer, t_token *next)

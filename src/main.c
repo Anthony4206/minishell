@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/15 18:06:31 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/17 11:41:41 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,8 @@ void    ft_visit(t_ast_node *tree)
 			while (tree->data.content.redirect[++j])
 				printf("Word/redir[%d](\"%s\")\n", j,tree->data.content.redirect[j]);
 		}
+	if (tree->data.content.next)
+		ft_visit(tree->data.content.next);
 	}
 	else
 	{
@@ -157,7 +159,6 @@ int	main(int argc, char **argv, char **envp)
 				printf("syntax error main\n");
 			else
 			{
-	//			ft_show_list(ctx->start_lexer);
 				exec_tree = ast_parse(ctx->start_lexer);
 				ft_visit(exec_tree);
 				ft_free_struct(ctx);

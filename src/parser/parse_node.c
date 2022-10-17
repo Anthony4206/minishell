@@ -27,7 +27,7 @@ t_token	*ast_scanner_next(t_token *lexer)
 
 void	ft_show_list(t_token *lexer);
 
-t_ast_node	*ast_cmd_node_new(t_token *lexer)
+t_ast_node	*ast_cmd_node_new(t_token *lexer, t_ast_node *next)
 {
 	t_ast_node	*node;
 
@@ -39,6 +39,7 @@ t_ast_node	*ast_cmd_node_new(t_token *lexer)
 	if (!node->data.content.tok_list)
 		return (ast_error_node_new("syntax error near redirection"));
 	node->data.content.redirect = ft_add_redir(lexer);
+	node->data.content.next = next;
 	return (node);
 }
 
