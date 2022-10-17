@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/15 17:06:32 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/15 18:06:31 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ int	main(int argc, char **argv, char **envp)
 				return (0);
 			ft_add_history(line_read);
 			if (ft_lexer(ctx, line_read) < 0)
-				printf("syntax error\n");
+				printf("syntax error main\n");
 			else
 			{
 	//			ft_show_list(ctx->start_lexer);

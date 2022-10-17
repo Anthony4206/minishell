@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:05:32 by mmidon            #+#    #+#             */
-/*   Updated: 2022/10/15 17:20:29 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/15 18:09:56 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,10 @@ int	ft_lexer(t_ctx *ctx, char *line)
 		{
 			tmp = ft_chr_token(ctx, tmp);
 			if (!tmp)
+			{
+				printf("tmp\n"); 
 				return (-1);
+			}
 		}
 	}
 	return (ft_parse_parenth(ctx->start_lexer));

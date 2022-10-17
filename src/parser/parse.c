@@ -90,7 +90,7 @@ t_ast_node	*ast_parse(t_token *lexer)
 		return (ast_parse_pair(lexer, next));
 	else if (next->type == TOK_L_PARENTHESIS)
 		return (ast_parse_parenth(lexer, next));
-	return (ast_error_node_new("syntax error\n"));
+	return (ast_error_node_new("syntax error 2\n"));
 }
 
 t_ast_node	*ast_parse_command(t_token *lexer)
@@ -116,6 +116,6 @@ t_ast_node	*ast_parse_pair(t_token *lexer, t_token *next)
 	if (lexer->next)
 		right = ast_parse(lexer->next);
 	else
-		return (ast_error_node_new("syntax error\n"));
+		return (ast_error_node_new("syntax error 3\n"));
 	return (ast_pair_node_new(left, right, NODE_AND));
 }

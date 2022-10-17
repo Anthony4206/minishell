@@ -9,25 +9,25 @@ int	ft_is_pair(int tested)
 	return (0);
 }
 
-char    *ft_type_redir(int type)
+char	*ft_type_redir(int type)
 {
-    if (type == REDIR_INFILE)
-        return ("0");
-    else if (type == REDIR_OUTFILE)
-        return ("1");
-    else if (type == REDIR_APP_OUTFILE)
-        return ("2");
-    else
-        return ("3");
+	if (type == REDIR_INFILE)
+		return ("0");
+	else if (type == REDIR_OUTFILE)
+		return ("1");
+	else if (type == REDIR_APP_OUTFILE)
+		return ("2");
+	else
+		return ("3");
 }
  
-char    **ft_init_redir(t_token *lexer, char **redir)
+char	**ft_init_redir(t_token *lexer, char **redir)
 {
-    int i;
+    int	i;
 
     i = 0;
-    if (!redir)
-        return (NULL);
+	if (!redir)
+		return (NULL);
     while (lexer && !ft_is_pair(lexer->type))
     {
         if (lexer->type == TOK_STRING)
