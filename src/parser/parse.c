@@ -97,21 +97,21 @@ t_ast_node	*ast_parse(t_token *lexer)
 {
 	t_token		*next;
 
-	ft_show_list(lexer);
-	printf("\n"); 
 	if (!lexer)
 		return (NULL);
 	next = ast_scanner_peek(lexer);
-	if (next->type == TOK_STRING  || next->type == TOK_REDIR)
-		return (ast_parse_command(lexer));
-	else if (next->type == TOK_AND || next->type == TOK_OR)
+	if (next->type == TOK_AND || next->type == TOK_OR)
 		return (ast_parse_pair(lexer, next));
 	else if (next->type == TOK_L_PARENTHESIS)
 		return (ast_parse_parenth(lexer, next));
+	else
+	{
+		next = ast_redir_peek(next);
+		if (next)
+			return(ast_parse_command(lexer));
+	}
 	return (ast_error_node_new("syntax error 2\n"));
 }
-
-void	ft_show_list(t_token *lexer);
 
 t_ast_node	*ast_parse_command(t_token *lexer)
 {

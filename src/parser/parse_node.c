@@ -5,11 +5,22 @@
 #include "../lexer/lexer.h"
 #include "tree.h"
 
+t_token	*ast_redir_peek(t_token *next)
+{
+	while (next->next)
+	{
+		if (next->type == TOK_REDIR)
+			return (next);
+		next = next->next;
+	}
+	return (NULL);
+}
+
 t_token	*ast_scanner_peek(t_token *next)
 {
 	while (next->next)
 	{
-		if (next->type == TOK_AND || next->type == TOK_OR || next->type == TOK_L_PARENTHESIS || next->type == TOK_REDIR)
+		if (next->type == TOK_AND || next->type == TOK_OR || next->type == TOK_L_PARENTHESIS)
 			return (next);
 		next = next->next;
 	}
