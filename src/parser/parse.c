@@ -60,8 +60,8 @@ t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 	t_ast_node	*left;
 	t_ast_node	*right;
 
-	if (next->next->type == TOK_R_PARENTHESIS)
-		return (ast_error_node_new("syntax error near unexpected token `)'"));
+	if (next->next->type != TOK_STRING)
+		return (ast_error_node_new("syntax error in parenthesis"));
 	end_of_parenth = ft_find_peer(next);
 	while (next && next != end_of_parenth)
 		next = next->next;
@@ -97,8 +97,6 @@ t_ast_node	*ast_parse(t_token *lexer)
 {
 	t_token		*next;
 
-	ft_show_list(lexer);
-	printf("\n"); 
 	if (!lexer)
 		return (NULL);
 	next = ast_scanner_peek(lexer);
@@ -127,9 +125,13 @@ t_ast_node	*ast_parse_command(t_token *lexer)
 	{
 		head = lexer;
 		tmp = lexer;
+		if (lexer->type == TOK_PIPE)
+			return (ast_error_node_new("syntax error pipe\n"));
 		while (lexer->next && lexer->next->type != TOK_PIPE)
 			lexer = lexer->next;
 		tmp = lexer->next;
+		if (!tmp->next || !(tmp->next->type == TOK_STRING || tmp->next->type == TOK_REDIR))
+			return (ast_error_node_new("syntax error pipe\n"));
 		lexer->next = 0;
 		lexer = head;
 		return (ast_cmd_node_new(tmp->next, ast_parse_command(lexer)));
