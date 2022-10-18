@@ -96,6 +96,16 @@ void ft_show_list(t_token *lexer);
 t_ast_node	*ast_parse(t_token *lexer)
 {
 	t_token		*next;
+	t_token	*head;
+	head = lexer;
+	while (lexer)
+	{
+		printf("lex		%p\n", lexer); 
+		printf("content %s	%p\n", lexer->content, lexer->content);
+		printf("type %d\n\n", lexer->type);
+		lexer = lexer->next;
+	}
+	lexer = head;
 
 	if (!lexer)
 		return (NULL);
@@ -118,7 +128,6 @@ void	ft_show_list(t_token *lexer);
 t_ast_node	*ast_parse_command(t_token *lexer)
 {
 	t_token	*tmp;
-	//t_token	*next;
 	t_token	*head;
 
 	if (ft_peek(lexer, TOK_PIPE))
@@ -152,8 +161,14 @@ t_ast_node	*ast_parse_pair(t_token *lexer, t_token *next)
 	left = ast_parse(lexer);
 	lexer = next;
 	if (lexer->next)
+	{
 		right = ast_parse(lexer->next);
+		free(lexer);
+	}
 	else
+	{
+		free(lexer);
 		return (ast_error_node_new("syntax error 3\n"));
+	}
 	return (ast_pair_node_new(left, right, NODE_AND));
 }

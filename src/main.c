@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/17 11:41:41 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/18 13:42:50 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,19 +121,36 @@ void    ft_visit(t_ast_node *tree)
 			}
 			j = -1;
 		}
+		free(tree->data.content.tok_list);
+		if (tree->data.content.redirect)
+			free (tree->data.content.redirect);
 		j = -1;
-		if (tree->data.content.redirect[0] && !a)
+	/*	if (tree->data.content.redirect && tree->data.content.redirect[0] && !a)
 		{
 			while (tree->data.content.redirect[++j])
 				printf("Word/redir[%d](\"%s\")\n", j,tree->data.content.redirect[j]);
-		}
-	if (tree->data.content.next)
-		ft_visit(tree->data.content.next);
+		}*/
+		if (tree->data.content.next)
+			ft_visit(tree->data.content.next);
 	}
 	else
 	{
 		printf("code %d\n", tree->node_type); 
         printf("Word(\"%s\")\n", tree->data.error.msg);
+	}
+	free(tree);
+}
+
+void	ft_free_lexer(t_token *lexer)
+{
+	t_token	*tmp;
+	while (lexer)
+	{
+		if (lexer->content)
+			free(lexer->content);
+		tmp = lexer->next;
+		free(lexer);
+		lexer = tmp;
 	}
 }
 
@@ -160,10 +177,11 @@ int	main(int argc, char **argv, char **envp)
 			else
 			{
 				exec_tree = ast_parse(ctx->start_lexer);
+				ctx->start_lexer = NULL;
 				ft_visit(exec_tree);
-				ft_free_struct(ctx);
+				//ft_free_struct(ctx);
 			}
-			//system("leaks minishell");
+			system("leaks minishell");
 		}
 		free(line_read);
 	}

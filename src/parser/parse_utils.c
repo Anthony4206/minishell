@@ -60,7 +60,7 @@ char    **ft_add_redir(t_token *lexer)
         else if (tmp->type == TOK_REDIR && tmp->next->type == TOK_STRING)
         {
             i++;
-            tmp = tmp->next->next;           
+            tmp = tmp->next->next;
         }
         else
             return (NULL);
