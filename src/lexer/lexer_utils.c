@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:08:31 by mmidon            #+#    #+#             */
-/*   Updated: 2022/10/17 09:47:40 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/19 14:02:19 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	ft_find_content(char *str, char *limiter, t_token *token)
 	char	*stock;
 
 	i = 0;
-	while (str[i] && (ft_strchr(limiter, str[i]) == NULL || i == 0))
+	while (str[i] && (!ft_strchr(limiter, str[i]) || i == 0))
 		i++;
 	if (str[i] == '\'' || str[i] == '"')
 		i++;
