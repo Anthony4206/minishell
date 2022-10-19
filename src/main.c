@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/19 11:12:45 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/19 13:41:15 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,10 +180,10 @@ int	main(int argc, char **argv, char **envp)
 			else
 			{
 				exec_tree = ast_parse(ctx->start_lexer);
-				ctx->start_lexer = NULL;
 				ft_visit(exec_tree);
 				//ft_free_struct(ctx);
 			}
+			ctx->start_lexer = NULL;
 			//system("leaks minishell");
 		}
 		free(line_read);
