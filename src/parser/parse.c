@@ -125,7 +125,6 @@ t_ast_node	*ast_parse_command(t_token *lexer)
 {
 	t_token	*tmp;
 	t_token	*head;
-
 	if (ft_peek(lexer, TOK_PIPE))
 	{
 		head = lexer;

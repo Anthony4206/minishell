@@ -63,10 +63,23 @@ t_token	*ast_scanner_next(t_token *lexer)
 
 void	ft_show_list(t_token *lexer);
 
+int	ft_check(t_token *lex)
+{
+	while (lex)
+	{
+		if (lex->type == TOK_STRING && lex->next && lex->next->type == TOK_L_PARENTHESIS)
+			return (1);
+		lex = lex->next;
+	}
+	return (0);
+}
+
 t_ast_node	*ast_cmd_node_new(t_token *lexer, t_ast_node *next)
 {
 	t_ast_node	*node;
 
+	if (ft_check(lexer))
+		return (ast_error_node_new("syntax error near unexpected token `('"));
 	node = malloc(sizeof(t_ast_node));
 	if (!node)
 		return (NULL);
