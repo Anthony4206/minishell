@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/18 13:42:50 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/19 09:51:28 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ int	main(int argc, char **argv, char **envp)
 				ft_visit(exec_tree);
 				//ft_free_struct(ctx);
 			}
-			system("leaks minishell");
+			//system("leaks minishell");
 		}
 		free(line_read);
 	}

@@ -18,9 +18,34 @@ t_token	*ast_redir_peek(t_token *next)
 
 t_token	*ast_scanner_peek(t_token *next)
 {
+	t_token	*head;
+	head = next;
+	int	parenth;
+
+	parenth = 0;
 	while (next->next)
 	{
-		if (next->type == TOK_AND || next->type == TOK_OR || next->type == TOK_L_PARENTHESIS)
+		if (next->type == TOK_L_PARENTHESIS)
+			parenth = 1;
+		else if (next->type == TOK_R_PARENTHESIS)
+			parenth = 0;
+		else if ((next->type == TOK_AND || next->type == TOK_OR) && !parenth)
+			return (next);
+		next = next->next;
+	}
+	next = head;
+	if (next->type == TOK_L_PARENTHESIS)
+		return (next);
+	while (next->next)
+	{
+		if (next->type == TOK_PIPE)
+			return (next);
+		next = next->next;
+	}
+	next = head;
+	while (next->next)
+	{
+		if (next->type == TOK_REDIR)
 			return (next);
 		next = next->next;
 	}
