@@ -56,7 +56,7 @@ char	**ft_init_redir(t_token *lexer, char **redir)
         else if (lexer->type == TOK_REDIR && lexer->next->type == TOK_STRING)
         {
             redir[i] = ft_calloc(sizeof(char) * (ft_strlen(lexer->next->content) + 2), 1);
-            ft_strlcat(redir[i], ft_type_redir(lexer->redir), -1);
+			ft_strlcat(redir[i], ft_type_redir(lexer->redir), -1);
             ft_strlcat(redir[i++], lexer->next->content, -1);
             lexer = lexer->next->next;
         }
@@ -67,6 +67,8 @@ char	**ft_init_redir(t_token *lexer, char **redir)
     return (redir);
 }
 
+void ft_show_list(t_token *lexer);
+
 char    **ft_add_redir(t_token *lexer)
 {
     int     i;
@@ -74,6 +76,8 @@ char    **ft_add_redir(t_token *lexer)
 
     i = 0;
     tmp = lexer;
+	if (tmp->type == TOK_REDIR && tmp->redir != REDIR_HERE_DOC)
+		return (NULL);
     while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR))
     {
         if (tmp->type == TOK_STRING)
