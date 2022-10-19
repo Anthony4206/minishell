@@ -124,21 +124,17 @@ t_ast_node	*ast_parse(t_token *lexer)
 
 void	ft_show_list(t_token *lexer);
 
-t_token	*ft_last_pipe(t_token *lexer, t_token *lst_pipe)
+t_token	*ft_last_pipe(t_token *lexer)
 {
 	t_token	*ptr;
 	
 	ptr = NULL;
 	while (lexer && lexer->next)
 	{
-		if (lexer->next->type == TOK_PIPE && lexer->next != lst_pipe)
-		{
-			printf("pipe %s\n", lexer->content); 
+		if (lexer->next->type == TOK_PIPE)
 			ptr = lexer;
-		}
 		lexer = lexer->next;
 	}
-	printf("\n\n"); 
 	return (ptr);
 }
 
@@ -154,7 +150,7 @@ t_ast_node	*ast_parse_command(t_token *lexer)
 		tmp = lexer;
 		if (lexer->type == TOK_PIPE)
 			return (ast_error_node_new("syntax error pipe\n"));
-		ptr = ft_last_pipe(lexer, NULL);
+		ptr = ft_last_pipe(lexer);
 		tmp = ptr->next;
 		ptr->next = NULL;
 		if (!tmp->next || !(tmp->next->type == TOK_STRING || tmp->next->type == TOK_REDIR || tmp->next->type == TOK_L_PARENTHESIS))
