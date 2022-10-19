@@ -9,6 +9,27 @@ int	ft_is_pair(int tested)
 	return (0);
 }
 
+t_token *ft_find_pair(t_token	*lst)
+{
+	int	parenth;
+
+	if (lst->type == TOK_L_PARENTHESIS)
+		parenth = 1;
+	else
+		parenth = 0;
+	while (lst && lst->next)
+	{
+		if (lst->next->type == TOK_L_PARENTHESIS)
+			parenth = 1;
+		if (lst->next->type == TOK_R_PARENTHESIS)
+			parenth = 0;
+		else if ((lst->next->type == TOK_AND || lst->next->type == TOK_OR) && !parenth)
+			return (lst);
+		lst = lst->next;
+	}
+	return (lst);
+}
+
 char	*ft_type_redir(int type)
 {
 	if (type == REDIR_INFILE)
