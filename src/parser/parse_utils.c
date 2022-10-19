@@ -75,7 +75,7 @@ char    **ft_init_arg(t_token *lexer, char **arg)
     i = 0;
     if (!arg)
         return (NULL);
-    while (lexer && (lexer->type == TOK_STRING || lexer->type == TOK_REDIR))
+    while (lexer && (lexer->type == TOK_STRING || lexer->type == TOK_REDIR || lexer->type == TOK_L_PARENTHESIS))
     {
         if (lexer->type == TOK_STRING)
         {
@@ -84,6 +84,8 @@ char    **ft_init_arg(t_token *lexer, char **arg)
         }
         else if (lexer->type == TOK_REDIR && lexer->next->type == TOK_STRING)
             lexer = lexer->next->next;
+		else if (lexer->type == TOK_L_PARENTHESIS)
+			lexer = lexer->next;
         else
             return (NULL);
     }
@@ -98,7 +100,7 @@ char    **ft_add_arg(t_token *lexer)
 
     i = 0;
     tmp = lexer;
-    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR))
+    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR ||tmp->type == TOK_L_PARENTHESIS))
     {
         if (tmp->type == TOK_STRING)
         {
@@ -114,6 +116,8 @@ char    **ft_add_arg(t_token *lexer)
 			else
 				return (NULL);
         }
+		else if (tmp->type == TOK_L_PARENTHESIS)
+			tmp = tmp->next;
         else
             return (NULL);
     }
