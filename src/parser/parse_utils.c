@@ -44,6 +44,7 @@ char	*ft_type_redir(int type)
  
 char	**ft_init_redir(t_token *lexer, char **redir)
 {
+	t_token	*tmp;
     int	i;
 
     i = 0;
@@ -56,9 +57,13 @@ char	**ft_init_redir(t_token *lexer, char **redir)
         else if (lexer->type == TOK_REDIR && lexer->next->type == TOK_STRING)
         {
             redir[i] = ft_calloc(sizeof(char) * (ft_strlen(lexer->next->content) + 2), 1);
+			free(lexer->next->content);
 			ft_strlcat(redir[i], ft_type_redir(lexer->redir), -1);
             ft_strlcat(redir[i++], lexer->next->content, -1);
-            lexer = lexer->next->next;
+            tmp = lexer->next->next;
+			free(lexer->next);
+			free(lexer);
+			lexer = tmp;
         }
         else
             return (NULL);
