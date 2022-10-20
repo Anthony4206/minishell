@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/19 13:41:15 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/20 11:49:47 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,9 @@ void    ft_visit(t_ast_node *tree)
 	int	a;
 
 	i = -1;
-//	printf("%d", tree->node_type);
-    if (tree->node_type == NODE_AND)
+    if (tree->node_type == NODE_AND || tree->node_type == NODE_OR)
     {
+		printf("type %d\n", tree->node_type);
         printf("Pair(\n");
 		printf("left -->	"); 
         ft_visit(tree->data.pair.left);
@@ -102,8 +102,9 @@ void    ft_visit(t_ast_node *tree)
 		}
         printf(")\n");
     }
-    else if (tree->node_type == NODE_DATA)
+    else if (tree->node_type == NODE_DATA || tree->node_type == NODE_PIPE)
 	{
+		//printf("%u-", tree->node_type); 
 		a = 0;
 		j = -1;
 		while (tree->data.content.tok_list[++i])
@@ -122,14 +123,14 @@ void    ft_visit(t_ast_node *tree)
 			j = -1;
 		}
 		free(tree->data.content.tok_list);
-		if (tree->data.content.redirect)
-			free (tree->data.content.redirect);
 		j = -1;
-	/*	if (tree->data.content.redirect && tree->data.content.redirect[0] && !a)
+		if (tree->data.content.redirect && tree->data.content.redirect[0] && !a)
 		{
 			while (tree->data.content.redirect[++j])
-				printf("Word/redir[%d](\"%s\")\n", j,tree->data.content.redirect[j]);
-		}*/
+				printf("Word/redir/2ndprint[%d](\"%s\")\n", j,tree->data.content.redirect[j]);
+		}
+		if (tree->data.content.redirect)
+			free (tree->data.content.redirect);
 		if (tree->data.content.next)
 		{
 			printf("next -->"); 

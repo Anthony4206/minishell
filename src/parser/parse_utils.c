@@ -51,7 +51,7 @@ char	**ft_init_redir(t_token *lexer, char **redir)
 		return (NULL);
     while (lexer && !ft_is_pair(lexer->type))
     {
-        if (lexer->type == TOK_STRING)
+        if (lexer->type == TOK_STRING || lexer->type == TOK_L_PARENTHESIS || lexer->type == TOK_R_PARENTHESIS)
             lexer = lexer->next;
         else if (lexer->type == TOK_REDIR && lexer->next->type == TOK_STRING)
         {
@@ -61,7 +61,10 @@ char	**ft_init_redir(t_token *lexer, char **redir)
             lexer = lexer->next->next;
         }
         else
+		{
+			printf("OSKOUR\n"); 
             return (NULL);
+		}
     }
     redir[i] = 0;
     return (redir);

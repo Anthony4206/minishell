@@ -114,7 +114,7 @@ t_ast_node	*ast_parse(t_token *lexer)
 		return (NULL);
 	next = ast_scanner_peek(lexer);
 	if (next->type == TOK_AND || next->type == TOK_OR)
-		return (ast_parse_pair(lexer, next));
+		return (ast_parse_pair(lexer, next, next->type));
 	else if (next->type == TOK_L_PARENTHESIS)
 		return (ast_parse_parenth(lexer, next));
 	else
@@ -161,7 +161,7 @@ t_ast_node	*ast_parse_command(t_token *lexer)
 	return (ast_cmd_node_new(lexer, NULL));
 }
 
-t_ast_node	*ast_parse_pair(t_token *lexer, t_token *next)
+t_ast_node	*ast_parse_pair(t_token *lexer, t_token *next, int type)
 {
 	t_token		*tmp;
 	t_ast_node	*left;
@@ -182,5 +182,9 @@ t_ast_node	*ast_parse_pair(t_token *lexer, t_token *next)
 		free(lexer);
 		return (ast_error_node_new("syntax error 3\n"));
 	}
-	return (ast_pair_node_new(left, right, NODE_AND));
+	if (type == TOK_AND)
+		type = NODE_AND;
+	if (type == TOK_OR)
+		type = NODE_OR;
+	return (ast_pair_node_new(left, right, type));
 }
