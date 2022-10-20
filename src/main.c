@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/20 11:49:47 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/20 12:12:13 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,9 @@ void    ft_visit(t_ast_node *tree)
 	int	a;
 
 	i = -1;
-    if (tree->node_type == NODE_AND || tree->node_type == NODE_OR)
+	printf("%d-", tree->node_type);
+    if (tree->node_type == NODE_AND || tree->node_type == NODE_OR || tree->node_type == NODE_PARENTHESIS)
     {
-		printf("type %d\n", tree->node_type);
         printf("Pair(\n");
 		printf("left -->	"); 
         ft_visit(tree->data.pair.left);
@@ -104,7 +104,6 @@ void    ft_visit(t_ast_node *tree)
     }
     else if (tree->node_type == NODE_DATA || tree->node_type == NODE_PIPE)
 	{
-		//printf("%u-", tree->node_type); 
 		a = 0;
 		j = -1;
 		while (tree->data.content.tok_list[++i])

@@ -88,7 +88,7 @@ t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 	}
 	else
 		right = NULL;
-	return (ast_pair_node_new(left, right, NODE_AND));
+	return (ast_pair_node_new(left, right, NODE_PARENTHESIS));
 }
 
 void ft_show_list(t_token *lexer);
@@ -156,9 +156,9 @@ t_ast_node	*ast_parse_command(t_token *lexer)
 		if (!tmp->next || !(tmp->next->type == TOK_STRING || tmp->next->type == TOK_REDIR || tmp->next->type == TOK_L_PARENTHESIS))
 			return (ast_error_node_new("syntax error pipe2\n"));
 		lexer = head;
-		return (ast_cmd_node_new(tmp->next, ast_parse_command(lexer)));
+		return (ast_cmd_node_new(tmp->next, ast_parse_command(lexer), NODE_PIPE));
 	}
-	return (ast_cmd_node_new(lexer, NULL));
+	return (ast_cmd_node_new(lexer, NULL, 0));
 }
 
 t_ast_node	*ast_parse_pair(t_token *lexer, t_token *next, int type)

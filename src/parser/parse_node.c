@@ -74,7 +74,7 @@ int	ft_check(t_token *lex)
 	return (0);
 }
 
-t_ast_node	*ast_cmd_node_new(t_token *lexer, t_ast_node *next)
+t_ast_node	*ast_cmd_node_new(t_token *lexer, t_ast_node *next, int type)
 {
 	t_ast_node	*node;
 
@@ -84,6 +84,8 @@ t_ast_node	*ast_cmd_node_new(t_token *lexer, t_ast_node *next)
 	if (!node)
 		return (NULL);
 	node->node_type = NODE_DATA;
+	if (type)
+		node->node_type = type;
 	node->data.content.tok_list = ft_add_arg(lexer);
 	node->data.content.redirect = ft_add_redir(lexer);
 	if (!node->data.content.tok_list || !node->data.content.redirect)
