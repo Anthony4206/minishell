@@ -71,14 +71,16 @@ t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 	while (tmp->next && tmp->next != end_of_parenth)
 		tmp = tmp->next;
 	tmp->next = 0;
-	tmp = lexer->next;
+	tmp = lexer;
 	while (lexer != next)
 	{
 		if (lexer->type == TOK_STRING && lexer->next->type == TOK_L_PARENTHESIS)
 			return (ast_error_node_new("syntax error near unexpected token `()'"));
 		lexer = next;
 	}
-	left = ast_parse(tmp);
+	left = ast_parse(tmp->next);
+	free(tmp);
+	free(end_of_parenth);
 	if (lexer->next)
 	{
 		if (lexer->type == TOK_REDIR)
