@@ -61,10 +61,7 @@ char	**ft_init_redir(t_token *lexer, char **redir)
             lexer = lexer->next->next;
         }
         else
-		{
-			printf("OSKOUR\n"); 
             return (NULL);
-		}
     }
     redir[i] = 0;
     return (redir);
@@ -79,11 +76,9 @@ char    **ft_add_redir(t_token *lexer)
 
     i = 0;
     tmp = lexer;
-	if (tmp->type == TOK_REDIR && tmp->redir != REDIR_HERE_DOC)
-		return (NULL);
-    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR))
+    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR || tmp->type == TOK_L_PARENTHESIS || tmp->type == TOK_R_PARENTHESIS))
     {
-        if (tmp->type == TOK_STRING)
+        if (tmp->type == TOK_STRING || tmp->type == TOK_L_PARENTHESIS || tmp->type == TOK_R_PARENTHESIS)
             tmp = tmp->next;
         else if (tmp->type == TOK_REDIR && tmp->next->type == TOK_STRING)
         {
