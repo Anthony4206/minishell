@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/21 09:30:32 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/21 13:45:53 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ void    ft_visit(t_ast_node *tree)
 			{
 				a = 1;
         		printf("Word/arg(\"%s\")\n", tree->data.content.tok_list[i]);
-				free(tree->data.content.tok_list[i]);
 			}
 			if (tree->data.content.redirect)
 			{
@@ -121,18 +120,12 @@ void    ft_visit(t_ast_node *tree)
 			}
 			j = -1;
 		}
-		free(tree->data.content.tok_list);
 		j = -1;
 		if (tree->data.content.redirect && tree->data.content.redirect[0] && !a)
 		{
 			while (tree->data.content.redirect[++j])
 				printf("Word/redir/2ndprint[%d](\"%s\")\n", j,tree->data.content.redirect[j]);
 		}
-		j = -1;
-		while (tree->data.content.redirect && tree->data.content.redirect[++j])
-			free(tree->data.content.redirect[j]);
-		if (tree->data.content.redirect)
-			free (tree->data.content.redirect);
 		if (tree->data.content.next)
 		{
 			printf("next -->"); 
@@ -140,11 +133,7 @@ void    ft_visit(t_ast_node *tree)
 		}
 	}
 	else
-	{
-		printf("code %d\n", tree->node_type); 
         printf("Word(\"%s\")\n", tree->data.error.msg);
-	}
-	free(tree);
 }
 
 void	ft_free_lexer(t_token *lexer)
@@ -187,6 +176,7 @@ int	main(int argc, char **argv, char **envp)
 			{
 				exec_tree = ast_parse(ctx->start_lexer);
 				ft_visit(exec_tree);
+				ft_free_tree(exec_tree);
 			}
 			ctx->start_lexer = NULL;
 			//system("leaks minishell");

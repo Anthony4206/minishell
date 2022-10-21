@@ -11,11 +11,12 @@ void	ft_free_all(t_token *lexer)
 		tmp = lexer->next;
 		if (lexer->content)
 		{
-			printf("%s beeing freed\n", lexer->content); 
+			printf("%s freed\n", lexer->content); 
 			free(lexer->content);
 		}
-		printf("%d beeing freed\n",lexer->type); 
+		printf("%d freed\n",lexer->type); 
 		free(lexer);
+		lexer = NULL;
 		lexer = tmp;
 	}
 }
@@ -171,7 +172,6 @@ char    **ft_add_arg(t_token *lexer)
     ptr = tmp;
     while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR ||tmp->type == TOK_L_PARENTHESIS))
     {
-		printf("lexer->content %s\n", lexer->content); 
         if (tmp->type == TOK_STRING)
         {
             i++;

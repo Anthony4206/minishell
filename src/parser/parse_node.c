@@ -2,6 +2,7 @@
 #include "libft.h"
 #include "parse_node.h"
 #include "parse_utils.h"
+#include "parse_utils.h" 
 #include "../lexer/lexer.h"
 #include "tree.h"
 
@@ -79,7 +80,10 @@ t_ast_node	*ast_cmd_node_new(t_token *lexer, t_ast_node *next, int type)
 	t_ast_node	*node;
 
 	if (ft_check(lexer))
+	{
+		ft_free_all(lexer);
 		return (ast_error_node_new("syntax error near unexpected token `('"));
+	}
 	node = malloc(sizeof(t_ast_node));
 	if (!node)
 		return (NULL);
@@ -90,7 +94,17 @@ t_ast_node	*ast_cmd_node_new(t_token *lexer, t_ast_node *next, int type)
 	if (node->data.content.tok_list)
 		node->data.content.redirect = ft_add_redir(lexer);
 	if (!node->data.content.tok_list || !node->data.content.redirect)
+	{
+		if (node->data.content.tok_list)
+		{
+			int i = -1;
+			while (node->data.content.tok_list[++i])
+				free(node->data.content.tok_list[i]);
+			free(node->data.content.tok_list);
+		}
+		free(node);
 		return (ast_error_node_new("syntax error near redirection"));
+	}
 	node->data.content.next = next;	
 	return (node);
 }
@@ -105,7 +119,7 @@ t_ast_node	*ast_pair_node_new(t_ast_node *left, t_ast_node *right, t_node_type t
 	node->node_type = type;
 	node->data.pair.left = left;
 	node->data.pair.right = right;
-	return (node)	
+	return (node);	
 }
 
 t_ast_node	*ast_error_node_new(char *msg)

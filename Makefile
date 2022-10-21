@@ -5,6 +5,7 @@ SRC				=	src/main.c	src/close.c \
 					src/builtins/echo.c src/builtins/pwd.c src/builtins/env.c src/builtins/cd.c \
 					src/builtins/export.c src/builtins/unset.c src/builtins/exit.c \
 					src/parser/parse.c src/parser/parse_node.c src/parser/parse_utils.c \
+					src/parser/free.c
 
 
 SRC_B			= 
