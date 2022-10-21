@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/21 08:00:44 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/21 09:30:32 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@
 #include "parser/tree.h"
 #include "close.h"
 #include "libft.h"
+#include "parser/parse_utils.h" 
 #include "lexer/lexer.h"
-#include "builtins/builtin.h" 
 
 void	rl_replace_line(const char *text, int clear_undo);
 
@@ -179,7 +179,10 @@ int	main(int argc, char **argv, char **envp)
 				return (0);
 			ft_add_history(line_read);
 			if (ft_lexer(ctx, line_read) < 0)
+			{
 				printf("syntax error main\n");
+				ft_free_all(ctx->start_lexer);
+			}
 			else
 			{
 				exec_tree = ast_parse(ctx->start_lexer);

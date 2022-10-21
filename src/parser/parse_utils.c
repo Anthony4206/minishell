@@ -2,6 +2,24 @@
 #include "libft.h"
 #include "../lexer/lexer.h"
 
+void	ft_free_all(t_token *lexer)
+{
+	t_token	*tmp;
+
+	while (lexer)
+	{
+		tmp = lexer->next;
+		if (lexer->content)
+		{
+			printf("%s beeing freed\n", lexer->content); 
+			free(lexer->content);
+		}
+		printf("%d beeing freed\n",lexer->type); 
+		free(lexer);
+		lexer = tmp;
+	}
+}
+
 int	ft_is_pair(int tested)
 {
 	if (tested == TOK_AND || tested == TOK_OR)
@@ -49,14 +67,17 @@ char	**ft_init_redir(t_token *lexer, char **redir)
 
     i = 0;
 	if (!redir)
+	{
+		ft_free_all(lexer);
 		return (NULL);
+	}
     while (lexer && !ft_is_pair(lexer->type))
     {
         if (lexer->type == TOK_STRING || lexer->type == TOK_L_PARENTHESIS || lexer->type == TOK_R_PARENTHESIS)
 			{
+				tmp = lexer->next;
 				if (lexer->type == TOK_STRING)
 					{
-						tmp = lexer->next;
 						free(lexer->content);
 						free(lexer);
 					}
@@ -74,13 +95,14 @@ char	**ft_init_redir(t_token *lexer, char **redir)
 			lexer = tmp;
         }
         else
+		{
+			ft_free_all(lexer);
             return (NULL);
+		}
     }
     redir[i] = 0;
     return (redir);
 }
-
-void ft_show_list(t_token *lexer);
 
 char    **ft_add_redir(t_token *lexer)
 {
@@ -99,7 +121,10 @@ char    **ft_add_redir(t_token *lexer)
             tmp = tmp->next->next;
         }
         else
+		{
+			ft_free_all(tmp);
             return (NULL);
+		}
     }
     return (ft_init_redir(lexer, malloc(sizeof(char *) * (i + 1))));
 }
@@ -110,7 +135,10 @@ char    **ft_init_arg(t_token *lexer, char **arg)
 
     i = 0;
     if (!arg)
+	{
+		ft_free_all(lexer);
         return (NULL);
+	}
     while (lexer && (lexer->type == TOK_STRING || lexer->type == TOK_REDIR || lexer->type == TOK_L_PARENTHESIS))
     {
         if (lexer->type == TOK_STRING)
@@ -123,7 +151,10 @@ char    **ft_init_arg(t_token *lexer, char **arg)
 		else if (lexer->type == TOK_L_PARENTHESIS)
 			lexer = lexer->next;
         else
+		{
+			ft_free_all(lexer);
             return (NULL);
+		}
     }
     arg[i] = 0;
     return (arg);
@@ -133,29 +164,42 @@ char    **ft_add_arg(t_token *lexer)
 {
     int     i;
     t_token *tmp;
+	t_token	*ptr;
 
     i = 0;
     tmp = lexer;
+    ptr = tmp;
     while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR ||tmp->type == TOK_L_PARENTHESIS))
     {
+		printf("lexer->content %s\n", lexer->content); 
         if (tmp->type == TOK_STRING)
         {
             i++;
-            tmp = tmp->next;
+			tmp = tmp->next;
+			
         }
         else if (tmp->type == TOK_REDIR)
         {
 			if (!tmp->next)
+			{
+				ft_free_all(ptr);
 				return (NULL);
+			}
 			if (tmp->next->type == TOK_STRING)
             	tmp = tmp->next->next;
 			else
+			{
+				ft_free_all(ptr);
 				return (NULL);
+			}
         }
 		else if (tmp->type == TOK_L_PARENTHESIS)
 			tmp = tmp->next;
         else
+		{
+			ft_free_all(ptr);
             return (NULL);
-    }
+		}
+	}
     return (ft_init_arg(lexer, malloc(sizeof(char *) * (i + 1))));
 }
