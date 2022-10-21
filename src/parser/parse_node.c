@@ -91,8 +91,6 @@ t_ast_node	*ast_cmd_node_new(t_token *lexer, t_ast_node *next, int type)
 	if (!node->data.content.tok_list || !node->data.content.redirect)
 		return (ast_error_node_new("syntax error near redirection"));
 	node->data.content.next = next;	
-	free(lexer->content);
-	free(lexer);
 	return (node);
 }
 

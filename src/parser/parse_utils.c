@@ -9,7 +9,7 @@ int	ft_is_pair(int tested)
 	return (0);
 }
 
-t_token *ft_find_pair(t_token	*lst)
+t_token *ft_find_pair(t_token *lst)
 {
 	int	parenth;
 
@@ -53,14 +53,22 @@ char	**ft_init_redir(t_token *lexer, char **redir)
     while (lexer && !ft_is_pair(lexer->type))
     {
         if (lexer->type == TOK_STRING || lexer->type == TOK_L_PARENTHESIS || lexer->type == TOK_R_PARENTHESIS)
-            lexer = lexer->next;
+			{
+				if (lexer->type == TOK_STRING)
+					{
+						tmp = lexer->next;
+						free(lexer->content);
+						free(lexer);
+					}
+				lexer = tmp;
+			}
         else if (lexer->type == TOK_REDIR && lexer->next->type == TOK_STRING)
         {
             redir[i] = ft_calloc(sizeof(char) * (ft_strlen(lexer->next->content) + 2), 1);
-			free(lexer->next->content);
 			ft_strlcat(redir[i], ft_type_redir(lexer->redir), -1);
             ft_strlcat(redir[i++], lexer->next->content, -1);
             tmp = lexer->next->next;
+			free(lexer->next->content);
 			free(lexer->next);
 			free(lexer);
 			lexer = tmp;
