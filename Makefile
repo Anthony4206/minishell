@@ -5,7 +5,7 @@ SRC				=	src/main.c	src/close.c \
 					src/builtins/echo.c src/builtins/pwd.c src/builtins/env.c src/builtins/cd.c \
 					src/builtins/export.c src/builtins/unset.c src/builtins/exit.c \
 					src/parser/parse.c src/parser/parse_node.c src/parser/parse_utils.c \
-					src/parser/free.c
+					src/executor/executor.c src/executor/path.c src/executor/free_tree.c 
 
 
 SRC_B			= 
@@ -15,14 +15,14 @@ OBJ_B			= ${SRC_B:.c=.o}
 
 INCLUDE 		= -I./include/ 
 
-RL              = -L/Users/${USER}/.brew/opt/readline/lib -lreadline
+RL              = -L/usr/local/Cellar/readline/8.1.2/lib -lreadline
 
 HEAD			= include/libft.h
 
 LIBS 			= ./libft/
 				
 CC 				= gcc -g
-CFLAGS 			= -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS 			= -Wall -Wextra -Werror -fsanitize=address
 
 AR 				= ar rcs
 RM 				= rm -f

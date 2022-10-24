@@ -24,6 +24,8 @@ typedef struct s_cmd_content
 {
 	char		**tok_list;
 	char		**redirect;
+	int			pipes[2];
+	int			state;
 	t_ast_node	*next;
 }				t_cmd_content;
 

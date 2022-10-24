@@ -25,6 +25,7 @@
 #include "libft.h"
 #include "parser/parse_utils.h" 
 #include "lexer/lexer.h"
+#include "executor/executor.h"
 
 void	rl_replace_line(const char *text, int clear_undo);
 
@@ -175,7 +176,8 @@ int	main(int argc, char **argv, char **envp)
 			else
 			{
 				exec_tree = ast_parse(ctx->start_lexer);
-				ft_visit(exec_tree);
+				ft_exec_cmd(exec_tree, ctx);
+//				ft_visit(exec_tree);
 				ft_free_tree(exec_tree);
 			}
 			ctx->start_lexer = NULL;
