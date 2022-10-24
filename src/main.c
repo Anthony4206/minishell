@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/21 13:45:53 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/10/24 08:44:15 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -176,8 +176,8 @@ int	main(int argc, char **argv, char **envp)
 			else
 			{
 				exec_tree = ast_parse(ctx->start_lexer);
-				ft_exec_cmd(exec_tree, ctx);
-//				ft_visit(exec_tree);
+			//	ft_exec_cmd(exec_tree, ctx);
+				ft_visit(exec_tree);
 				ft_free_tree(exec_tree);
 			}
 			ctx->start_lexer = NULL;

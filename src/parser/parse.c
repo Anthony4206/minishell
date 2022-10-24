@@ -42,6 +42,8 @@
  *
 **/
 
+void	ft_show_list(t_token *lexer);
+
 int	ft_peek(t_token *lexer, t_token_type tok)
 {
 	while (lexer && lexer->type != TOK_AND && lexer->type != TOK_OR)
@@ -86,7 +88,7 @@ t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 	}
 	left = ast_parse(tmp->next);
 	free(tmp);
-	free(end_of_parenth);
+	//free(end_of_parenth);
 	if (lexer->next)
 	{
 		if (lexer->type == TOK_REDIR)
@@ -131,18 +133,15 @@ t_ast_node	*ast_parse(t_token *lexer)
 	return (ast_error_node_new("syntax error 2\n"));
 }
 
-t_token	*ft_last_pipe(t_token *lexer)
+t_token	*ft_next_pipe(t_token *lexer)
 {
-	t_token	*ptr;
-	
-	ptr = NULL;
 	while (lexer && lexer->next)
 	{
 		if (lexer->next->type == TOK_PIPE)
-			ptr = lexer;
+			return (lexer);
 		lexer = lexer->next;
 	}
-	return (ptr);
+	return (lexer);
 }
 
 t_ast_node	*ast_parse_command(t_token *lexer)
@@ -174,7 +173,7 @@ t_ast_node	*ast_parse_command(t_token *lexer)
 			ft_free_all(head);
 			return (ast_error_node_new("syntax error pipe\n"));
 		}
-		ptr = ft_last_pipe(lexer);
+		ptr = ft_next_pipe(lexer);
 		tmp = ptr->next;
 		ptr->next = NULL;
 		if (!tmp->next || !(tmp->next->type == TOK_STRING || tmp->next->type == TOK_REDIR || tmp->next->type == TOK_L_PARENTHESIS))
@@ -185,7 +184,7 @@ t_ast_node	*ast_parse_command(t_token *lexer)
 		}
 		ptr = tmp->next;
 		lexer = head;
-		node = ast_parse_command(lexer);
+		node = ast_parse_command(ptr);
 		if (node->node_type == NODE_ERROR)
 		{
 			free(tmp);
@@ -193,7 +192,7 @@ t_ast_node	*ast_parse_command(t_token *lexer)
 			return (node);
 		}
 		free(tmp);
-		return (ast_cmd_node_new(ptr, node, NODE_PIPE));
+		return (ast_cmd_node_new(lexer, node, NODE_PIPE));
 	}
 	return (ast_cmd_node_new(lexer, NULL, 0));
 }

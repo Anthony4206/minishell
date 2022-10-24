@@ -74,7 +74,7 @@ char	**ft_init_redir(t_token *lexer, char **redir)
 	}
     while (lexer && !ft_is_pair(lexer->type))
     {
-        if (lexer->type == TOK_STRING || lexer->type == TOK_L_PARENTHESIS || lexer->type == TOK_R_PARENTHESIS)
+        if (lexer->type == TOK_STRING || lexer->type == TOK_L_PARENTHESIS || lexer->type == TOK_R_PARENTHESIS || lexer->type == TOK_PIPE)
 			{
 				tmp = lexer->next;
 				if (lexer->type == TOK_STRING)
