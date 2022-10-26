@@ -110,13 +110,9 @@ char    **ft_add_arg(t_token **lexer)
             tmp = tmp->next;
         }
         else if (tmp->type == TOK_REDIR && tmp->next->type == TOK_STRING)
-        {
             tmp = tmp->next->next;           
-        }
         else
-        {
-            printf("?\n");
             return (NULL);
-        }    }
+    }
     return (ft_init_arg(lexer, malloc(sizeof(char *) * (i + 1))));
 }

@@ -24,7 +24,8 @@ typedef enum e_token_type
 	TOK_PIPE, // '|'
 	TOK_L_PARENTHESIS, // '('
 	TOK_R_PARENTHESIS, // ')'
-	TOK_EOF
+	TOK_EOF,
+	TOK_ERROR
 }	t_token_type;
 
 typedef enum e_string_type
