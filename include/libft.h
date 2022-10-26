@@ -127,21 +127,24 @@ typedef struct s_opts
 }			t_opts;
 
 int			ft_printf(const char *fmt, ...);
-int			ft_parser(const char *fmt, va_list args);
-int			ft_define_args(const char *fmt, va_list args, int *i);
+int			ft_fprintf(int fd, const char *fmt, ...);
+int			ft_parser(int fd, const char *fmt, va_list args);
+int			ft_define_args(int fd, const char *fmt, va_list args, int *i);
 t_opts		ft_get_opts(const char *fmt, int *i);
 int			ft_is_flag(char c);
 void		ft_add_flags(t_flags *flags, char c);
 
-int			ft_conv_char(int c, t_opts opts);
-int			ft_conv_str(char *s, t_opts opts);
-int			ft_conv_int(int n, t_opts opts);
-int			ft_conv_uint(unsigned int n, t_opts opts);
-int			ft_conv_hex(unsigned int n, t_opts opts, int upper);
-int			ft_conv_ptr(unsigned long n, t_opts opts);
+int			ft_conv_char(int fd, int c, t_opts opts);
+int			ft_conv_str(int fd, char *s, t_opts opts);
+int			ft_conv_int(int fd, int n, t_opts opts);
+int			ft_conv_uint(int fd, unsigned int n, t_opts opts);
+int			ft_conv_hex(int fd, unsigned int n, t_opts opts, int upper);
+int			ft_conv_ptr(int fd, unsigned long n, t_opts opts);
 
 int			ft_putchar_size(char c);
+int			ft_putchar_size_fd(char c, int fd);
 int			ft_putstr_size(const char *s);
+int			ft_putstr_size_fd(char *s, int fd);
 int			ft_strlen_int(const char *s);
 char		*ft_insert_str(char *s, char *ins, int pos);
 char		*ft_itoa_unsigned(unsigned int n);

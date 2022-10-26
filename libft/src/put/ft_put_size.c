@@ -35,3 +35,17 @@ int	ft_putstr_size(const char *s)
 	ft_putstr(s);
 	return (ft_strlen_int(s));
 }
+
+int	ft_putchar_size_fd(char c, int fd)
+{
+	ft_putchar_fd(c, fd);
+	return (1);
+}
+
+int	ft_putstr_size_fd(char *s, int fd)
+{
+	if (!s)
+		return (0);
+	ft_putstr_fd(s, fd);
+	return (ft_strlen_int(s));
+}

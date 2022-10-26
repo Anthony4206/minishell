@@ -41,7 +41,7 @@ static char	*ft_wdt_uint(char *s, int len, t_opts opts)
 	return (new);
 }
 
-int	ft_conv_uint(unsigned int n, t_opts opts)
+int	ft_conv_uint(int fd, unsigned int n, t_opts opts)
 {
 	char	*s;
 	char	*new;
@@ -57,11 +57,11 @@ int	ft_conv_uint(unsigned int n, t_opts opts)
 	if (opts.wdt > len)
 	{
 		new = ft_wdt_uint(s, len, opts);
-		len = ft_putstr_size(new);
+		len = ft_putstr_size_fd(new, fd);
 		free(new);
 	}
 	else
-		len = ft_putstr_size(s);
+		len = ft_putstr_size_fd(s, fd);
 	free(s);
 	return (len);
 }

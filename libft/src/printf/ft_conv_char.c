@@ -12,21 +12,21 @@
 
 #include "libft.h"
 
-int	ft_conv_char(int c, t_opts opts)
+int	ft_conv_char(int fd, int c, t_opts opts)
 {
 	int	len;
 
 	len = 1;
 	while (opts.wdt > 1 && !opts.flags.minus)
 	{
-		ft_putchar(' ');
+		ft_putchar_fd(' ', fd);
 		opts.wdt--;
 		len++;
 	}
-	ft_putchar(c);
+	ft_putchar_fd(c, fd);
 	while (opts.wdt > 1 && opts.flags.minus)
 	{
-		ft_putchar(' ');
+		ft_putchar_fd(' ', fd);
 		opts.wdt--;
 		len++;
 	}

@@ -90,8 +90,11 @@ char	*ft_chr_token(t_ctx *ctx, char *str)
 int	ft_lexer(t_ctx *ctx, char *line)
 {
 	char	*tmp;
+	t_token	*token;
 
 	tmp = line;
+	token = ft_lst_new_token();
+	token->type = TOK_EOF;
 	while (*tmp)
 	{
 		if (ft_isspace(*tmp))
@@ -99,5 +102,6 @@ int	ft_lexer(t_ctx *ctx, char *line)
 		else
 			tmp = ft_chr_token(ctx, tmp);
 	}
+	ft_token_add_back(&ctx->start_lexer, token);
 	return (ft_parse_parenth(ctx->start_lexer));
 }

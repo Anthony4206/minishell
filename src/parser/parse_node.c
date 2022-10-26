@@ -5,27 +5,35 @@
 #include "../lexer/lexer.h"
 #include "tree.h"
 
-t_token	*ast_scanner_peek(t_token *next, t_token_type tok)
+int	ast_peek(t_token **lexer, int *tok, int size)
 {
-	while (next->next)
+	int		i;
+	t_token	*next;
+
+	i = -1;
+	next = *lexer;
+	next = next->next;
+	while (++i < size)
 	{
-		next = next->next;
-		if (next->type == tok)
-			return (next);
+		if ((int)next->type == tok[i])
+		{
+			*lexer = next;
+			return (1);
+		}
 	}
-	return (next);
+	return (0);
 }
 
-t_token	*ast_scanner_next(t_token *lexer)
+void	ast_scanner_next(t_token **lexer)
 {
-	t_token	*ret;
+	t_token	*next;
 
-	ret = lexer;
-	lexer = lexer->next;
-	return (ret);
+	next = *lexer;
+	next = next->next;
+	*lexer = next;
 }
 
-t_ast_node	*ast_cmd_node_new(t_token *lexer)
+t_ast_node	*ast_cmd_node_new(t_token **lexer)
 {
 	t_ast_node	*node;
 
@@ -35,11 +43,15 @@ t_ast_node	*ast_cmd_node_new(t_token *lexer)
 	node->node_type = NODE_DATA;
 	node->data.content.tok_list = ft_add_arg(lexer);
 	node->data.content.redirect = ft_add_redir(lexer);
+	node->data.content.next = NULL;
+	if (node->data.content.tok_list[0] || node->data.content.redirect[0])
+		while (ast_peek(lexer, (int[]){TOK_STRING, TOK_REDIR}, 2))
+			;
 	return (node);
 }
 
 t_ast_node	*ast_pair_node_new
-    (t_ast_node *left, t_ast_node *right, t_node_type type)
+    (t_ast_node *left, t_ast_node *right, int type)
 {
 	t_ast_node	*node;
 
@@ -50,16 +62,4 @@ t_ast_node	*ast_pair_node_new
 	node->data.pair.left = left;
 	node->data.pair.right = right;
 	return (node);	
-}
-
-t_ast_node	*ast_error_node_new(char *msg)
-{
-	t_ast_node	*node;
-
-	node = malloc(sizeof(t_ast_node));
-	if (!node)
-		return (NULL);
-	node->node_type = NODE_ERROR;
-	node->data.error.msg = msg;
-	return (node);
 }

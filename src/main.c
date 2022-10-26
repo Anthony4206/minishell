@@ -86,27 +86,28 @@ void    ft_visit(t_ast_node *tree)
 {
 	int	i;
 
-	i = -1;
-//	printf("%d", tree->node_type);
-    if (tree->node_type == NODE_AND)
+    if (tree->node_type == NODE_AND || tree->node_type == NODE_OR)
     {
         printf("Pair(\n");
+		printf("left -->	"); 
         ft_visit(tree->data.pair.left);
+		printf("right -->	"); 
         ft_visit(tree->data.pair.right);
         printf(")\n");
     }
-    else if (tree->node_type == NODE_DATA)
+    else if (tree->node_type == NODE_DATA || tree->node_type == NODE_PIPE)
 	{
+		i = -1;
 		while (tree->data.content.tok_list[++i])
-		{
 			if (tree->data.content.tok_list)
-        		printf("Word/arg(\"%s\")\n", tree->data.content.tok_list[i]);
-	//		if (tree->data.content.redirect)
-      //  		printf("Word/redir(\"%s\")\n", tree->data.content.redirect[i]);
-		}
+        		printf("Word/arg/%d(\"%s\")\n", i, tree->data.content.tok_list[i]);
+		i = -1;
+		while (tree->data.content.redirect[++i])
+			if (tree->data.content.redirect)
+        		printf("Word/redir/%d(\"%s\")\n", i , tree->data.content.redirect[i]);
+		if (tree->data.content.next)
+			ft_visit(tree->data.content.next);
 	}
-	else
-        printf("Word(\"%s\")\n", tree->data.error.msg);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -128,14 +129,20 @@ int	main(int argc, char **argv, char **envp)
 				return (0);
 			ft_add_history(line_read);
 			if (ft_lexer(ctx, line_read) < 0)
-				printf("TMP ERROR [handle readline]\n");////
-//			ft_show_list(ctx->start_lexer);
-			exec_tree = ast_parse(ctx->start_lexer);
-			ft_visit(exec_tree);
-			ft_free_struct(ctx);
+			{
+				printf("syntaxe error\n");
+			}
+			else
+			{
+				exec_tree = ast_parse(ctx->start_lexer);
+				if (exec_tree)
+					ft_visit(exec_tree);
+			}
+			ctx->start_lexer = NULL;
 			//system("leaks minishell");
 		}
 		free(line_read);
 	}
+	ft_free_struct(ctx);
 	return (0);
 }

@@ -56,9 +56,6 @@ int	ft_parse_parenth(t_token *lexer)
 		ptr = ptr->next;
 	}
 	if (count_parenth1 != count_parenth2 || ft_parse_duplicate(lexer) < 0)
-	{
-		printf("tmp error [parenthesis]\n");
 		return (-1);
-	}
 	return (0);
 }

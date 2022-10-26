@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-int	ft_parser(const char *fmt, va_list args)
+int	ft_parser(int fd, const char *fmt, va_list args)
 {
 	int	i;
 	int	len;
@@ -24,7 +24,7 @@ int	ft_parser(const char *fmt, va_list args)
 		if (fmt[i] == '%')
 		{
 			i++;
-			len += ft_define_args(fmt, args, &i);
+			len += ft_define_args(fd, fmt, args, &i);
 		}
 		else
 			len += ft_putchar_size(fmt[i]);
@@ -39,7 +39,18 @@ int	ft_printf(const char *fmt, ...)
 	int		ret;
 
 	va_start(args, fmt);
-	ret = ft_parser(fmt, args);
+	ret = ft_parser(1, fmt, args);
+	va_end(args);
+	return (ret);
+}
+
+int	ft_fprintf(int fd, const char *fmt, ...)
+{
+	va_list	args;
+	int		ret;
+
+	va_start(args, fmt);
+	ret = ft_parser(fd, fmt, args);
 	va_end(args);
 	return (ret);
 }

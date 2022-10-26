@@ -4,8 +4,9 @@
 # include "tree.h"
 # include "../lexer/lexer.h"
 
-t_ast_node  *ast_parse(t_token *lexer);
-t_ast_node	*ast_parse_command(t_token *lexer);
-t_ast_node  *ast_parse_pair(t_token *lexer, t_token *next);
+t_ast_node	*ast_parse(t_token *lexer);
+t_ast_node	*ast_parse_line(t_token **lexer);
+t_ast_node	*ast_parse_pipe(t_token **lexer);
+t_ast_node	*ast_parse_parent(t_token **lexer);
 
 #endif

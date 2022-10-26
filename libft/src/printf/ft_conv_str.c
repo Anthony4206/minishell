@@ -35,7 +35,7 @@ static char	*ft_prc_str(char *s, t_opts opts)
 	return (new);
 }
 
-int	ft_conv_str(char *s, t_opts opts)
+int	ft_conv_str(int fd, char *s, t_opts opts)
 {
 	char	*new;
 	int		len;
@@ -54,7 +54,7 @@ int	ft_conv_str(char *s, t_opts opts)
 	if (opts.flags.dot && !opts.prc)
 		len = 0;
 	else
-		len = ft_putstr_size(new);
+		len = ft_putstr_size_fd(new, fd);
 	free(new);
 	return (len);
 }

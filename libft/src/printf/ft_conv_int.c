@@ -115,7 +115,7 @@ static char	*ft_opts_int(char *s, int len, int neg, t_opts opts)
 	return (new);
 }
 
-int	ft_conv_int(int n, t_opts opts)
+int	ft_conv_int(int fd, int n, t_opts opts)
 {
 	char	*s;
 	int		neg;
@@ -136,7 +136,7 @@ int	ft_conv_int(int n, t_opts opts)
 		len = ft_strlen_int(s);
 	}
 	else
-		len = ft_putstr_size(s);
+		len = ft_putstr_size_fd(s, fd);
 	free(s);
 	return (len);
 }

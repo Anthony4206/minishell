@@ -26,7 +26,7 @@ static char	*ft_wdt_ptr(char *s, int len, t_opts opts)
 	return (new);
 }
 
-int	ft_conv_ptr(unsigned long n, t_opts opts)
+int	ft_conv_ptr(int fd, unsigned long n, t_opts opts)
 {
 	char	*s;
 	int		len;
@@ -37,7 +37,7 @@ int	ft_conv_ptr(unsigned long n, t_opts opts)
 	if (opts.wdt > len)
 		s = ft_wdt_ptr(s, len, opts);
 	len = ft_strlen_int(s);
-	ft_putstr(s);
+	ft_putstr_fd(s, fd);
 	free(s);
 	return (len);
 }

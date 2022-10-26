@@ -70,7 +70,7 @@ static char	*ft_opts_hex(char *s, int len, int upper, t_opts opts)
 	return (new);
 }
 
-int	ft_conv_hex(unsigned int n, t_opts opts, int upper)
+int	ft_conv_hex(int fd, unsigned int n, t_opts opts, int upper)
 {
 	char	*s;
 	int		len;
@@ -94,7 +94,7 @@ int	ft_conv_hex(unsigned int n, t_opts opts, int upper)
 	}
 	len = ft_strlen_int(s);
 	s = ft_opts_hex(s, len, upper, opts);
-	len = ft_putstr_size(s);
+	len = ft_putstr_size_fd(s, fd);
 	free(s);
 	return (len);
 }

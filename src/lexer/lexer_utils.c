@@ -45,8 +45,9 @@ char	*ft_add_string(char *str, t_token *token)
 	int	i;
 
 	i = 0;
-	ft_parse_quotes(str);
-	while (str[i] && !ft_isspace(str[i]) && !ft_strchr("<>()&|", str[i]))
+	if (ft_parse_quotes(str))
+		return (NULL);
+	while (str[i] && !ft_isspace(str[i]) && !ft_strchr("<>()|", str[i]) && ft_strncmp(str + i, "&&", 2))
 	{
 		if (str[i] == '\'')
 		{
