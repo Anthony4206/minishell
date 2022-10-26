@@ -23,9 +23,9 @@ char    **ft_init_redir(t_token **lexer, char **redir)
     tmp = *lexer;
     if (!redir)
         return (NULL);
-    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR))
+    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR || tmp->type == TOK_L_PARENTHESIS || tmp->type == TOK_R_PARENTHESIS))
     {
-        if (tmp->type == TOK_STRING)
+        if (tmp->type == TOK_STRING || tmp->type == TOK_L_PARENTHESIS || tmp->type == TOK_R_PARENTHESIS)
             tmp = tmp->next;
         else if (tmp->type == TOK_REDIR && tmp->next->type == TOK_STRING)
         {
@@ -35,10 +35,8 @@ char    **ft_init_redir(t_token **lexer, char **redir)
             tmp = tmp->next->next;
         }
         else
-        {
-            printf("?\n");
             return (NULL);
-        }    }
+	}
     redir[i] = 0;
     return (redir);
 }
@@ -50,9 +48,9 @@ char    **ft_add_redir(t_token **lexer)
 
     i = 0;
     tmp = *lexer;
-    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR))
+    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR || tmp->type == TOK_L_PARENTHESIS || tmp->type == TOK_R_PARENTHESIS))
     {
-        if (tmp->type == TOK_STRING)
+        if (tmp->type == TOK_STRING || tmp->type == TOK_L_PARENTHESIS || tmp->type == TOK_R_PARENTHESIS)
             tmp = tmp->next;
         else if (tmp->type == TOK_REDIR && tmp->next->type == TOK_STRING)
         {
@@ -60,10 +58,7 @@ char    **ft_add_redir(t_token **lexer)
             tmp = tmp->next->next;           
         }
         else
-        {
-            printf("?\n");
             return (NULL);
-        }
     }
     return (ft_init_redir(lexer, malloc(sizeof(char *) * (i + 1))));
 }
@@ -77,7 +72,7 @@ char    **ft_init_arg(t_token **lexer, char **arg)
     tmp = *lexer;
     if (!arg)
         return (NULL);
-    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR))
+    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR || tmp->type == TOK_L_PARENTHESIS || tmp->type == TOK_R_PARENTHESIS))
     {
         if (tmp->type == TOK_STRING)
         {
@@ -86,11 +81,11 @@ char    **ft_init_arg(t_token **lexer, char **arg)
         }
         else if (tmp->type == TOK_REDIR && tmp->next->type == TOK_STRING)
             tmp = tmp->next->next;
-        else
-        {
-            printf("?\n");
+		else if (tmp->type == TOK_L_PARENTHESIS || tmp->type == TOK_R_PARENTHESIS)
+			tmp = tmp->next;
+		else
             return (NULL);
-        }    }
+        }
     arg[i] = 0;
     return (arg);
 }
@@ -102,7 +97,7 @@ char    **ft_add_arg(t_token **lexer)
 
     i = 0;
     tmp = *lexer;
-    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR))
+    while (tmp && (tmp->type == TOK_STRING || tmp->type == TOK_REDIR || tmp->type == TOK_L_PARENTHESIS || tmp->type == TOK_R_PARENTHESIS))
     {
         if (tmp->type == TOK_STRING)
         {
@@ -110,7 +105,9 @@ char    **ft_add_arg(t_token **lexer)
             tmp = tmp->next;
         }
         else if (tmp->type == TOK_REDIR && tmp->next->type == TOK_STRING)
-            tmp = tmp->next->next;           
+            tmp = tmp->next->next;
+		else if (tmp->type == TOK_L_PARENTHESIS || tmp->type == TOK_R_PARENTHESIS)
+            tmp = tmp->next;
         else
             return (NULL);
     }
