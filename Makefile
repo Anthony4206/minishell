@@ -22,7 +22,7 @@ HEAD			= include/libft.h
 LIBS 			= ./libft/
 				
 CC 				= gcc -g
-CFLAGS 			= -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS 			= -Wall -Wextra -Werror -fsanitize=address
 
 AR 				= ar rcs
 RM 				= rm -f

@@ -91,9 +91,7 @@ t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 	if (lexer->next)
 	{
 		if (lexer->type == TOK_REDIR)
-		{
 			right = ast_parse(lexer);
-		}
 		else
 		{
 			tmp = lexer->next;

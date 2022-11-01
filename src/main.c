@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/01 08:27:26 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/01 09:08:54 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 #include "parser/parse_utils.h" 
 #include "lexer/lexer.h"
 #include "executor/executor.h"
+#include "expander/expand_var.h"
 
 void	rl_replace_line(const char *text, int clear_undo);
 
