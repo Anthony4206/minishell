@@ -11,7 +11,6 @@ int ft_strlen_tab(char **tab)
     return (i);
 }
 
-//friterie
 
 void    ft_free_tree(t_ast_node *tree)
 {
@@ -19,7 +18,8 @@ void    ft_free_tree(t_ast_node *tree)
         || tree->node_type == NODE_PARENTHESIS)
     {
         ft_free_tree(tree->data.pair.left);
-        ft_free_tree(tree->data.pair.right);
+        if (tree->data.pair.right)
+			ft_free_tree(tree->data.pair.right);
 //        printf("to be freed [pair] %p\n", tree); 
         free(tree);
     }

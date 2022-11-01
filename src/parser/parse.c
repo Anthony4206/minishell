@@ -88,11 +88,12 @@ t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 	}
 	left = ast_parse(tmp->next);
 	free(tmp);
-	//free(end_of_parenth);
 	if (lexer->next)
 	{
 		if (lexer->type == TOK_REDIR)
+		{
 			right = ast_parse(lexer);
+		}
 		else
 		{
 			tmp = lexer->next;
@@ -102,6 +103,7 @@ t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 	}
 	else
 		right = NULL;
+	free(end_of_parenth);
 	return (ast_pair_node_new(left, right, NODE_PARENTHESIS));
 }
 
