@@ -62,7 +62,7 @@ t_ast_node	*ast_parse_parenth(t_token *lexer, t_token *next)
 	t_ast_node	*left;
 	t_ast_node	*right;
 
-	if (next->next->type != TOK_STRING)
+	if (next->next->type != TOK_STRING && next->next->type != TOK_L_PARENTHESIS)
 	{
 		ft_free_all(lexer);
 		return (ast_error_node_new("syntax error in parenthesis"));
@@ -168,7 +168,7 @@ t_ast_node	*ast_parse_command(t_token *lexer)
 	{
 		head = lexer;
 		tmp = lexer;
-		if (lexer->type == TOK_PIPE)
+		if (lexer->type == TOK_PIPE || !lexer->next)
 		{
 			ft_free_all(head);
 			return (ast_error_node_new("syntax error pipe\n"));
