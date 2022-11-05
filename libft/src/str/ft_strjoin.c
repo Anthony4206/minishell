@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/23 11:25:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/09/22 11:03:41 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/03 09:16:09 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	s1_len;
 	size_t	s2_len;
 
-	if (!s2)
+	if (!s1 && !s2)
 		return (NULL);
+	if (!s2)
+		return (ft_strdup(s1));
 	if (!s1)
 		return (ft_strdup(s2));
 	s1_len = ft_strlen(s1);

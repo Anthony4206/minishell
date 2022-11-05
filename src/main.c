@@ -6,7 +6,7 @@
 /*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/10/14 12:41:30 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/05 14:45:40 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 #include "close.h"
 #include "libft.h"
 #include "lexer/lexer.h"
-#include "builtins/builtin.h" 
+#include "builtins/builtin.h"
+#include "expander/expand_var.h"
 
 void	rl_replace_line(const char *text, int clear_undo);
 
@@ -113,24 +114,27 @@ void    ft_visit(t_ast_node *tree)
 int	main(int argc, char **argv, char **envp)
 {
 	t_ctx		*ctx;
-	t_ast_node	*exec_tree;
-	char		*line_read;
+//	t_ast_node	*exec_tree;
+	char		**line_read;
 
 	(void)(argc + argv);
 	ctx = ft_init(envp);
 	while (1)
 	{
-		line_read = readline("minishell$ ");
-		if (!line_read)
+		line_read = malloc(sizeof(char *) * 3);
+		line_read[0] = readline("minishell$ ");
+		line_read[1] = 0;
+		if (!line_read[0])
 			return (0);
-		if (line_read && *line_read)
+		if (line_read[0] && *line_read[0])
 		{
-			if (!ft_strcmp(line_read, "exit"))
-				return (0);
-			ft_add_history(line_read);
-			if (ft_lexer(ctx, line_read) < 0)
+			ft_add_history(line_read[0]);
+			line_read = ft_expand(line_read, ctx);
+			printf("result: %s\n", line_read[0]);
+			free(line_read[0]);
+		/*	if (ft_lexer(ctx, line_read) < 0)
 			{
-				printf("syntaxe error\n");
+				printf("syntax error\n");
 			}
 			else
 			{
@@ -140,7 +144,7 @@ int	main(int argc, char **argv, char **envp)
 			}
 			ctx->start_lexer = NULL;
 			//system("leaks minishell");
-		}
+		*/}
 		free(line_read);
 	}
 	ft_free_struct(ctx);
