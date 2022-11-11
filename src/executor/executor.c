@@ -507,7 +507,11 @@ int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 		close(closed);
         if (!cmd_path)
             ft_return_err(node->data.cmd.tok_list[0], "command not found");
-		ft_expand(node->data.cmd.tok_list, ctx);
+		if (ft_expand(node->data.cmd.tok_list, ctx) > 0)
+		{
+			dprintf(2,"WILDCARD [grrrrr]\n");
+		//	ft_wild_exec()
+		}
         execve(cmd_path, node->data.cmd.tok_list, ctx->env);
         dprintf(2, "exec %s failed\n", node->data.cmd.tok_list[0]);
         exit(1);
