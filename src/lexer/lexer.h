@@ -20,6 +20,7 @@
 typedef struct g_prompt
 {
 	int	prompt;
+	pid_t	last_pid;
 	int ex_status;
 }	t_prompt;
 

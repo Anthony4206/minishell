@@ -76,7 +76,7 @@ int	ft_return_err(char *arg, char *msg)
 {
 	char	*ret;
 
-	ret = ft_calloc(ft_strlen(arg) + ft_strlen(msg) + 11, 1);
+	ret = ft_calloc(ft_strlen(arg) + ft_strlen(msg) + 15, 1);
 	if (ret)
 	{	
 		ft_strlcat(ret, "minishell: ", -1);
@@ -97,8 +97,8 @@ void	ft_sig_handler(int sig)
 		write(1, "\n", 1);
 		if (g_prompt.prompt)
 		{
-			rl_on_new_line();
 			rl_replace_line("", 0);
+			rl_on_new_line();
 			rl_redisplay();
 		}
 		else

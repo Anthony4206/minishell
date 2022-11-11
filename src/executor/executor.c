@@ -344,25 +344,6 @@ void	ft_is_here_doc(t_ctx *ctx, t_ast_node *tree)
 	ft_adjust(ctx, tmp, i);
 }
 
-
-void	ft_exec(t_ast_node *tree, t_ctx *ctx)
-{
-    t_fd    fds;
-	int	    i;
-	int	    children;
-	
-	if (!tree)
-		exit(1);
-	i = -1;
-    fds.fd[0] = STDIN_FILENO;
-	fds.fd[1] = STDOUT_FILENO;
-	fds.fd_close = -1;
-    fds.first_in = 1;
-    fds.first_out = 1;	children = ft_exec_node(tree, ctx, &fds);
-	while (++i < children)
-		wait(0);
-}
-
 void    ft_get_heredoc(char *eof)
 {
     char    *line;
@@ -410,6 +391,33 @@ int	ft_exec_node(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 	}
 	else
 		return (0);
+}
+
+void	ft_exec(t_ast_node *tree, t_ctx *ctx)
+{
+    t_fd    fds;
+	int	    i;
+	int	    children;
+    int     status;
+    pid_t   pid;
+	
+	if (!tree)
+		exit(1);
+	i = -1;
+    fds.fd[0] = STDIN_FILENO;
+	fds.fd[1] = STDOUT_FILENO;
+	fds.fd_close = -1;
+    fds.first_in = 1;
+    fds.first_out = 1;	
+    children = ft_exec_node(tree, ctx, &fds);
+	while (1)
+    {
+		pid = wait(&status);
+        if (pid == g_prompt.last_pid)
+            g_prompt.ex_status = WEXITSTATUS(status);
+        if (pid < 0 && errno != EINTR)
+            break;
+   }
 }
 
 int    ft_exec_redir(t_ast_node *exec, t_ctx *ctx, t_fd *fds)
@@ -477,8 +485,10 @@ int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 	char	*cmd_path;
 
 	g_prompt.prompt = 0;
-	if (fork() == CHILD_PROCESS)
-	{
+    g_prompt.last_pid = fork();
+	if (g_prompt.last_pid == CHILD_PROCESS)
+	{        
+        dprintf(2, "bonjour\n");
 		if (fds->fd_close != fds->fd[STDIN_FILENO])
 			dup2(fds->fd[STDIN_FILENO], STDIN_FILENO);
 		if (fds->fd_close != fds->fd[STDOUT_FILENO])
@@ -493,7 +503,8 @@ int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
         if (!cmd_path)
             ft_return_err(node->data.cmd.tok_list[0], "command not found");
         execve(cmd_path, node->data.cmd.tok_list, ctx->env);
-        ft_fprintf(2, "exec %s failed\n", node->data.cmd.tok_list[0]);
+        dprintf(2, "exec %s failed\n", node->data.cmd.tok_list[0]);
+        exit(1);
 	}
 	return (1);
 }

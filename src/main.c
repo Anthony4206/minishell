@@ -158,8 +158,8 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		g_prompt.prompt = 1;
-		dprintf(2, "prompt : \n");
-		line_read = readline("minishell$ ");
+//		dprintf(2, "prompt : \n");
+		line_read = readline("minishell-1.0$ ");
 		if (!line_read)
 			return (0);
 		if (line_read && *line_read)
@@ -171,11 +171,10 @@ int	main(int argc, char **argv, char **envp)
 				printf("syntaxe error\n");
 			else
 			{
-					
-					ctx->exec_tree = ast_parse(ctx->start_lexer);
-					ft_exec(ctx->exec_tree, ctx);
-					if (ctx->exec_tree)
-						ft_free_tree(ctx->exec_tree);
+				ctx->exec_tree = ast_parse(ctx->start_lexer);
+				ft_exec(ctx->exec_tree, ctx);
+				if (ctx->exec_tree)
+					ft_free_tree(ctx->exec_tree);
 			}
 			ft_free_all(ctx->start_lexer);
 			ctx->start_lexer = NULL;
