@@ -114,7 +114,7 @@ char	*ft_expand_var(char *cmd, char **env)
 	return (ft_adjust(ret, j + 1));
 }
 
-char	**ft_expand(char **cmd, t_ctx *ctx)
+int	ft_expand(char **cmd, t_ctx *ctx)
 {
 	int		i;
 	DIR		*folder;
@@ -126,7 +126,7 @@ char	**ft_expand(char **cmd, t_ctx *ctx)
 	if (folder == NULL)
     {
         printf("Unable to read directory\n");
-        return(NULL);
+        return(1);
     }
 	while(cmd[++i])
 	{
@@ -148,5 +148,5 @@ char	**ft_expand(char **cmd, t_ctx *ctx)
 			cmd[i] = ft_expand_wildcard(cmd[i], entry, folder);
 */	}
 	closedir(folder);
-	return (cmd);
+	return (0);
 }

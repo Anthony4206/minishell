@@ -7,6 +7,7 @@
 #include "../lexer/lexer.h"
 #include "../parser/parse.h"
 #include "../parser/tree.h"
+#include "../expander/expand_var.h" 
 #include "path.h"
 #include "../close.h"
 
@@ -506,6 +507,7 @@ int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 		close(closed);
         if (!cmd_path)
             ft_return_err(node->data.cmd.tok_list[0], "command not found");
+		ft_expand(node->data.cmd.tok_list, ctx);
         execve(cmd_path, node->data.cmd.tok_list, ctx->env);
         dprintf(2, "exec %s failed\n", node->data.cmd.tok_list[0]);
         exit(1);
