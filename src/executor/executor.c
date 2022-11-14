@@ -501,13 +501,10 @@ int    ft_exec_and_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
 	char	*cmd_path;
-	int static	closed;
 
-	if (!closed)
-		closed = 2;
+
 	g_prompt.prompt = 0;
     g_prompt.last_pid = fork();
-	closed++;
 	if (g_prompt.last_pid == CHILD_PROCESS)
 	{        
 		if (fds->fd_close != fds->fd[STDIN_FILENO])
@@ -518,11 +515,12 @@ int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 			close(fds->fd[STDIN_FILENO]);
 		if (fds->fd[STDOUT_FILENO] != STDOUT_FILENO)
 			close(fds->fd[STDOUT_FILENO]);
-		close(fds->fd_close);
+//		dprintf(2, "fd_close = %d\n", fds->fd_close);
+		if (fds->fd_close != 1)
+			close(fds->fd_close);
         if (node->data.cmd.tok_list[0] == 0)
             exit(1);
         cmd_path = ft_chr_path(node->data.cmd.tok_list[0], ctx->env);
-		close(closed);
         if (!cmd_path)
             ft_return_err(node->data.cmd.tok_list[0], "command not found");
 		if (ft_expand(node->data.cmd.tok_list, ctx) > 0)
@@ -530,6 +528,7 @@ int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 			dprintf(2,"WILDCARD [grrrrr]\n");
 		//	ft_wild_exec()
 		}
+//		dprintf(2, "yo\n");
         execve(cmd_path, node->data.cmd.tok_list, ctx->env);
         dprintf(2, "exec %s failed\n", node->data.cmd.tok_list[0]);
         exit(1);
