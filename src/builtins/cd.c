@@ -22,7 +22,7 @@ int	built_cd(char **dir, char **env)
 	int	i;
 	char	*new_pwd;
 
-	if (chdir(dir))
+	if (chdir(dir[1]))
 	{
 		perror("Error: ");
 		return (1);

@@ -11,7 +11,6 @@
 #include "../expander/expand_var.h"
 #include "../builtins/builtin.h"
 #include "../close.h"
-#include "../context.h"
 
 t_prompt	g_prompt;
 

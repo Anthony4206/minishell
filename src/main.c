@@ -28,7 +28,6 @@
 #include "lexer/lexer.h"
 #include "builtins/builtin.h" 
 #include "executor/executor.h"
-#include "context.h"
 
 t_prompt	g_prompt;
 void	rl_replace_line(const char *text, int clear_undo);

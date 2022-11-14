@@ -14,7 +14,6 @@
 # define CLOSE_H
 
 # include "lexer/lexer.h"
-# include "context.h"
 
 void	ft_free_struct(t_ctx *ctx);
 int		ft_return_err(char *arg, char *msg);

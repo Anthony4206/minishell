@@ -117,7 +117,7 @@ void	ft_sig_handler(int sig)
 		else
 		{
 			printf("Quit: 3\n");
-			rl_on_new_line();					
+			rl_on_new_line();
 		}
 	}
 }

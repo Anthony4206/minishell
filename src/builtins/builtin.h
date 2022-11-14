@@ -1,6 +1,7 @@
 #ifndef BUILTIN_H
 # define BUILTIN_H
 
+int	    ft_is_builtin(char **arg, char **env);
 int		ft_findchar(char *str, char c);
 int		built_echo(char **args);
 int		built_cd(char **dir, char **env);

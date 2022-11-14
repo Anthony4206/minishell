@@ -20,8 +20,8 @@ int	ft_is_setted(char **env, char *unseted, int	*i)
 
 char	**ft_unset_env(char **env, char *unseted, int i)
 {
-	int	exist;
-	char	**new_env;
+	int	    exist;
+	char    **new_env;
 
 	exist = 0;
 	new_env = malloc(sizeof(char *) * i);
@@ -39,7 +39,7 @@ char	**ft_unset_env(char **env, char *unseted, int i)
 	return (new_env);
 }
 
-char	**built_unset(char	*unseted, char **env)
+char	**built_unset(char **unseted, char **env)
 {
 	char	**new_env;
 	int		i;
@@ -47,15 +47,15 @@ char	**built_unset(char	*unseted, char **env)
 
 	i = 0;
 	new_env = NULL;
-	exist = ft_is_setted(env, unseted, &i);
+	exist = ft_is_setted(env, unseted[1], &i);
 	if (exist < 0)
 	{
-		printf("minishell: unset: `%s': not a valid identifier\n", unseted);
+		printf("minishell: unset: `%s': not a valid identifier\n", unseted[1]);
 		return (env);
 	}
 	if (exist)
 	{
-		new_env = ft_unset_env(env,  unseted, i);
+		new_env = ft_unset_env(env, unseted[1], i);
 		return (new_env);
 	}
 	return (env);
