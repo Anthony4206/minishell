@@ -2,7 +2,7 @@
 #include <unistd.h> 
 #include "libft.h" 
 
-int	built_echo(char *args)
+int	built_echo(char **args)
 {
 	int		i;
 	int		backslash;

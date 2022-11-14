@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
-void	built_exit(int	status)
+void	built_exit(char **arg)
 {
-	exit (status);
+	/// A REVOIR
+	exit(arg[1]);
 }

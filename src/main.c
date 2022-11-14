@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/14 11:15:19 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/14 13:31:04 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 #include "lexer/lexer.h"
 #include "builtins/builtin.h" 
 #include "executor/executor.h"
+#include "context.h"
 
 t_prompt	g_prompt;
 void	rl_replace_line(const char *text, int clear_undo);

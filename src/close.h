@@ -6,14 +6,15 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:14:15 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/03 08:19:06 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/14 13:33:22 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CLOSE_H
 # define CLOSE_H
 
-#include "lexer/lexer.h"
+# include "lexer/lexer.h"
+# include "context.h"
 
 void	ft_free_struct(t_ctx *ctx);
 int		ft_return_err(char *arg, char *msg);

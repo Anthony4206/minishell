@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmidon <mmidon@student.42.fr>              +#+  +:+       +#+        */
+/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:05:32 by mmidon            #+#    #+#             */
-/*   Updated: 2022/09/22 10:13:20 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/14 13:31:47 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include "../close.h"
 #include "token_list.h"
 #include "parenthesis.h"
+#include "../context.h"
 
 void	ft_show_list(t_token *list);
 

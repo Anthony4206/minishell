@@ -17,7 +17,7 @@ int	ft_find_pwd_index(char **env)
 	return (-1);
 }
 
-int	built_cd(char *dir, char **env)
+int	built_cd(char **dir, char **env)
 {
 	int	i;
 	char	*new_pwd;
