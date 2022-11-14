@@ -5,7 +5,8 @@ SRC				=	src/main.c	src/close.c \
 					src/builtins/echo.c src/builtins/pwd.c src/builtins/env.c src/builtins/cd.c \
 					src/builtins/export.c src/builtins/unset.c src/builtins/exit.c \
 					src/parser/parse.c src/parser/parse_node.c src/parser/parse_utils.c \
-					src/executor/executor.c src/executor/path.c
+					src/executor/executor.c src/executor/path.c \
+					src/expander/expand_var.c src/expander/no_random_quote.c \
 
 SRC_B			= 
 
@@ -14,7 +15,7 @@ OBJ_B			= ${SRC_B:.c=.o}
 
 INCLUDE 		= -I./include/ 
 
-RL              = -L/Users/mmidon/.brew/opt/readline/lib -lreadline
+RL              = -L/Users/${USER}/.brew/opt/readline/lib -lreadline
 
 HEAD			= include/libft.h
 

@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/07 08:03:04 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/14 08:09:36 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,8 @@ int	main(int argc, char **argv, char **envp)
 			else
 			{
 				ctx->exec_tree = ast_parse(ctx->start_lexer);
+//				if (ctx->exec_tree)
+//					ft_visit(ctx->exec_tree);
 				ft_exec(ctx->exec_tree, ctx);
 				if (ctx->exec_tree)
 					ft_free_tree(ctx->exec_tree);

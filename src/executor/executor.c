@@ -390,6 +390,8 @@ int	ft_exec_node(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 		unlink(".here_doc");
         return (ret);
 	}
+	else if (node->node_type == NODE_AND || node->node_type == NODE_OR)
+        return (ft_exec_end_or(node, ctx, fds));
 	else
 		return (0);
 }
@@ -415,71 +417,66 @@ void	ft_exec(t_ast_node *tree, t_ctx *ctx)
     {
 		pid = wait(&status);
         if (pid == g_prompt.last_pid)
-            g_prompt.ex_status = WEXITSTATUS(status);
+            ctx->ex_status = WEXITSTATUS(status);
         if (pid < 0 && errno != EINTR)
             break;
    }
 }
 
-int    ft_exec_redir(t_ast_node *exec, t_ctx *ctx, t_fd *fds)
+int    ft_exec_redir(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
     int fd;
 
 	if (ctx->is_first)
-		ft_is_here_doc(ctx, exec);
-	if (exec->data.redir.fd == 2)
+		ft_is_here_doc(ctx, node);
+	if (node->data.redir.fd == 2)
 	{
 		ft_get_heredoc(ctx->fd_here_doc[--ctx->len]);
         fd = open(".here_doc", O_RDONLY);
 	}
 	else
-    	fd = open(exec->data.redir.file, exec->data.redir.mode, 0664);
+    	fd = open(node->data.redir.file, node->data.redir.mode, 0664);
     if (fd == -1)
     {
-        ft_fprintf(2, "open %s failed\n", exec->data.redir.file);
+        ft_fprintf(2, "open %s failed\n", node->data.redir.file);
         exit(1);
     }
-    if (fds->first_in && (exec->data.redir.fd == 0 || exec->data.redir.fd == 2))
+    if (fds->first_in && (node->data.redir.fd == 0 || node->data.redir.fd == 2))
     {
         fds->fd[0] = fd;
         fds->first_in = 0;
     }
-    if (fds->first_out && exec->data.redir.fd == 1)
+    if (fds->first_out && node->data.redir.fd == 1)
     {
         fds->fd[1] = fd;
         fds->first_out = 0;
     }	
-    fds->fd_close = exec->data.redir.fd;
-    if (!exec->data.redir.cmd || exec->data.redir.cmd->node_type == NODE_CMD)
+    fds->fd_close = node->data.redir.fd;
+    if (!node->data.redir.cmd || node->data.redir.cmd->node_type == NODE_CMD)
     {
         fds->first_in = 1;       
         fds->first_out = 1;
 		ctx->is_first = 1;
 		ctx->len = 0;
     }
-    ft_exec_node(exec->data.redir.cmd, ctx, fds);
+    ft_exec_node(node->data.redir.cmd, ctx, fds);
     return (1);
 }
 
-/*int    ft_exec_end_or(t_ast_node *exec, t_ctx *ctx)
+int    ft_exec_end_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
-    pid_t   pid;
-    int     status;
-    int     children;
-
-    children = 0;
-    pid = fork();
-    if (pid == 0)
-        children += ft_exec_node(exec->data.pair.left, ctx);
-    waitpid(pid, &status, 0);
-    if (status == 2)
-        status += 128;
+    ft_exec_node(node->data.pair.left, ctx, fds);
+    waitpid(g_prompt.last_pid, &ctx->ex_status, 0);
+    if (ctx->ex_status == 2)
+        ctx->ex_status += 128;
     else
-        status = WEXITSTATUS(status);
-    if (exec->node_type == NODE_AND && status)
-        children += ft_exec_node(exec->data.pair.left, ctx);
-    return (children);
-}*/
+        ctx->ex_status = WEXITSTATUS(ctx->ex_status);
+    if (node->node_type == NODE_AND && ctx->ex_status == 0)
+        ft_exec_node(node->data.pair.right, ctx, fds);
+    else if (node->node_type == NODE_OR && ctx->ex_status != 0)
+        ft_exec_node(node->data.pair.right, ctx, fds);
+    return (1);
+}
 
 int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
@@ -501,6 +498,7 @@ int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 			close(fds->fd[STDIN_FILENO]);
 		if (fds->fd[STDOUT_FILENO] != STDOUT_FILENO)
 			close(fds->fd[STDOUT_FILENO]);
+		close(fds->fd_close);
         if (node->data.cmd.tok_list[0] == 0)
             exit(1);
         cmd_path = ft_chr_path(node->data.cmd.tok_list[0], ctx->env);

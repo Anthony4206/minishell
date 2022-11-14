@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:03:39 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/04 10:57:57 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/14 08:02:46 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,8 @@
 
 typedef struct g_prompt
 {
-	int	prompt;
+	int		prompt;
 	pid_t	last_pid;
-	int ex_status;
 }	t_prompt;
 
 typedef enum e_token_type
@@ -70,6 +69,7 @@ typedef struct s_ctx
 	char		**fd_here_doc;
 	int			len;
 	int			is_first;
+	int 		ex_status;
 }				t_ctx;
 
 int		ft_parse_quotes(char *str);
