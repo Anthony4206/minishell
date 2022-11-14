@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/14 08:42:26 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/14 11:15:19 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ int	main(int argc, char **argv, char **envp)
 		g_prompt.prompt = 1;
 		line_read = readline("minishell-1.0$ ");
 		if (!line_read)
-			return (0);
+			break;
 		if (line_read && *line_read)
 		{
 
