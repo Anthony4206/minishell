@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/14 08:09:36 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/14 08:42:26 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,6 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		g_prompt.prompt = 1;
-//		dprintf(2, "prompt : \n");
 		line_read = readline("minishell-1.0$ ");
 		if (!line_read)
 			return (0);
@@ -172,8 +171,10 @@ int	main(int argc, char **argv, char **envp)
 			else
 			{
 				ctx->exec_tree = ast_parse(ctx->start_lexer);
-//				if (ctx->exec_tree)
-//					ft_visit(ctx->exec_tree);
+/*
+				if (ctx->exec_tree)
+					ft_visit(ctx->exec_tree);
+*/
 				ft_exec(ctx->exec_tree, ctx);
 				if (ctx->exec_tree)
 					ft_free_tree(ctx->exec_tree);

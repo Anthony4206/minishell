@@ -25,7 +25,7 @@ typedef struct s_fd
 int	    ft_strlen_tab(char **tab);
 void    ft_init_fd_ctx(t_fd *fds);
 void	ft_exec(t_ast_node *tree, t_ctx *ctx);
-int   	ft_exec_end_or(t_ast_node *node, t_ctx *ctx, t_fd *fds);
+int   	ft_exec_and_or(t_ast_node *node, t_ctx *ctx, t_fd *fds);
 int		ft_exec_node(t_ast_node *node, t_ctx *ctx, t_fd *fds);
 int		ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds);
 int     ft_exec_redir(t_ast_node *node, t_ctx *ctx, t_fd *fds);

@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:14:45 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/04 10:14:28 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/14 09:06:07 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,6 @@ void	ft_sig_handler(int sig)
 	if (sig == SIGQUIT)
 	{
 		rl_on_new_line();
-		rl_redisplay();
+	//	rl_redisplay(); ///////////////////////
 	}
 }

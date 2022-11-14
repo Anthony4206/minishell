@@ -391,7 +391,7 @@ int	ft_exec_node(t_ast_node *node, t_ctx *ctx, t_fd *fds)
         return (ret);
 	}
 	else if (node->node_type == NODE_AND || node->node_type == NODE_OR)
-        return (ft_exec_end_or(node, ctx, fds));
+        return (ft_exec_and_or(node, ctx, fds));
 	else
 		return (0);
 }
@@ -463,7 +463,21 @@ int    ft_exec_redir(t_ast_node *node, t_ctx *ctx, t_fd *fds)
     return (1);
 }
 
-int    ft_exec_end_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
+t_ast_node	*ft_skip_to_pair(t_ast_node *node)
+{
+	while (node && node->data.pair.right)
+	{
+		if (node->node_type == NODE_AND || node->node_type == NODE_OR)
+			return (node->data.pair.right);
+		if (node->node_type && node->node_type <= 5) 
+			node = node->data.pair.right;
+		else 
+			return(NULL);
+	}
+	return (NULL);
+}
+
+int    ft_exec_and_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
     ft_exec_node(node->data.pair.left, ctx, fds);
     waitpid(g_prompt.last_pid, &ctx->ex_status, 0);
@@ -475,6 +489,12 @@ int    ft_exec_end_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
         ft_exec_node(node->data.pair.right, ctx, fds);
     else if (node->node_type == NODE_OR && ctx->ex_status != 0)
         ft_exec_node(node->data.pair.right, ctx, fds);
+	else
+	{
+		node = ft_skip_to_pair(node->data.pair.right);
+		if (node)
+        	ft_exec_node(node, ctx, fds);
+	}
     return (1);
 }
 
