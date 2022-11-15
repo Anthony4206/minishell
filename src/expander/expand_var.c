@@ -56,7 +56,10 @@ char	*ft_find_var(char *cmd, int *i, int *j, char **env)
 		&& cmd[*i + 1] != ' ' && cmd[*i + 1] != '"')
 		var[++k] = cmd[(*i)++];
 	var[++k] = cmd[(*i)];
-	ret = ft_env_chr(var, env);
+	if (!ft_strcmp(var, "$") && ft_strlen(var) == 1)
+		ret = ft_strdup(var);
+	else
+		ret = ft_env_chr(var, env);
 	if (cmd[*i] && cmd[(*i)++ + 1] == '$')
 	{
 		free(var);
@@ -137,13 +140,13 @@ int	ft_expand(char **cmd, t_ctx *ctx)
 			cmd[i] = ft_strdup(cpy);
 			free(cpy);
 		}
-/*		if (ft_strchr(cmd[i], '"') || ft_strchr(cmd[i], '\''))
+		if (ft_strchr(cmd[i], '"') || ft_strchr(cmd[i], '\''))
 		{
 			cpy = ft_no_random_quote(cmd[i]);
 			free(cmd[i]);
 			cmd[i] = ft_strdup(cpy);
 			free(cpy);
-		}*/
+		}
 /*		if (ft_strchr(cmd[i], '*'))
 			cmd[i] = ft_expand_wildcard(cmd[i], entry, folder);
 */	}

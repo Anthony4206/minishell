@@ -15,7 +15,7 @@ OBJ_B			= ${SRC_B:.c=.o}
 
 INCLUDE 		= -I./include/ 
 
-RL              = -L/usr/local/Cellar/readline/8.1.2/lib -lreadline
+RL              = -L/Users/mmidon/.brew/opt/readline/lib -lreadline
 
 HEAD			= include/libft.h
 
