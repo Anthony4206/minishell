@@ -19,7 +19,10 @@ t_ast_node	*ast_parse(t_token *lexer)
 		return (NULL);
 	cmd = ast_parse_line(&lexer);
 	if (!ast_peek(&lexer, (int[]){TOK_EOF}, 1, 0))
+	{
 		printf("syntax error\n");
+		return(NULL);
+	}
 	return (cmd);
 }
 

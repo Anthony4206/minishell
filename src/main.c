@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/14 13:31:04 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/15 10:45:45 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 #include <errno.h>
 #include <time.h>
 #include <termios.h>
-
 #include <string.h>
 #include <signal.h>
+
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -155,15 +155,14 @@ int	main(int argc, char **argv, char **envp)
 	(void)(argc + argv);
 	ft_init_sig(&term, &sign);
 	ctx = ft_init(envp);
-	while (1)
+	while (42)
 	{
 		g_prompt.prompt = 1;
-		line_read = readline("minishell-1.0$ ");
+		line_read = readline("\033[0;36mminishell-1.0$ \033[0m");
 		if (!line_read)
 			break;
 		if (line_read && *line_read)
 		{
-
 			ft_add_history(line_read);
 			tcsetattr(STDIN_FILENO, TCSANOW, &sign);
 			if (ft_lexer(ctx, line_read) < 0)

@@ -88,13 +88,23 @@ char	*ft_join(char *ret, char *var, int *j)
 	return (ret);
 }
 
+void	ft_quote(int *quote)
+{
+	if (*quote)
+		*quote  = 0;
+	else
+		*quote = 1;
+}
+
 char	*ft_expand_var(char *cmd, char **env)
 {
 	int		i;
 	int		j;
+	int		quote;
 	char	*var;
 	char	*ret;
 
+	quote  = 0;
 	if (!cmd || !cmd[0])
 		return (NULL);
 	ret = ft_calloc(sizeof(char), ARG_MAX);
@@ -104,7 +114,9 @@ char	*ft_expand_var(char *cmd, char **env)
 	j = -1;
 	while (cmd[i])
 	{
-		if (cmd[i] == '$')
+		if (cmd[i] == '\'')
+			ft_quote(&quote);
+		if (cmd[i] == '$' && !quote)
 		{
 			var = ft_find_var(cmd, &i, &j, env);
 			if (var)

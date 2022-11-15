@@ -2,6 +2,7 @@
 #include <limits.h>
 #include <unistd.h>
 #include <stdio.h>
+#include "../lexer/lexer.h"
 
 int	ft_find_pwd_index(char **env)
 {
@@ -17,7 +18,7 @@ int	ft_find_pwd_index(char **env)
 	return (-1);
 }
 
-int	built_cd(char **dir, char **env)
+int	built_cd(char **dir, t_ctx *ctx)
 {
 	int	i;
 	char	*new_pwd;
@@ -27,13 +28,14 @@ int	built_cd(char **dir, char **env)
 		perror("Error: ");
 		return (1);
 	}
-	i = ft_find_pwd_index(env);
+	i = ft_find_pwd_index(ctx->env);
 	if (i < 0)
 		return (1);
 	new_pwd = malloc(sizeof(char) * PATH_MAX);
 	getcwd(new_pwd, PATH_MAX);
 	if (!new_pwd[0])
 		return (-1);
-	env[i] = ft_strjoin("PWD=", new_pwd);
+	free(ctx->env[i]);
+	ctx->env[i] = ft_strjoin("PWD=", new_pwd);
 	return (0);
 }
