@@ -154,7 +154,7 @@ int    ft_exec_redir(t_ast_node *node, t_ctx *ctx, t_fd *fds)
     if (fd == -1)
     {
         ft_fprintf(2, "open %s failed\n", node->data.redir.file);
-        exit(1);
+        return (1);
     }
     if (fds->first_in && (node->data.redir.fd == 0 || node->data.redir.fd == 2))
     {
