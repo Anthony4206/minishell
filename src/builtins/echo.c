@@ -2,6 +2,21 @@
 #include <unistd.h> 
 #include "libft.h" 
 
+static int ft_option(char *arg)
+{
+	int	i;
+
+	if (arg[0] != '-')
+		return (0);
+	i = 0;
+	while (arg[++i])
+	{
+		if (arg[i] != 'n')
+			return (0);
+	}
+	return (1);
+}
+
 int	built_echo(char **args)
 {
 	int		i;
@@ -14,12 +29,10 @@ int	built_echo(char **args)
 	}
 	i = 1;
 	backslash = 0;
-	if (!ft_strncmp(args[1], "-n\0", 3))
-		return (1);
-	if (!ft_strncmp(args[1], "-n ", 3))
+	if (ft_option(args[1]))
 	{
+		i++;
 		backslash = 1;
-		i += 3;
 	}
 	while (args[i])
 	{
