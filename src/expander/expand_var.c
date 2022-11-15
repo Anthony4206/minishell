@@ -52,8 +52,7 @@ char	*ft_find_var(char *cmd, int *i, int *j, char **env)
 	tmp = NULL;
 	k = -1;
 	var = ft_calloc(sizeof(char), ARG_MAX);
-	while (cmd[*i + 1] && cmd[*i + 1] != 0 && cmd[*i + 1] != '$'
-		&& cmd[*i + 1] != ' ' && cmd[*i + 1] != '"')
+	while (cmd[*i + 1] && ((cmd[*i + 1] >= 'A' && cmd[*i + 1] <= 'Z') || (cmd[*i + 1] >= 'a' && cmd[*i + 1] <= 'z')))
 		var[++k] = cmd[(*i)++];
 	var[++k] = cmd[(*i)];
 	if (!ft_strcmp(var, "$") && ft_strlen(var) == 1)
