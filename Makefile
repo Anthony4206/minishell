@@ -13,9 +13,9 @@ SRC_B			=
 OBJ				= ${SRC:.c=.o}
 OBJ_B			= ${SRC_B:.c=.o}
 
-INCLUDE 		= -I./include/ 
+INCLUDE 		= -I./include/
 
-RL              = -L/Users/mmidon/.brew/opt/readline/lib -lreadline
+RL              = -L/Users/${USER}/.brew/opt/readline/lib -lreadline
 
 HEAD			= include/libft.h
 
