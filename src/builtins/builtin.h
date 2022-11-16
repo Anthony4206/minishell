@@ -10,7 +10,7 @@ int		built_cd(char **dir, t_ctx *ctx);
 void	built_exit(char **status);
 void	built_pwd(char **env);
 void	built_env(char **env, int opt);
-char	**built_export(char **exported, char **env);
-char	**built_unset(char **unseted, char **env);
+char	**built_export(char **exported, t_ctx *ctx);
+char	**built_unset(char **unseted, t_ctx *ctx);
 
 #endif

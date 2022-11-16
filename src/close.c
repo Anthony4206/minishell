@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:14:45 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/14 12:00:40 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/15 14:44:06 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void	ft_free_struct(t_ctx *ctx)
 			free (ctx->start_lexer);
 		ctx->start_lexer = ptr;
 	}
-	ft_free_tab(ctx->env);
+	if (ctx->env)
+		ft_free_tab(ctx->env);
 //	ft_free_tab(ctx->fd_here_doc);
 	free(ctx);
 }
@@ -105,7 +106,7 @@ void	ft_sig_handler(int sig)
 			rl_redisplay();
 		}
 		else
-			kill(getppid(), SIGINT);
+			kill(1, SIGINT);
 	}
 	if (sig == SIGQUIT)
 	{
