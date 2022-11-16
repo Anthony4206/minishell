@@ -39,26 +39,29 @@ char	**ft_unset_env(char **env, char *unseted, int i)
 	return (new_env);
 }
 
-char	**built_unset(char **unseted, t_ctx *ctx)
+int	built_unset(char **unseted, t_ctx *ctx)
 {
 	char	**new_env;
 	int		i;
 	int		exist;
-//	int		j;
+	int		j;
 
 	i = 0;
-	//j = 
+	j = 0;
 	new_env = NULL;
-	exist = ft_is_setted(ctx->env, unseted[1], &i);
-	if (exist < 0)
+	while (unseted[++j])
 	{
-		printf("minishell: unset: `%s': not a valid identifier\n", unseted[1]);
-		return (ctx->env);
+		exist = ft_is_setted(ctx->env, unseted[j], &i);
+		if (exist < 0)
+		{
+			printf("minishell: unset: `%s': not a valid identifier\n", unseted[j]);
+			return (1);
+		}
+		if (exist)
+		{
+			new_env = ft_unset_env(ctx->env, unseted[j], i);
+			ctx->env = new_env;
+		}
 	}
-	if (exist)
-	{
-		new_env = ft_unset_env(ctx->env, unseted[1], i);
-		ctx->env = new_env;
-	}
-	return (ctx->env);
+	return (0);
 }

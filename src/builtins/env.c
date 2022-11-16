@@ -1,10 +1,12 @@
 #include <stdio.h>
+
 #include "libft.h"
+#include "../executor/executor.h"
 
 //opt 1 = export
 //opt 0 = env
 
-void	built_env(char **env, int opt)
+void	built_env(char **env, int opt, t_fd *fds)
 {
 	int	i;
 
@@ -15,16 +17,16 @@ void	built_env(char **env, int opt)
 		{
 			if (opt)
 			{
-				printf("declare -x ");
-				printf("%s", env[i]);
-				printf("\n");
+				ft_putstr_fd("declare -x ", fds->fd[1]);
+				ft_putstr_fd(env[i], fds->fd[1]);
+				ft_putstr_fd("\n", fds->fd[1]);
 			}
 			else if (ft_strchr(env[i], '=') || opt)
 			{
-				printf("%s", env[i]);
+				ft_putstr_fd(env[i], fds->fd[1]);
 				if (!ft_strchr(env[i], '='))	
-					printf("=''");
-				printf("\n");
+					ft_putstr_fd("=''", fds->fd[1]);
+				ft_putstr_fd("\n", fds->fd[1]);
 			}
 			i++;
 		}

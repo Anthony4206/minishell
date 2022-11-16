@@ -2,7 +2,7 @@
 
 #include "libft.h"
 #include "builtin.h"
-#include "../lexer/lexer.h" 
+#include "../lexer/lexer.h"
 
 int	ft_findchar(char *str, char c)
 {
@@ -28,7 +28,7 @@ void	is_deja_vu(int *tmp, int *i, char *exported, char **env)
 		(*i)--;
 }
 
-char	**ft_new_env(char **args, t_ctx *ctx, int j)
+char	**ft_new_env(char **args, int j, t_ctx *ctx)
 {
 	int		i;
 	int	tmp;
@@ -54,17 +54,17 @@ char	**ft_new_env(char **args, t_ctx *ctx, int j)
 	return(new_env);
 }
 
-char	**built_export(char	**args, t_ctx *ctx)
+char	**built_export(char	**args, t_fd *fds, t_ctx *ctx)
 {
 	int		j;
 
 	j = 0;
 	if (!args[1])
 	{
-		built_env(ctx->env, 1);
+		built_env(ctx->env, 1, fds);
 		return (NULL);
 	}
 	while (args[++j])
-		ctx->env = ft_new_env(args, ctx, j);
+		ctx->env = ft_new_env(args, j, ctx);
 	return (NULL);
 }
