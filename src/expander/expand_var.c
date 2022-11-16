@@ -131,17 +131,9 @@ char	*ft_expand_var(char *cmd, char **env)
 int	ft_expand(char **cmd, t_ctx *ctx)
 {
 	int		i;
-	DIR		*folder;
 	char	*cpy;
-//	struct dirent *entry;
 
 	i = -1;
-	folder = opendir(".");
-	if (folder == NULL)
-    {
-        printf("Unable to read directory\n");
-        return(1);
-    }
 	while(cmd[++i])
 	{
 		if (ft_strchr(cmd[i], '$'))
@@ -158,9 +150,8 @@ int	ft_expand(char **cmd, t_ctx *ctx)
 			cmd[i] = ft_strdup(cpy);
 			free(cpy);
 		}
-/*		if (ft_strchr(cmd[i], '*'))
-			cmd[i] = ft_expand_wildcard(cmd[i], entry, folder);
-*/	}
-	closedir(folder);
+		if (ft_strchr(cmd[i], '*'))
+			ft_expand_wildcard(cmd);
+	}
 	return (0);
 }
