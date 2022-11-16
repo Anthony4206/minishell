@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:05:32 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/14 13:31:47 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/16 12:41:31 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ int	ft_count_quotes(char *str)
 				state = 0;
 		}
 	}
-//	if (count_dquotes % 2 || count_squotes % 2)
-//		return (i);
+	if (count_dquotes % 2 || count_squotes % 2)
+		return (i);
 	return (count_squotes);
 }
 

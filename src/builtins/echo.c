@@ -1,6 +1,8 @@
 #include <stdio.h> 
-#include <unistd.h> 
+#include <unistd.h>
+
 #include "libft.h" 
+#include "../executor/executor.h"
 
 static int ft_option(char *arg)
 {
@@ -17,14 +19,14 @@ static int ft_option(char *arg)
 	return (1);
 }
 
-int	built_echo(char **args)
+int	built_echo(char **args, t_fd *fds)
 {
 	int		i;
 	int		backslash;
 
-	if (!args)
+	if (!args || !args[1])
 	{
-		write(1, "\n", 1);
+		write(fds->fd[1], "\n", 1);
 		return (1);
 	}
 	i = 1;
@@ -36,12 +38,12 @@ int	built_echo(char **args)
 	}
 	while (args[i])
 	{
-		ft_putstr(args[i]);
+		ft_putstr_fd(args[i], fds->fd[1]);
 		if (args[i + 1])
-			write(1, " ", 1);
+			write(fds->fd[1], " ", 1);
 		i++;
 	}
 	if (!backslash)
-		write(1, "\n", 1);
+		write(fds->fd[1], "\n", 1);
 	return (0);
 }

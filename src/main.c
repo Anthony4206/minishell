@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/15 10:45:45 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/16 12:38:20 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@
 #include "builtins/builtin.h" 
 #include "executor/executor.h"
 
-t_prompt	g_prompt;
+extern t_prompt	g_prompt;
+
 void	rl_replace_line(const char *text, int clear_undo);
 
 char	**ft_dup(char	**envp)
@@ -177,8 +178,8 @@ int	main(int argc, char **argv, char **envp)
 				ft_exec(ctx->exec_tree, ctx);
 				if (ctx->exec_tree)
 					ft_free_tree(ctx->exec_tree);
+				ft_free_all(ctx->start_lexer);
 			}
-			ft_free_all(ctx->start_lexer);
 			ctx->start_lexer = NULL;
 			tcsetattr(STDIN_FILENO, TCSANOW, &term);
 		}

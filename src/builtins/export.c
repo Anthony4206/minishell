@@ -1,5 +1,8 @@
-#include "libft.h"
 #include <stdio.h> 
+
+#include "libft.h"
+#include "builtin.h"
+#include "../lexer/lexer.h"
 
 int	ft_findchar(char *str, char c)
 {
@@ -25,28 +28,43 @@ void	is_deja_vu(int *tmp, int *i, char *exported, char **env)
 		(*i)--;
 }
 
-char	**built_export(char	*exported, char	**env)
+char	**ft_new_env(char **args, int j, t_ctx *ctx)
 {
 	int		i;
-	int		tmp;
-	char	**new_env;
+	int	tmp;
+	char **new_env;
 
 	i = -1;
 	tmp = 0;
-	is_deja_vu(&tmp, &i, exported, env);
+	is_deja_vu(&tmp, &i, args[j], ctx->env);
 	new_env = malloc(sizeof(char *) * (i + 2));
 	i = -1;
-	while (env[++i])
+	while (ctx->env[++i])
 	{
-		if (tmp && !ft_strncmp(exported, env[i], ft_findchar(exported, '=')) && ft_findchar(env[i], '=') == ft_findchar(exported, '='))
-			new_env[i] = ft_strdup(exported);
+		if (tmp && !ft_strncmp(args[j], ctx->env[i], ft_findchar(args[j], '=')) && ft_findchar(ctx->env[i], '=') == ft_findchar(args[j], '='))
+			new_env[i] = ft_strdup(args[j]);
 		else
-			new_env[i] = ft_strdup(env[i]);
-		free(env[i]);
+			new_env[i] = ft_strdup(ctx->env[i]);
+		free(ctx->env[i]);
 	}
-	free(env);
+	free(ctx->env);
 	if (!tmp)
-		new_env[i++] = ft_strdup(exported);
+		new_env[i++] = ft_strdup(args[j]);
 	new_env[i] = 0;
-	return (new_env);
+	return(new_env);
+}
+
+char	**built_export(char	**args, t_fd *fds, t_ctx *ctx)
+{
+	int		j;
+
+	j = 0;
+	if (!args[1])
+	{
+		built_env(ctx->env, 1, fds);
+		return (NULL);
+	}
+	while (args[++j])
+		ctx->env = ft_new_env(args, j, ctx);
+	return (NULL);
 }

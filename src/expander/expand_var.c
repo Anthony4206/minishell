@@ -147,11 +147,14 @@ int	ft_expand(char **cmd, t_ctx *ctx)
 		{
 			cpy = ft_no_random_quote(cmd[i]);
 			free(cmd[i]);
-			cmd[i] = ft_strdup(cpy);
+			if (cpy[0])
+				cmd[i] = ft_strdup(cpy);
+			else
+				cmd[i] = ft_strdup("");
 			free(cpy);
 		}
-		if (ft_strchr(cmd[i], '*'))
-			ft_expand_wildcard(cmd, cmd[i], i);
+/*		if (ft_strchr(cmd[i], '*'))
+			ft_expand_wildcard(cmd);*/
 	}
 	return (0);
 }
