@@ -38,6 +38,8 @@ char	**ft_new_env(char **args, int j, t_ctx *ctx)
 	tmp = 0;
 	is_deja_vu(&tmp, &i, args[j], ctx->env);
 	new_env = malloc(sizeof(char *) * (i + 2));
+	if (!new_env)
+		return (NULL);
 	i = -1;
 	while (ctx->env[++i])
 	{
@@ -54,17 +56,21 @@ char	**ft_new_env(char **args, int j, t_ctx *ctx)
 	return(new_env);
 }
 
-char	**built_export(char	**args, t_fd *fds, t_ctx *ctx)
+int	built_export(char **args, t_fd *fds, t_ctx *ctx)
 {
 	int		j;
 
+	if (!ctx->env)
+		return (1);
 	j = 0;
 	if (!args[1])
 	{
 		built_env(ctx->env, 1, fds);
-		return (NULL);
+		return (0);
 	}
 	while (args[++j])
 		ctx->env = ft_new_env(args, j, ctx);
-	return (NULL);
+	if (!ctx->env)
+		return (1);
+	return (0);
 }

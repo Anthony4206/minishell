@@ -94,6 +94,7 @@ int	ft_exec_node(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 	if (node->node_type == NODE_CMD)
 	{
 		ret = ft_exec_cmd(node, ctx, fds);
+		g_prompt.status = ret;
 		unlink(".here_doc");
 		return (ret);
 	}
@@ -132,7 +133,7 @@ void	ft_exec(t_ast_node *tree, t_ctx *ctx)
     {
 		pid = wait(&status);
         if (pid == g_prompt.last_pid)
-            ctx->ex_status = WEXITSTATUS(status);
+           g_prompt.status = WEXITSTATUS(status);
         if (pid < 0 && errno != EINTR)
             break;
    }
@@ -195,14 +196,16 @@ t_ast_node	*ft_skip_to_pair(t_ast_node *node)
 int    ft_exec_and_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
     ft_exec_node(node->data.pair.left, ctx, fds);
-    waitpid(g_prompt.last_pid, &ctx->ex_status, 0);
-    if (ctx->ex_status == 2)
-        ctx->ex_status += 128;
-    else
-        ctx->ex_status = WEXITSTATUS(ctx->ex_status);
-    if (node->node_type == NODE_AND && ctx->ex_status == 0)
+	if (g_prompt.status)
+		return (g_prompt.status);
+    waitpid(g_prompt.last_pid, &g_prompt.status, 0);
+//    if (g_prompt.status == 2)
+ //       g_prompt.status += 128;
+//    else
+    g_prompt.status = WEXITSTATUS(g_prompt.status);
+    if (node->node_type == NODE_AND && g_prompt.status == 0)
         ft_exec_node(node->data.pair.right, ctx, fds);
-    else if (node->node_type == NODE_OR && ctx->ex_status != 0)
+    else if (node->node_type == NODE_OR && g_prompt.status != 0)
         ft_exec_node(node->data.pair.right, ctx, fds);
 	else
 	{
@@ -216,12 +219,16 @@ int    ft_exec_and_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
 	char	*cmd_path;
+	int	ret;
 
 	g_prompt.prompt = 0;
 	if (ft_expand(node->data.cmd.tok_list, ctx) > 0)
 		dprintf(2,"WILDCARD [grrrrr]\n");
-	if (ft_is_builtin(node->data.cmd.tok_list, fds, ctx))
+	ret = ft_is_builtin(node->data.cmd.tok_list, fds, ctx);
+	if (ret == 2)
 		return (0);
+	else if (ret)
+		return (g_prompt.status);
 	else
 		g_prompt.last_pid = fork();
 	if (g_prompt.last_pid == CHILD_PROCESS)
@@ -240,7 +247,10 @@ int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 			exit(1);
         cmd_path = ft_chr_path(node->data.cmd.tok_list[0], ctx->env);
         if (!cmd_path)
+		{
             ft_return_err(node->data.cmd.tok_list[0], "command not found");
+			exit (127);
+		}
 		execve(cmd_path, node->data.cmd.tok_list, ctx->env);
         dprintf(2, "exec %s failed\n", node->data.cmd.tok_list[0]); //////////sussy dprintf//////////////////////////
         exit(1);

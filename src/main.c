@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/17 09:57:38 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/17 15:07:56 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,6 @@ int	main(int argc, char **argv, char **envp)
 		g_prompt.prompt = 1;
 		if (g_prompt.status == 132)
 			g_prompt.status--;
-		else
-			g_prompt.status = 0;
 		line_read = readline("\033[0;36mminishell-1.0$ \033[0m");
 		if (!line_read)
 			break;
@@ -188,5 +186,6 @@ int	main(int argc, char **argv, char **envp)
 //		system("leaks minishell");
 	}
 	ft_free_struct(ctx);
+	system("leaks minishell"); 
 	return (0);
 }

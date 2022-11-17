@@ -6,7 +6,7 @@
 /*   By: mmidon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 08:12:58 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/17 08:37:33 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/17 14:12:37 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -56,7 +56,7 @@ static void	ft_export(char **env, t_fd *fds)
 	}
 }
 
-void	built_env(char **env, int opt, t_fd *fds)
+int	built_env(char **env, int opt, t_fd *fds)
 {
 	int	i;
 
@@ -66,7 +66,7 @@ void	built_env(char **env, int opt, t_fd *fds)
 		if (opt)
 		{
 			ft_export(env, fds);
-			return ;
+			return (0);
 		}
 		while (env[i])
 		{
@@ -80,4 +80,5 @@ void	built_env(char **env, int opt, t_fd *fds)
 			i++;
 		}
 	}
+	return (0);
 }

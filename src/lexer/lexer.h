@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:03:39 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/17 08:58:47 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/17 13:31:40 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ typedef struct s_ctx
 	char		**fd_here_doc;
 	int			len;
 	int			is_first;
-	int 		ex_status;
 }				t_ctx;
 
 typedef struct g_prompt

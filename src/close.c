@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:14:45 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/17 09:56:05 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/17 15:12:33 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,8 +61,15 @@ void	ft_free_all(t_token *lexer)
 
 void    ft_free_tree(t_ast_node *tree)
 {
+	int	i;
+
+	i = -1;
     if (tree->node_type == NODE_CMD)
+	{
+		while (tree->data.cmd.tok_list[++i])
+			free(tree->data.cmd.tok_list[i]);
 		free(tree);
+	}
     else if (tree->node_type == NODE_REDIR)
     {
         if (tree->data.redir.cmd)
