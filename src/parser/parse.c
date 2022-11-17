@@ -119,7 +119,7 @@ t_ast_node	*ast_parse_cmd(t_token **lexer)
 		if (!ast_peek(lexer, (int[]){TOK_STRING}, 1, 1))
 			return (ret);
 		if ((*lexer)->type == TOK_STRING)
-			cmd->data.cmd.tok_list[++i] = (*lexer)->content;
+			cmd->data.cmd.tok_list[++i] = ft_strdup((*lexer)->content);
 		if (ast_peek(lexer, (int[]){TOK_EOF}, 1, 0))
 			break;
 		ret = ast_parse_redir(ret, lexer);

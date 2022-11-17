@@ -22,8 +22,8 @@ int	ft_is_builtin(char **arg, t_fd *fds, t_ctx *ctx)
 	else if (!ft_strncmp(arg[0], "env", ft_strlen(arg[0]))
         && ft_strlen(arg[0]) == 3)
 		built_env(ctx->env, 0, fds);
-/*	else if (!ft_strncmp(arg[0], "exit", ft_strlen(arg[0])) && ft_strlen(arg[0]) == 4)
-		built_exit(arg);*/
+	else if (!ft_strncmp(arg[0], "exit", ft_strlen(arg[0])) && ft_strlen(arg[0]) == 4)
+		built_exit(arg);
 	else	
 		return (0);
 	return (1);

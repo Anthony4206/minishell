@@ -5,6 +5,8 @@
 #include "no_random_quote.h" 
 #include "../lexer/lexer.h"
 
+t_prompt	g_prompt;
+
 char	*ft_adjust(char *cmd, int i)
 {
 	char	*ret;
@@ -28,6 +30,8 @@ char	*ft_env_chr(char *var, char **env)
 	char	*ret;
 	int		var_len;
 
+	if (!ft_strcmp(var, "$?") && ft_strlen(var) == 2)
+		return (ft_itoa(g_prompt.status));
 	var_len = ft_strlen(var);
 	i = -1;
 	while (env[++i])
@@ -52,7 +56,7 @@ char	*ft_find_var(char *cmd, int *i, int *j, char **env)
 	tmp = NULL;
 	k = -1;
 	var = ft_calloc(sizeof(char), ARG_MAX);
-	while (cmd[*i + 1] && ((cmd[*i + 1] >= 'A' && cmd[*i + 1] <= 'Z') || (cmd[*i + 1] >= 'a' && cmd[*i + 1] <= 'z')))
+	while (cmd[*i + 1] && ((cmd[*i + 1] >= 'A' && cmd[*i + 1] <= 'Z') || (cmd[*i + 1] >= 'a' && cmd[*i + 1] <= 'z') || cmd[*i + 1] == '?'))
 		var[++k] = cmd[(*i)++];
 	var[++k] = cmd[(*i)];
 	if (!ft_strcmp(var, "$") && ft_strlen(var) == 1)
@@ -140,14 +144,17 @@ int	ft_expand(char **cmd, t_ctx *ctx)
 		{
 			cpy = ft_expand_var(cmd[i], ctx->env);
 			free(cmd[i]);
-			cmd[i] = ft_strdup(cpy);
+			if (cpy && cpy[0] && ft_strlen(cpy))
+				cmd[i] = ft_strdup(cpy);
+			else
+				cmd[i] = ft_strdup("");
 			free(cpy);
 		}
 		if (ft_strchr(cmd[i], '"') || ft_strchr(cmd[i], '\''))
 		{
 			cpy = ft_no_random_quote(cmd[i]);
 			free(cmd[i]);
-			if (cpy[0])
+			if (cpy && cpy[0])
 				cmd[i] = ft_strdup(cpy);
 			else
 				cmd[i] = ft_strdup("");

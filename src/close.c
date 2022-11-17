@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:14:45 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/16 11:03:45 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/17 09:56:05 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "lexer/lexer.h"
 
 t_prompt	g_prompt;
+
 void	rl_replace_line(const char *text, int clear_undo);
 
 void	ft_free_struct(t_ctx *ctx)
@@ -49,7 +50,10 @@ void	ft_free_all(t_token *lexer)
 	{
 		tmp = lexer->next;
 		if (lexer->content)
+		{
 			free(lexer->content);
+			lexer->content = NULL;
+		}
 		free(lexer);
 		lexer = tmp;
 	}
@@ -98,6 +102,7 @@ void	ft_sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
+		g_prompt.status = 1;
 		write(1, "\n", 1);
 		if (g_prompt.prompt)
 		{
@@ -117,6 +122,7 @@ void	ft_sig_handler(int sig)
 		}
 		else
 		{
+			g_prompt.status = 132;
 			printf("Quit: 3\n");
 			rl_on_new_line();
 		}

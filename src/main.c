@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/16 12:38:20 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/17 09:57:38 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	ft_init_sig(struct termios *term, struct termios *sign)
 	struct sigaction	sa;
 
 	g_prompt.prompt = 1;
+	g_prompt.status = 0;
 	sa.sa_handler = ft_sig_handler;
 	sa.sa_flags = SA_RESTART;
 	if (sigaction(SIGINT, &sa, NULL) == -1)
@@ -159,6 +160,10 @@ int	main(int argc, char **argv, char **envp)
 	while (42)
 	{
 		g_prompt.prompt = 1;
+		if (g_prompt.status == 132)
+			g_prompt.status--;
+		else
+			g_prompt.status = 0;
 		line_read = readline("\033[0;36mminishell-1.0$ \033[0m");
 		if (!line_read)
 			break;
@@ -171,10 +176,6 @@ int	main(int argc, char **argv, char **envp)
 			else
 			{
 				ctx->exec_tree = ast_parse(ctx->start_lexer);
-/*
-				if (ctx->exec_tree)
-					ft_visit(ctx->exec_tree);
-*/
 				ft_exec(ctx->exec_tree, ctx);
 				if (ctx->exec_tree)
 					ft_free_tree(ctx->exec_tree);

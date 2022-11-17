@@ -1,11 +1,19 @@
 #include <stdlib.h>
 
 #include "libft.h"
+#include "../lexer/lexer.h"
 
-void	built_exit(char **arg)
+t_prompt	g_prompt;
+
+int	built_exit(char **arg)
 {
-    int status;
-	/// A REVOIR
-    status = ft_atoi(arg[1]);
-	exit(status);
+	ft_putstr_fd("exit\n",2);
+	if (arg[2])
+	{
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
+		return (1);
+	}
+    g_prompt.status = ft_atoi(arg[1]);
+	exit(g_prompt.status);
+	return (0);
 }
