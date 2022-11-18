@@ -10,7 +10,9 @@ void    ft_expand_wildcard(char **cmd, char *wildcard, int pos)
 {
     DIR             *dir;
     struct dirent   *sd;
+    int             i;
 
+    i = 0;
     dir = opendir(".");
     sd = readdir(dir);
     if (dir == NULL)
@@ -21,39 +23,55 @@ void    ft_expand_wildcard(char **cmd, char *wildcard, int pos)
     while (sd)
     {
         if (ft_apply_wildcard(wildcard, sd->d_name) > 0)
-            cmd = ft_add_param(cmd, sd->d_name, pos);
+        {
+            ft_add_param(cmd, sd->d_name, pos + i);
+            i++;
+        }
         sd = readdir(dir);
-        if (wildcard != cmd[pos])
-            cmd = ft_sup_param(cmd, wildcard);
     }
+    if (wildcard != cmd[pos])
+        ft_sup_param(cmd, wildcard);
     closedir(dir);
 }
 
 void    ft_sup_param(char **cmd, char *wildcard)
 {
-    int     i;
+    int i;
+    int len;
 
-    i = -1;
+    i = 0;
+    len = ft_strlen_tab(cmd);
     if (!cmd)
-        return (NULL);
-    while (ft_strcmp(cmd[++i], wildcard))
-        cmd[i] = cmd[i];
+        return ;
+    while (ft_strcmp(cmd[i], wildcard))
+        i++;
     free(cmd[i]);
-    while (cmd[i++])
-        cmd[i] = cmd[i - 1];
+    while (i < len)
+    {
+        cmd[i] = cmd[i + 1];
+        i++;
+    }
+    cmd[i] = NULL;
 }
 
 void    ft_add_param(char **cmd, char *str, int pos)
 {
     int     i;
+    int     len;
 
-    i = -1;
-    while (++i < pos)
+    i = 0;
+    len = ft_strlen_tab(cmd) + 1;
+    if (!cmd)
+        return ;
+    cmd[len] = NULL;
+    while (i < pos)
+        i++;
+    while (i < len - 1)
+    {
         cmd[i + 1] = cmd[i];
-    cmd[i] = ft_strdup(str);
-    while (cmd[i++])
-        cmd[i + 1] = cmd[i];
-    cmd[i + 1] = ft_strdup("");
+        i++;
+    }
+    cmd[pos] = ft_strdup(str);
 }
 
 int ft_apply_wildcard(char *wildcard, char *str)
@@ -61,24 +79,30 @@ int ft_apply_wildcard(char *wildcard, char *str)
     char    *part;
     int     i;
     int     j;
+    int     len;
 
-    i = -1;
+    i = 0;
     part = malloc(sizeof(char) * strlen(wildcard));
     if (!part)
         return (1);
-/*  if (wildcard[0] != '*')
+    if (str[0] == '.')
+        return (0);
+    if (wildcard[0] != '*')
     {
-        while (wildcard && wildcard[i] != '*')
+        while (wildcard[i] && wildcard[i] != '*')
         {
             if (wildcard[i] != str[i])
-                 return (1);
+                 return (0);
             i++;
         }
-    }*/
-    while (wildcard[++i])
+    }
+    while (wildcard[i])
     {
-        if (wildcard[i] == '*') 
+        if (wildcard[i] == '*')
+        { 
+            i++;
             continue ;
+        }
         j = 0;
         while (wildcard[i + j] && wildcard[i + j] != '*')
         {
@@ -86,13 +110,17 @@ int ft_apply_wildcard(char *wildcard, char *str)
             j++;
         }
         part[j] = '\0';
-        if (ft_strstr(str, part) == NULL)
+        len = ft_strlen(part);
+        str = ft_strstr(str, part);
+        if (str == NULL || (*(str + len) != '\0' && wildcard[i + len] != '*'))
         {
+            printf("file: %s / %d\n", str, i + len);
             free(part);
             return (0);
         }
-        i += ft_strlen(part);
+        i += len;
     }
     free(part);
+//  printf("%s\n", str);
     return (1);
 }
