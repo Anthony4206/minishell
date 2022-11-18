@@ -1,7 +1,9 @@
 #include <limits.h> 
 #include <dirent.h>
 #include <stdio.h>
+
 #include "libft.h"
+#include "expand_wildcard.h"
 #include "no_random_quote.h" 
 #include "../lexer/lexer.h"
 
@@ -160,8 +162,9 @@ int	ft_expand(char **cmd, t_ctx *ctx)
 				cmd[i] = ft_strdup("");
 			free(cpy);
 		}
-/*		if (ft_strchr(cmd[i], '*'))
-			ft_expand_wildcard(cmd);*/
+        if (ft_strchr(cmd[i], '*'))
+            ft_expand_wildcard(cmd, cmd[i], i);
+
 	}
 	return (0);
 }

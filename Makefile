@@ -6,7 +6,7 @@ SRC				=	src/main.c	src/close.c \
 					src/builtins/export.c src/builtins/unset.c src/builtins/exit.c src/builtins/builtins.c \
 					src/parser/parse.c src/parser/parse_node.c src/parser/parse_utils.c \
 					src/executor/executor.c src/executor/path.c \
-					src/expander/expand_var.c src/expander/no_random_quote.c \
+					src/expander/expand_var.c src/expander/no_random_quote.c src/expander/expand_wildcard.c \
 
 SRC_B			= 
 
@@ -15,7 +15,7 @@ OBJ_B			= ${SRC_B:.c=.o}
 
 INCLUDE 		= -I./include/
 
-RL              = -L/Users/${USER}/.brew/opt/readline/lib -lreadline
+RL              = -L/usr/local/Cellar/readline/8.1.2/lib -lreadline
 
 HEAD			= include/libft.h
 
