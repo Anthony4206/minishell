@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/17 15:07:56 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/18 11:49:13 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@
 #include "builtins/builtin.h" 
 #include "executor/executor.h"
 
-extern t_prompt	g_prompt;
+t_prompt	g_prompt;
 
 void	rl_replace_line(const char *text, int clear_undo);
 
@@ -52,6 +52,7 @@ void	ft_init_sig(struct termios *term, struct termios *sign)
 	struct sigaction	sa;
 
 	g_prompt.prompt = 1;
+	g_prompt.here_doc = 0;
 	g_prompt.status = 0;
 	sa.sa_handler = ft_sig_handler;
 	sa.sa_flags = SA_RESTART;
@@ -107,7 +108,7 @@ void    ft_visit(t_ast_node *tree)
 
     if (tree->node_type == NODE_AND)
     {
-        printf("Pair AND(\n");
+        printf("Pair AND(	%p\n", tree);
 		printf("left -->	"); 
         ft_visit(tree->data.pair.left);
 		printf("right -->	"); 
@@ -116,7 +117,7 @@ void    ft_visit(t_ast_node *tree)
     }
 	else if (tree->node_type == NODE_OR)
 	{
-	    printf("Pair OR(\n");
+	    printf("Pair OR(	%p\n", tree);
 		printf("left -->	"); 
         ft_visit(tree->data.pair.left);
 		printf("right -->	"); 
@@ -125,7 +126,7 @@ void    ft_visit(t_ast_node *tree)
     }
 	else if (tree->node_type == NODE_PIPE)
 	{
-	    printf("Pair PIPE(\n");
+	    printf("Pair PIPE(	%p\n", tree);
 		printf("left -->	"); 
         ft_visit(tree->data.pair.left);
 		printf("right -->	"); 
@@ -134,7 +135,7 @@ void    ft_visit(t_ast_node *tree)
     }
 	else if (tree->node_type == NODE_REDIR)
 	{
-		printf("Redir -->	(\"%s\")\n", tree->data.redir.file);
+		printf("Redir -->	(\"%s	%p\")\n", tree->data.redir.file, tree->data.redir.file);
 		if (tree->data.redir.cmd)
 			ft_visit(tree->data.redir.cmd);
 	}
@@ -143,7 +144,7 @@ void    ft_visit(t_ast_node *tree)
 		i = -1;
 		while (tree->data.cmd.tok_list[++i])
 //			if (tree->data.cmd.tok_list != 0)
-        	printf("Word -->	(\"%s\")\n", tree->data.cmd.tok_list[i]);
+        	printf("Word -->	(\"%s	%p\")\n", tree->data.cmd.tok_list[i], tree->data.cmd.tok_list[i]);
 	}
 }
 
@@ -170,11 +171,12 @@ int	main(int argc, char **argv, char **envp)
 			ft_add_history(line_read);
 			tcsetattr(STDIN_FILENO, TCSANOW, &sign);
 			if (ft_lexer(ctx, line_read) < 0)
-				printf("syntaxe error\n");
+				printf("syntax error\n");
 			else
 			{
 				ctx->exec_tree = ast_parse(ctx->start_lexer);
 				ft_exec(ctx->exec_tree, ctx);
+				//ft_visit(ctx->exec_tree);
 				if (ctx->exec_tree)
 					ft_free_tree(ctx->exec_tree);
 				ft_free_all(ctx->start_lexer);
@@ -183,9 +185,9 @@ int	main(int argc, char **argv, char **envp)
 			tcsetattr(STDIN_FILENO, TCSANOW, &term);
 		}
 		free(line_read);
-//		system("leaks minishell");
+		//system("leaks minishell");
 	}
 	ft_free_struct(ctx);
-//	system("leaks minishell"); 
+	//system("leaks minishell"); 
 	return (0);
 }

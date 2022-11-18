@@ -162,9 +162,9 @@ int	ft_expand(char **cmd, t_ctx *ctx)
 				cmd[i] = ft_strdup("");
 			free(cpy);
 		}
-        if (ft_strchr(cmd[i], '*'))
+/*        if (ft_strchr(cmd[i], '*'))
             ft_expand_wildcard(cmd, cmd[i], i);
-
+*/
 	}
 	return (0);
 }

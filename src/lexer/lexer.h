@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:03:39 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/17 13:31:40 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/18 09:12:10 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_ctx
 typedef struct g_prompt
 {
 	int		prompt;
+	int		here_doc;
 	pid_t	last_pid;
 	int		status;
 }	t_prompt;

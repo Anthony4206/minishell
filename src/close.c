@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:14:45 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/17 15:12:33 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/18 13:48:49 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <signal.h>
 #include <termios.h>
+#include <fcntl.h>
 
 #include "libft.h"
 # include "lexer/lexer.h"
@@ -38,7 +39,7 @@ void	ft_free_struct(t_ctx *ctx)
 	}
 	if (ctx->env)
 		ft_free_tab(ctx->env);
-//	ft_free_tab(ctx->fd_here_doc);
+	ft_free_tab(ctx->fd_here_doc);
 	free(ctx);
 }
 
@@ -105,12 +106,16 @@ int	ft_return_err(char *arg, char *msg)
 	return (0);
 }
 
+int     pipe_fd[2];
+
 void	ft_sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
 		g_prompt.status = 1;
 		write(1, "\n", 1);
+		if (g_prompt.here_doc)
+			g_prompt.here_doc = 0;
 		if (g_prompt.prompt)
 		{
 			rl_replace_line("", 0);
@@ -119,9 +124,12 @@ void	ft_sig_handler(int sig)
 		}
 		else
 			kill(1, SIGINT);
+		g_prompt.prompt = 1;
 	}
 	if (sig == SIGQUIT)
 	{
+		if (g_prompt.here_doc)
+			return ;
 		if (g_prompt.prompt)
 		{
 			rl_on_new_line();

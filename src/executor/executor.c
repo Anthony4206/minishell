@@ -2,6 +2,9 @@
 #include <fcntl.h>
 #include <errno.h>
 
+#include <readline/readline.h>
+#include <readline/history.h>
+
 #include "libft.h"
 #include "executor.h"
 #include "path.h"
@@ -13,6 +16,8 @@
 #include "../close.h"
 
 t_prompt	g_prompt;
+
+void    rl_replace_line(const char *text, int clear_undo);
 
 int	ft_strlen_tab(char **tab)
 {
@@ -29,6 +34,8 @@ static void	ft_adjust(t_ctx *ctx, char **tab, int i)
 	int j;
 
 	j = -1;
+	if (ctx->fd_here_doc)
+		ft_free_tab(ctx->fd_here_doc);
 	ctx->fd_here_doc = malloc(sizeof(char *) * (i + 2));
 	while(tab[++j])
 	{
@@ -60,6 +67,8 @@ void	ft_is_here_doc(t_ctx *ctx, t_ast_node *tree)
 	ft_adjust(ctx, tmp, i);
 }
 
+int		pipe_fd[2];
+
 void    ft_get_heredoc(char *eof)
 {
     char    *line;
@@ -68,14 +77,16 @@ void    ft_get_heredoc(char *eof)
 
     fd = open(".here_doc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd == -1)
-        return ;
+        return ; 
     line = "";
     limiter = eof;
-    while (1)
+	g_prompt.prompt = 1;
+	g_prompt.here_doc = 1;
+    while (g_prompt.here_doc)
     {
-        ft_putstr_fd("> ", 1);
-        line = get_next_line(STDIN_FILENO);
-        if (line == NULL)
+		ft_putstr_fd("> ", STDOUT_FILENO);
+		line = get_next_line(pipe_fd[0]);
+        if (line == NULL || !g_prompt.here_doc)
             break ;
         if (ft_strlen(limiter) + 1 == ft_strlen(line)
             && !ft_strncmp(line, limiter, ft_strlen(limiter)))
@@ -84,6 +95,7 @@ void    ft_get_heredoc(char *eof)
             ft_putstr_fd(line, fd);
         free(line);
     }
+	unlink(".here_doc");
 }
 
 int	ft_exec_node(t_ast_node *node, t_ctx *ctx, t_fd *fds)
@@ -148,7 +160,10 @@ int    ft_exec_redir(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 	if (node->data.redir.fd == 2)
 	{
 		ft_get_heredoc(ctx->fd_here_doc[--ctx->len]);
-        fd = open(".here_doc", O_RDONLY);
+		if (!g_prompt.here_doc)
+			return (1);
+		else
+			fd = open(".here_doc", O_RDONLY);
 	}
 	else
     	fd = open(node->data.redir.file, node->data.redir.mode, 0664);
