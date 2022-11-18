@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/18 11:49:13 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/18 14:04:52 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,8 @@ void    ft_visit(t_ast_node *tree)
         	printf("Word -->	(\"%s	%p\")\n", tree->data.cmd.tok_list[i], tree->data.cmd.tok_list[i]);
 	}
 }
+
+//clean cjunker_quotes in builtins/env.c ls 23
 
 int	main(int argc, char **argv, char **envp)
 {

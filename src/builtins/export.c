@@ -3,6 +3,7 @@
 #include "libft.h"
 #include "builtin.h"
 #include "../lexer/lexer.h"
+#include "../close.h"
 
 int	ft_findchar(char *str, char c)
 {
@@ -69,7 +70,14 @@ int	built_export(char **args, t_fd *fds, t_ctx *ctx)
 		return (0);
 	}
 	while (args[++j])
+	{
+		if (ft_isdigit(args[j][0]))
+		{
+			printf("test bash: export: `args[j]': not a valid identifier (a remplacer)\n");
+			return (1);
+		}
 		ctx->env = ft_new_env(args, j, ctx);
+	}
 	if (!ctx->env)
 		return (1);
 	return (0);

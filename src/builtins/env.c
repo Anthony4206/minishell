@@ -6,7 +6,7 @@
 /*   By: mmidon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 08:12:58 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/17 14:12:37 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/18 14:03:17 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -28,7 +28,7 @@ static void	ft_print_var(char *printed, t_fd *fds)
 	while (printed[++i])
 	{
 		write(fds->fd[1], &printed[i], 1);
-		if (printed[i] == '=')
+		if (printed[i] == '=' && !cjunker_quotes)
 		{
 			write(fds->fd[1], "\"", 1);
 			cjunker_quotes = 1;
