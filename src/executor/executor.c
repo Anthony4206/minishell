@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 12:49:16 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 13:10:46 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/21 15:03:57 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,32 @@
 t_prompt	g_prompt;
 void	rl_replace_line(const char *text, int clear_undo);
 
+void	ft_exec(t_ast_node *tree, t_ctx *ctx)
+{
+	t_fd	fds;
+	int		i;
+	int		status;
+	pid_t	pid;
+
+	if (!tree)
+		return ;
+	i = -1;
+	fds.fd[0] = STDIN_FILENO;
+	fds.fd[1] = STDOUT_FILENO;
+	fds.fd_close = -1;
+	fds.first_in = 1;
+	fds.first_out = 1;
+	ft_exec_node(tree, ctx, &fds);
+	while (1)
+	{
+		pid = wait(&status);
+		if (pid == g_prompt.last_pid)
+			g_prompt.status = WEXITSTATUS(status);
+		if (pid < 0 && errno != EINTR)
+			break ;
+	}
+}
+
 int	ft_exec_node(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
 	int	ret;
@@ -57,33 +83,6 @@ int	ft_exec_node(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 		return (ft_exec_and_or(node, ctx, fds));
 	else
 		return (0);
-}
-
-void	ft_exec(t_ast_node *tree, t_ctx *ctx)
-{
-	t_fd	fds;
-	int		i;
-	int		children;
-	int		status;
-	pid_t	pid;
-
-	if (!tree)
-		return ;
-	i = -1;
-	fds.fd[0] = STDIN_FILENO;
-	fds.fd[1] = STDOUT_FILENO;
-	fds.fd_close = -1;
-	fds.first_in = 1;
-	fds.first_out = 1;
-	children = ft_exec_node(tree, ctx, &fds);
-	while (1)
-	{
-		pid = wait(&status);
-		if (pid == g_prompt.last_pid)
-			g_prompt.status = WEXITSTATUS(status);
-		if (pid < 0 && errno != EINTR)
-			break ;
-	}
 }
 
 int	ft_exec_and_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)

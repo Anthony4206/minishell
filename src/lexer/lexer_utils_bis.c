@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 07:02:13 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 08:11:22 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/21 14:54:59 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,13 @@ char	*ft_over_add_two_char(char *str, t_token *token, int type, int redir)
 char	*ft_add_two_char(char *str, t_token *token)
 {
 	if (ft_strncmp(str, "<<", 2) == 0)
-		ft_over_add_two_char(str, token, TOK_REDIR, REDIR_HERE_DOC);
+		return (ft_over_add_two_char(str, token, TOK_REDIR, REDIR_HERE_DOC));
 	else if (ft_strncmp(str, "<", 1) == 0)
-		ft_over_add_two_char(str, token, TOK_REDIR, REDIR_INFILE);
+		return (ft_over_add_two_char(str, token, TOK_REDIR, REDIR_INFILE));
 	else if (ft_strncmp(str, ">>", 2) == 0)
-		ft_over_add_two_char(str, token, TOK_REDIR, REDIR_APP_OUTFILE);
+		return (ft_over_add_two_char(str, token, TOK_REDIR, REDIR_APP_OUTFILE));
 	else if (ft_strncmp(str, ">", 1) == 0)
-		ft_over_add_two_char(str, token, TOK_REDIR, REDIR_OUTFILE);
+		return (ft_over_add_two_char(str, token, TOK_REDIR, REDIR_OUTFILE));
 	else if (ft_strncmp(str, "||", 2) == 0)
 		return (token->type = TOK_OR, str + 2);
 	else if (ft_strncmp(str, "|", 1) == 0)
