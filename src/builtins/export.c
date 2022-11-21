@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmidon <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 12:37:46 by mmidon            #+#    #+#             */
+/*   Updated: 2022/11/21 12:37:48 by mmidon           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include <stdio.h> 
 
 #include "libft.h"
@@ -10,7 +21,7 @@ int	ft_findchar(char *str, char c)
 	int	i;
 
 	i = -1;
-	while(str[++i])
+	while (str[++i])
 	{
 		if (str[i] == c)
 			return (i);
@@ -22,7 +33,8 @@ void	is_deja_vu(int *tmp, int *i, char *exported, char **env)
 {
 	while (env[++(*i)])
 	{
-		if (!ft_strncmp(exported, env[*i], ft_findchar(exported, '=')) && ft_findchar(exported, '=') == ft_findchar(env[*i], '='))
+		if (!ft_strncmp(exported, env[*i], ft_findchar(exported, '='))
+			&& ft_findchar(exported, '=') == ft_findchar(env[*i], '='))
 			*tmp = 1;
 	}
 	if (*tmp)
@@ -32,8 +44,8 @@ void	is_deja_vu(int *tmp, int *i, char *exported, char **env)
 char	**ft_new_env(char **args, int j, t_ctx *ctx)
 {
 	int		i;
-	int	tmp;
-	char **new_env;
+	int		tmp;
+	char	**new_env;
 
 	i = -1;
 	tmp = 0;
@@ -44,7 +56,8 @@ char	**ft_new_env(char **args, int j, t_ctx *ctx)
 	i = -1;
 	while (ctx->env[++i])
 	{
-		if (tmp && !ft_strncmp(args[j], ctx->env[i], ft_findchar(args[j], '=')) && ft_findchar(ctx->env[i], '=') == ft_findchar(args[j], '='))
+		if (tmp && !ft_strncmp(args[j], ctx->env[i], ft_findchar(args[j], '='))
+			&& ft_findchar(ctx->env[i], '=') == ft_findchar(args[j], '='))
 			new_env[i] = ft_strdup(args[j]);
 		else
 			new_env[i] = ft_strdup(ctx->env[i]);
@@ -54,7 +67,7 @@ char	**ft_new_env(char **args, int j, t_ctx *ctx)
 	if (!tmp)
 		new_env[i++] = ft_strdup(args[j]);
 	new_env[i] = 0;
-	return(new_env);
+	return (new_env);
 }
 
 int	built_export(char **args, t_fd *fds, t_ctx *ctx)
@@ -66,14 +79,14 @@ int	built_export(char **args, t_fd *fds, t_ctx *ctx)
 	j = 0;
 	if (!args[1])
 	{
-		built_env(ctx->env, 1, fds);
+		built_env(ctx->env, 1, fds, args);
 		return (0);
 	}
 	while (args[++j])
 	{
 		if (ft_isdigit(args[j][0]))
 		{
-			printf("test bash: export: `args[j]': not a valid identifier (a remplacer)\n");
+			ft_return_err("export", "not a valid identifier");
 			return (1);
 		}
 		ctx->env = ft_new_env(args, j, ctx);

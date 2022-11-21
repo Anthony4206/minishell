@@ -1,10 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmidon <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 12:29:26 by mmidon            #+#    #+#             */
+/*   Updated: 2022/11/21 12:29:28 by mmidon           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 #include <stdio.h> 
 #include <unistd.h>
 
 #include "libft.h" 
 #include "../executor/executor.h"
 
-static int ft_option(char *arg)
+static int	ft_option(char *arg)
 {
 	int	i;
 

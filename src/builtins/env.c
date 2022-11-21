@@ -3,15 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mmidon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 08:12:58 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/21 11:47:02 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/21 12:30:24 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include <stdio.h>
 
 #include "libft.h"
 #include "../executor/executor.h"
+
+//opt 1 = export
+//opt 0 = env
 
 static void	ft_print_var(char *printed, t_fd *fds)
 {
@@ -40,6 +44,8 @@ static int	ft_export(char **env, t_fd *fds)
 	int	ascii;
 	int	i;
 
+	if (!env || !env[0])
+		return (1);
 	ascii = 0;
 	while (++ascii <= 127)
 	{
@@ -53,13 +59,14 @@ static int	ft_export(char **env, t_fd *fds)
 	return (0);
 }
 
-int built_env(char **env, int opt, t_fd *fds, char **arg)
+int	built_env(char **env, int opt, t_fd *fds, char **arg)
 {
-	int i;
+	int	i;
+
 	i = 0;
-	if (arg[2])
+	if (arg[1] && arg[1][0] && !opt)
 	{
-		ft_putstr_fd("minishell: env: No such file or directory\n", fds->fd[1]);
+		ft_putstr_fd("env: No such file or directory: \n", fds->fd[1]);
 		return (127);
 	}
 	if (env)

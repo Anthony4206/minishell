@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mmidon <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 12:44:54 by mmidon            #+#    #+#             */
+/*   Updated: 2022/11/21 12:45:41 by mmidon           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+#include <stdio.h>
+
 #include "libft.h"
 #include "builtin.h"
-#include <stdio.h>
+#include "../close.h" 
 
 int	ft_is_setted(char **env, char *unseted, int	*i)
 {
@@ -12,7 +25,8 @@ int	ft_is_setted(char **env, char *unseted, int	*i)
 	*i = -1;
 	while (env[++(*i)])
 	{
-		if (!ft_strncmp(unseted, env[*i], ft_findchar(unseted, '=')) && ft_findchar(env[*i], '=') == ft_findchar(unseted, '='))
+		if (!ft_strncmp(unseted, env[*i], ft_findchar(unseted, '='))
+			&& ft_findchar(env[*i], '=') == ft_findchar(unseted, '='))
 			exist = 1;
 	}
 	return (exist);
@@ -20,8 +34,8 @@ int	ft_is_setted(char **env, char *unseted, int	*i)
 
 char	**ft_unset_env(char **env, char *unseted, int i)
 {
-	int	    exist;
-	char    **new_env;
+	int		exist;
+	char	**new_env;
 
 	exist = 0;
 	new_env = malloc(sizeof(char *) * i);
@@ -52,9 +66,9 @@ int	built_unset(char **unseted, t_ctx *ctx)
 	while (unseted[++j])
 	{
 		exist = ft_is_setted(ctx->env, unseted[j], &i);
-		if (exist < 0)
+		if (ft_isdigit(unseted[j][0]))
 		{
-			printf("minishell: unset: `%s': not a valid identifier\n", unseted[j]);
+			ft_return_err("unset", "not a valid identifier");
 			return (1);
 		}
 		if (exist)
