@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 13:14:06 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 13:37:24 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/21 14:20:17 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,23 @@ void	ft_is_here_doc(t_ctx *ctx, t_ast_node *tree)
 	ft_adjust_exec(ctx, tmp, i);
 }
 
+void	ft_exec_here_doc(char *line, char *limiter, int fd)
+{
+	while (1)
+	{
+		ft_putstr_fd("> ", STDOUT_FILENO);
+		line = get_next_line(g_prompt.pipe_fd[1]);
+		if (line == NULL || !g_prompt.here_doc)
+			break ;
+		if (ft_strlen(limiter) + 1 == ft_strlen(line)
+			&& !ft_strncmp(line, limiter, ft_strlen(limiter)))
+			break ;
+		else
+			ft_putstr_fd(line, fd);
+		free(line);
+	}
+}
+
 void	ft_get_heredoc(char *eof)
 {
 	char	*line;
@@ -56,19 +73,7 @@ void	ft_get_heredoc(char *eof)
 	limiter = eof;
 	g_prompt.prompt = 1;
 	g_prompt.here_doc = 1;
-	while (1)
-	{
-		ft_putstr_fd("> ", STDOUT_FILENO);
-		line = get_next_line(g_prompt.pipe_fd[1]);
-		if (line == NULL || !g_prompt.here_doc)
-			break ;
-		if (ft_strlen(limiter) + 1 == ft_strlen(line)
-			&& !ft_strncmp(line, limiter, ft_strlen(limiter)))
-			break ;
-		else
-			ft_putstr_fd(line, fd);
-		free(line);
-	}
+	ft_exec_here_doc(line, limiter, fd);
 	close(g_prompt.pipe_fd[0]);
 	close(fd);
 	unlink(".here_doc");

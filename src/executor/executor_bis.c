@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 13:11:57 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 13:23:44 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/21 14:16:37 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,22 +26,8 @@
 
 t_prompt	g_prompt;
 
-int	ft_exec_redir(t_ast_node *node, t_ctx *ctx, t_fd *fds)
+int	ft_over_exec_redir(t_ast_node *node, t_ctx *ctx, t_fd *fds, int fd)
 {
-	int	fd;
-
-	if (ctx->is_first)
-		ft_is_here_doc(ctx, node);
-	if (node->data.redir.fd == 2)
-	{
-		ft_get_heredoc(ctx->fd_here_doc[--ctx->len]);
-		if (!g_prompt.here_doc)
-			return (1);
-		else
-			fd = open(".here_doc", O_RDONLY);
-	}
-	else
-		fd = open(node->data.redir.file, node->data.redir.mode, 0664);
 	if (fd == -1)
 	{
 		fprintf(stderr, "open %s failed\n", node->data.redir.file);
@@ -65,18 +51,64 @@ int	ft_exec_redir(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 		ctx->is_first = 1;
 		ctx->len = 0;
 	}
+	return (0);
+}
+
+int	ft_exec_redir(t_ast_node *node, t_ctx *ctx, t_fd *fds)
+{
+	int	fd;
+
+	if (ctx->is_first)
+		ft_is_here_doc(ctx, node);
+	if (node->data.redir.fd == 2)
+	{
+		ft_get_heredoc(ctx->fd_here_doc[--ctx->len]);
+		if (!g_prompt.here_doc)
+			return (1);
+		else
+			fd = open(".here_doc", O_RDONLY);
+	}
+	else
+		fd = open(node->data.redir.file, node->data.redir.mode, 0664);
+	if (ft_over_exec_redir(node, ctx, fds, fd) == 1)
+		return (1);
 	ft_exec_node(node->data.redir.cmd, ctx, fds);
 	return (1);
 }
 
-int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
+int	ft_children(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
 	char	*cmd_path;
+
+	if (fds->fd_close != fds->fd[STDIN_FILENO])
+		dup2(fds->fd[STDIN_FILENO], STDIN_FILENO);
+	if (fds->fd_close != fds->fd[STDOUT_FILENO])
+		dup2(fds->fd[STDOUT_FILENO], STDOUT_FILENO);
+	if (fds->fd[STDIN_FILENO] != STDIN_FILENO)
+		close(fds->fd[STDIN_FILENO]);
+	if (fds->fd[STDOUT_FILENO] != STDOUT_FILENO)
+		close(fds->fd[STDOUT_FILENO]);
+	if (fds->fd_close > 2)
+		close(fds->fd_close);
+	if (node->data.cmd.tok_list[0] == 0)
+		exit(1);
+	cmd_path = ft_chr_path(node->data.cmd.tok_list[0], ctx->env);
+	if (!cmd_path)
+	{
+		ft_return_err(node->data.cmd.tok_list[0], "command not found");
+		exit (127);
+	}
+	execve(cmd_path, node->data.cmd.tok_list, ctx->env);
+	dprintf(2, "exec %s failed\n", node->data.cmd.tok_list[0]);
+	exit(1);
+}
+
+int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
+{
 	int		ret;
 
 	g_prompt.prompt = 0;
-	if (ft_expand(node->data.cmd.tok_list, ctx) > 0)
-		dprintf(2,"WILDCARD [grrrrr]\n");
+	ft_expand(node->data.cmd.tok_list, ctx);
 	ret = ft_is_builtin(node->data.cmd.tok_list, fds, ctx);
 	if (ret == 2)
 		return (0);
@@ -85,28 +117,6 @@ int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 	else
 		g_prompt.last_pid = fork();
 	if (g_prompt.last_pid == CHILD_PROCESS)
-	{
-		if (fds->fd_close != fds->fd[STDIN_FILENO])
-			dup2(fds->fd[STDIN_FILENO], STDIN_FILENO);
-		if (fds->fd_close != fds->fd[STDOUT_FILENO])
-			dup2(fds->fd[STDOUT_FILENO], STDOUT_FILENO);
-		if (fds->fd[STDIN_FILENO] != STDIN_FILENO)
-			close(fds->fd[STDIN_FILENO]);
-		if (fds->fd[STDOUT_FILENO] != STDOUT_FILENO)
-			close(fds->fd[STDOUT_FILENO]);
-		if (fds->fd_close > 2)
-			close(fds->fd_close);
-		if (node->data.cmd.tok_list[0] == 0)
-			exit(1);
-		cmd_path = ft_chr_path(node->data.cmd.tok_list[0], ctx->env);
-		if (!cmd_path)
-		{
-			ft_return_err(node->data.cmd.tok_list[0], "command not found");
-			exit (127);
-		}
-		execve(cmd_path, node->data.cmd.tok_list, ctx->env);
-		dprintf(2, "exec %s failed\n", node->data.cmd.tok_list[0]); //////////sussy dprintf//////////////////////////
-		exit(1);
-	}
+		ft_children(node, ctx, fds);
 	return (1);
 }
