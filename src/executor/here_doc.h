@@ -1,18 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_var.h                                       :+:      :+:    :+:   */
+/*   here_doc.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/21 08:55:16 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 08:55:18 by alevasse         ###   ########.fr       */
+/*   Created: 2022/11/21 12:55:26 by alevasse          #+#    #+#             */
+/*   Updated: 2022/11/21 13:20:36 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXPAND_VAR_H
-# define EXPAND_VAR_H
+#ifndef HERE_DOC_H
+# define HERE_DOC_H
 
-char	**ft_expand(char **cmd, t_ctx *ctx);
+void	ft_is_here_doc(t_ctx *ctx, t_ast_node *tree);
+void	ft_get_heredoc(char *eof);
 
 #endif

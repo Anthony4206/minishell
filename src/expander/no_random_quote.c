@@ -1,5 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   no_random_quote.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 08:26:54 by alevasse          #+#    #+#             */
+/*   Updated: 2022/11/21 08:32:01 by alevasse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "libft.h"
 #include <stdio.h>
+
+int	ft_return_free(char *part, int opt)
+{
+	free(part);
+	return (opt);
+}
 
 void	ft_count(int *counter, int *state, int quote_type)
 {

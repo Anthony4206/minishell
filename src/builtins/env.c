@@ -3,19 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mmidon <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 08:12:58 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/18 14:03:17 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/21 11:47:02 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#include <stdio.h>
 
 #include "libft.h"
 #include "../executor/executor.h"
-
-//opt 1 = export
-//opt 0 = env
 
 static void	ft_print_var(char *printed, t_fd *fds)
 {
@@ -39,7 +35,7 @@ static void	ft_print_var(char *printed, t_fd *fds)
 	write(fds->fd[1], "\n", 1);
 }
 
-static void	ft_export(char **env, t_fd *fds)
+static int	ft_export(char **env, t_fd *fds)
 {
 	int	ascii;
 	int	i;
@@ -54,20 +50,22 @@ static void	ft_export(char **env, t_fd *fds)
 				ft_print_var(env[i], fds);
 		}
 	}
+	return (0);
 }
 
-int	built_env(char **env, int opt, t_fd *fds)
+int built_env(char **env, int opt, t_fd *fds, char **arg)
 {
-	int	i;
-
+	int i;
 	i = 0;
+	if (arg[2])
+	{
+		ft_putstr_fd("minishell: env: No such file or directory\n", fds->fd[1]);
+		return (127);
+	}
 	if (env)
 	{
 		if (opt)
-		{
-			ft_export(env, fds);
-			return (0);
-		}
+			return (ft_export(env, fds));
 		while (env[i])
 		{
 			if (ft_strchr(env[i], '=') || opt)

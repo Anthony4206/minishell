@@ -1,18 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_var.h                                       :+:      :+:    :+:   */
+/*   expand_utils.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/21 08:55:16 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 08:55:18 by alevasse         ###   ########.fr       */
+/*   Created: 2022/11/21 08:55:07 by alevasse          #+#    #+#             */
+/*   Updated: 2022/11/21 12:41:58 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXPAND_VAR_H
-# define EXPAND_VAR_H
+#ifndef EXPAND_UTILS_H
+# define EXPAND_UTILS_H
 
-char	**ft_expand(char **cmd, t_ctx *ctx);
+char	*ft_adjust(char *cmd, int i);
+char	*ft_env_chr(char *var, char **env);
+void	ft_quote(int *quote);
+char	*ft_join(char *ret, char *var, int *j);
+void	ft_over_find_var(char *cmd, char *var, int *i);
 
 #endif

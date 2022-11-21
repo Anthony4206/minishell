@@ -1,13 +1,15 @@
 NAME			= minishell
 
-SRC				=	src/main.c src/close.c src/signal.c \
-					src/lexer/lexer.c src/lexer/lexer_utils.c src/lexer/token_list.c src/lexer/parenthesis.c \
-					src/lexer/lexer_utils_bis.c \
-					src/builtins/echo.c src/builtins/pwd.c src/builtins/env.c src/builtins/cd.c \
-					src/builtins/export.c src/builtins/unset.c src/builtins/exit.c src/builtins/builtins.c \
-					src/parser/parse.c src/parser/parse_bis.c src/parser/parse_node.c src/parser/parse_utils.c \
-					src/executor/executor.c src/executor/path.c \
-					src/expander/expand_var.c src/expander/no_random_quote.c src/expander/expand_wildcard.c \
+SRC				= src/main.c src/close.c src/signal.c \
+				  src/lexer/lexer.c src/lexer/lexer_utils.c src/lexer/token_list.c src/lexer/parenthesis.c \
+				  src/lexer/lexer_utils_bis.c \
+				  src/builtins/echo.c src/builtins/pwd.c src/builtins/env.c src/builtins/cd.c \
+				  src/builtins/export.c src/builtins/unset.c src/builtins/exit.c src/builtins/builtins.c \
+				  src/parser/parse.c src/parser/parse_bis.c src/parser/parse_node.c src/parser/parse_utils.c \
+				  src/executor/executor.c src/executor/path.c src/executor/executor_bis.c src/executor/executor_utils.c \
+				  src/executor/here_doc.c \
+				  src/expander/expand_var.c src/expander/no_random_quote.c src/expander/expand_wildcard.c \
+				  src/expander/expand_utils.c src/expander/wildcard_utils.c
 
 SRC_B			= 
 
@@ -23,7 +25,7 @@ HEAD			= include/libft.h
 LIBS 			= ./libft/
 
 CC 				= gcc -g
-CFLAGS 			= -Wall -Wextra -Werror
+CFLAGS 			= -Wall -Wextra -Werror -fsanitize=address
 
 AR 				= ar rcs
 RM 				= rm -f

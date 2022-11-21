@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:03:39 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/21 06:58:53 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/21 10:35:07 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,11 +67,12 @@ typedef struct s_ctx
 
 typedef struct g_prompt
 {
+	int		pipe_fd[2];
 	int		prompt;
 	int		here_doc;
 	pid_t	last_pid;
 	int		status;
-}	t_prompt;
+}			t_prompt;
 
 int		ft_parse_quotes(char *str);
 char	*ft_chr_token(t_ctx *ctx, char *str);

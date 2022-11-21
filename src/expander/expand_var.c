@@ -1,66 +1,36 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_var.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 08:56:17 by alevasse          #+#    #+#             */
+/*   Updated: 2022/11/21 12:42:04 by alevasse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <limits.h> 
 #include <dirent.h>
 #include <stdio.h>
 
 #include "libft.h"
 #include "expand_wildcard.h"
+#include "expand_utils.h"
 #include "no_random_quote.h" 
 #include "../lexer/lexer.h"
 
 t_prompt	g_prompt;
-
-char	*ft_adjust(char *cmd, int i)
-{
-	char	*ret;
-	int		size;
-
-	size = -1;
-	while (cmd[++size])
-		;
-	ret = malloc(sizeof(char) * size + 1);
-	size = -1;
-	while (cmd[++size] && i--)
-		ret[size] = cmd[size];
-	ret[size++] = 0;
-	free(cmd);
-	return (ret);
-}
-
-char	*ft_env_chr(char *var, char **env)
-{
-	int		i;
-	char	*ret;
-	int		var_len;
-
-	if (!ft_strcmp(var, "$?") && ft_strlen(var) == 2)
-		return (ft_itoa(g_prompt.status));
-	var_len = ft_strlen(var);
-	i = -1;
-	while (env[++i])
-	{
-		if (!ft_strncmp(env[i], var + 1, var_len - 1)
-			&& env[i][var_len - 1] == '=')
-		{
-			ret = ft_strdup(env[i] + var_len);
-			return (ret);
-		}
-	}
-	return (NULL);
-}
 
 char	*ft_find_var(char *cmd, int *i, int *j, char **env)
 {
 	char	*var;
 	char	*ret;
 	char	*tmp;
-	int		k;
 
 	tmp = NULL;
-	k = -1;
 	var = ft_calloc(sizeof(char), ARG_MAX);
-	while (cmd[*i + 1] && ((cmd[*i + 1] >= 'A' && cmd[*i + 1] <= 'Z') || (cmd[*i + 1] >= 'a' && cmd[*i + 1] <= 'z') || cmd[*i + 1] == '?'))
-		var[++k] = cmd[(*i)++];
-	var[++k] = cmd[(*i)];
+	ft_over_find_var(cmd, var, i);
 	if (!ft_strcmp(var, "$") && ft_strlen(var) == 1)
 		ret = ft_strdup(var);
 	else
@@ -79,45 +49,15 @@ char	*ft_find_var(char *cmd, int *i, int *j, char **env)
 	return (ret);
 }
 
-char	*ft_join(char *ret, char *var, int *j)
-{
-	char	*tmp;
-	char	*tmp2;
-
-	tmp = ft_strdup(ret);
-	tmp2 = ft_strjoin(tmp, var);
-	ft_strlcpy(ret, tmp2, ARG_MAX);
-	free(tmp2);
-	(*j) += ft_strlen(var);
-	free(var);
-	free(tmp);
-	return (ret);
-}
-
-void	ft_quote(int *quote)
-{
-	if (*quote)
-		*quote  = 0;
-	else
-		*quote = 1;
-}
-
-char	*ft_expand_var(char *cmd, char **env)
+int	ft_over_expand_var(char *cmd, char **env, char *var, char *ret)
 {
 	int		i;
 	int		j;
 	int		quote;
-	char	*var;
-	char	*ret;
 
-	quote  = 0;
-	if (!cmd || !cmd[0])
-		return (NULL);
-	ret = ft_calloc(sizeof(char), ARG_MAX);
-	if (!ret)
-		return (NULL);
 	i = 0;
 	j = -1;
+	quote = 0;
 	while (cmd[i])
 	{
 		if (cmd[i] == '\'')
@@ -131,47 +71,61 @@ char	*ft_expand_var(char *cmd, char **env)
 		else
 			ret[++j] = cmd[i++];
 	}
-	return (ft_adjust(ret, j + 1));
+	return (j);
+}
+
+char	*ft_expand_var(char *cmd, char **env)
+{
+	char	*var;
+	char	*ret;
+	int		add;
+
+	var = NULL;
+	if (!cmd || !cmd[0])
+		return (NULL);
+	ret = ft_calloc(sizeof(char), ARG_MAX);
+	if (!ret)
+		return (NULL);
+	add = ft_over_expand_var(cmd, env, var, ret);
+	return (ft_adjust(ret, add + 1));
+}
+
+void	ft_over_expand(t_ctx *ctx, char **cmd, int i)
+{
+	char	*cpy;
+
+	if (ft_strchr(cmd[i], '$'))
+	{
+		cpy = ft_expand_var(cmd[i], ctx->env);
+		free(cmd[i]);
+		if (cpy && cpy[0] && ft_strlen(cpy))
+			cmd[i] = ft_strdup(cpy);
+		else
+			cmd[i] = ft_strdup("");
+		free(cpy);
+	}
+	if (ft_strchr(cmd[i], '"') || ft_strchr(cmd[i], '\''))
+	{
+		cpy = ft_no_random_quote(cmd[i]);
+		free(cmd[i]);
+		if (cpy && cpy[0])
+			cmd[i] = ft_strdup(cpy);
+		else
+			cmd[i] = ft_strdup("");
+		free(cpy);
+	}
 }
 
 int	ft_expand(char **cmd, t_ctx *ctx)
 {
 	int		i;
-//    int     j;
-	char	*cpy;
 
 	i = -1;
-	while(cmd[++i])
+	while (cmd[++i])
 	{
-		if (ft_strchr(cmd[i], '$'))
-		{
-			cpy = ft_expand_var(cmd[i], ctx->env);
-			free(cmd[i]);
-			if (cpy && cpy[0] && ft_strlen(cpy))
-				cmd[i] = ft_strdup(cpy);
-			else
-				cmd[i] = ft_strdup("");
-			free(cpy);
-		}
-		if (ft_strchr(cmd[i], '"') || ft_strchr(cmd[i], '\''))
-		{
-			cpy = ft_no_random_quote(cmd[i]);
-			free(cmd[i]);
-			if (cpy && cpy[0])
-				cmd[i] = ft_strdup(cpy);
-			else
-				cmd[i] = ft_strdup("");
-			free(cpy);
-		}
-//        printf("befort cmd[i] : %s\n", cmd[i]);
-        if (ft_strchr(cmd[i], '*'))
-        {
-//            printf("cmd[i] : %s\n", cmd[i]);
-            ft_expand_wildcard(cmd, cmd[i], i);
-//            j = -1;
-//            while (cmd[++j])
-//                printf("%s\n", cmd[j]);    
-       }
+		ft_over_expand(ctx, cmd, i);
+		if (ft_strchr(cmd[i], '*'))
+			ft_expand_wildcard(cmd, cmd[i], i);
 	}
 	return (0);
 }
