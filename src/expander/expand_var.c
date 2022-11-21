@@ -137,6 +137,7 @@ char	*ft_expand_var(char *cmd, char **env)
 int	ft_expand(char **cmd, t_ctx *ctx)
 {
 	int		i;
+//    int     j;
 	char	*cpy;
 
 	i = -1;
@@ -162,9 +163,15 @@ int	ft_expand(char **cmd, t_ctx *ctx)
 				cmd[i] = ft_strdup("");
 			free(cpy);
 		}
-/*        if (ft_strchr(cmd[i], '*'))
+//        printf("befort cmd[i] : %s\n", cmd[i]);
+        if (ft_strchr(cmd[i], '*'))
+        {
+//            printf("cmd[i] : %s\n", cmd[i]);
             ft_expand_wildcard(cmd, cmd[i], i);
-*/
+//            j = -1;
+//            while (cmd[++j])
+//                printf("%s\n", cmd[j]);    
+       }
 	}
 	return (0);
 }

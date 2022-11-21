@@ -18,7 +18,7 @@
 void	ft_free_struct(t_ctx *ctx);
 int		ft_return_err(char *arg, char *msg);
 void	ft_sig_handler(int sig);
-void    ft_free_tree(t_ast_node *tree);
+void	ft_free_tree(t_ast_node *tree);
 void	ft_free_all(t_token *lexer);
 
 #endif

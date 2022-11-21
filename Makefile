@@ -1,6 +1,6 @@
 NAME			= minishell
 
-SRC				=	src/main.c	src/close.c \
+SRC				=	src/main.c	src/close.c src/signal.c \
 					src/lexer/lexer.c src/lexer/lexer_utils.c src/lexer/token_list.c src/lexer/parenthesis.c \
 					src/builtins/echo.c src/builtins/pwd.c src/builtins/env.c src/builtins/cd.c \
 					src/builtins/export.c src/builtins/unset.c src/builtins/exit.c src/builtins/builtins.c \
@@ -15,7 +15,7 @@ OBJ_B			= ${SRC_B:.c=.o}
 
 INCLUDE 		= -I./include/
 
-RL              = -L/Users/${USER}/.brew/opt/readline/lib -lreadline
+RL              = -L/usr/local/Cellar/readline/8.1.2/lib -lreadline
 
 HEAD			= include/libft.h
 

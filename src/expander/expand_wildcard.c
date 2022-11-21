@@ -14,12 +14,12 @@ void    ft_expand_wildcard(char **cmd, char *wildcard, int pos)
 
     i = 0;
     dir = opendir(".");
-    sd = readdir(dir);
     if (dir == NULL)
     {
         printf("Error! Unable to open directory.\n");
         return ;
     }
+    sd = readdir(dir);
     while (sd)
     {
         if (ft_apply_wildcard(wildcard, sd->d_name) > 0)
@@ -30,7 +30,7 @@ void    ft_expand_wildcard(char **cmd, char *wildcard, int pos)
         sd = readdir(dir);
     }
     if (wildcard != cmd[pos])
-        ft_sup_param(cmd, wildcard);
+        ft_sup_param(cmd, wildcard);   
     closedir(dir);
 }
 
@@ -68,8 +68,8 @@ void    ft_add_param(char **cmd, char *str, int pos)
         i++;
     while (i < len - 1)
     {
-        cmd[i + 1] = cmd[i];
-        i++;
+        len--;
+        cmd[len] = cmd[len - 1];
     }
     cmd[pos] = ft_strdup(str);
 }
@@ -80,47 +80,72 @@ int ft_apply_wildcard(char *wildcard, char *str)
     int     i;
     int     j;
     int     len;
+    int     len_str;
+    int     last;
 
     i = 0;
+    last = 0;
     part = malloc(sizeof(char) * strlen(wildcard));
     if (!part)
-        return (1);
+        return (1);  
     if (str[0] == '.')
+    {
+        free(part);
         return (0);
+    }
     if (wildcard[0] != '*')
     {
         while (wildcard[i] && wildcard[i] != '*')
         {
             if (wildcard[i] != str[i])
-                 return (0);
+            {
+                free(part);
+                return (0);
+            }
             i++;
         }
     }
     while (wildcard[i])
     {
         if (wildcard[i] == '*')
-        { 
+        {
             i++;
             continue ;
-        }
+        }      
         j = 0;
         while (wildcard[i + j] && wildcard[i + j] != '*')
         {
             part[j] = wildcard[i + j];
+            if (wildcard[i + j + 1] == '\0')
+                last = 1;
             j++;
         }
         part[j] = '\0';
         len = ft_strlen(part);
         str = ft_strstr(str, part);
+        if (last && str != NULL)
+        {
+            len_str = ft_strlen(str);
+            while (len_str && len)
+            {
+                if (str[len_str - 1] != part[len - 1])
+                {
+                    free(part);
+                    return (0) ;
+                }
+                len_str--;
+                len--;
+            }
+            free(part);
+            return (1);
+        }
         if (str == NULL || (*(str + len) != '\0' && wildcard[i + len] != '*'))
         {
-            printf("file: %s / %d\n", str, i + len);
             free(part);
             return (0);
         }
         i += len;
     }
     free(part);
-//  printf("%s\n", str);
     return (1);
 }

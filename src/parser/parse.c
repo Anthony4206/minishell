@@ -20,8 +20,8 @@ t_ast_node	*ast_parse(t_token *lexer)
 	cmd = ast_parse_line(&lexer);
 	if (!ast_peek(&lexer, (int[]){TOK_EOF}, 1, 0))
 	{
-		printf("syntax error\n");
-		return(NULL);
+        ft_putstr_fd("minishell: syntax error near unexpected token\n", 2);
+        return (0);
 	}
 	return (cmd);
 }

@@ -11,23 +11,24 @@ int	ft_is_builtin(char **arg, t_fd *fds, t_ctx *ctx)
 	if (!ft_strncmp(arg[0], "cd", ft_strlen(arg[0])) && ft_strlen(arg[0]) == 2)
 		g_prompt.status = built_cd(arg, ctx);
 	else if (!ft_strncmp(arg[0], "echo", ft_strlen(arg[0]))
-        && ft_strlen(arg[0]) == 4)
+		&& ft_strlen(arg[0]) == 4)
 		g_prompt.status = built_echo(arg, fds);
 	else if (!ft_strncmp(arg[0], "pwd", ft_strlen(arg[0]))
-        && ft_strlen(arg[0]) == 3)
+		&& ft_strlen(arg[0]) == 3)
 		g_prompt.status = built_pwd(fds, ctx);
 	else if (!ft_strncmp(arg[0], "export", ft_strlen(arg[0]))
-        && ft_strlen(arg[0]) == 6)
+		&& ft_strlen(arg[0]) == 6)
 		g_prompt.status = built_export(arg, fds, ctx);
 	else if (!ft_strncmp(arg[0], "unset", ft_strlen(arg[0]))
-        && ft_strlen(arg[0]) == 5)
+		&& ft_strlen(arg[0]) == 5)
 		g_prompt.status = built_unset(arg, ctx);
 	else if (!ft_strncmp(arg[0], "env", ft_strlen(arg[0]))
-        && ft_strlen(arg[0]) == 3)
+		&& ft_strlen(arg[0]) == 3)
 		g_prompt.status = built_env(ctx->env, 0, fds);
-	else if (!ft_strncmp(arg[0], "exit", ft_strlen(arg[0])) && ft_strlen(arg[0]) == 4)
+	else if (!ft_strncmp(arg[0], "exit", ft_strlen(arg[0])) 
+        && ft_strlen(arg[0]) == 4)
 		g_prompt.status = built_exit(arg);
-	else	
+	else
 		return (0);
 	if (g_prompt.status)
 		return (g_prompt.status);

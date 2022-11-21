@@ -18,7 +18,7 @@
 #include <fcntl.h>
 
 #include "libft.h"
-# include "lexer/lexer.h"
+#include "lexer/lexer.h"
 
 t_prompt	g_prompt;
 
@@ -45,8 +45,8 @@ void	ft_free_struct(t_ctx *ctx)
 
 void	ft_free_all(t_token *lexer)
 {
-	t_token *tmp;
-	
+	t_token	*tmp;
+
 	while (lexer)
 	{
 		tmp = lexer->next;
@@ -60,30 +60,30 @@ void	ft_free_all(t_token *lexer)
 	}
 }
 
-void    ft_free_tree(t_ast_node *tree)
+void	ft_free_tree(t_ast_node *tree)
 {
 	int	i;
 
 	i = -1;
-    if (tree->node_type == NODE_CMD)
+	if (tree->node_type == NODE_CMD)
 	{
 		while (tree->data.cmd.tok_list[++i])
 			free(tree->data.cmd.tok_list[i]);
 		free(tree);
 	}
-    else if (tree->node_type == NODE_REDIR)
-    {
-        if (tree->data.redir.cmd)
-            ft_free_tree(tree->data.redir.cmd);
+	else if (tree->node_type == NODE_REDIR)
+	{
+		if (tree->data.redir.cmd)
+			ft_free_tree(tree->data.redir.cmd);
 		free(tree);
-    }
+	}
 	else if (tree->node_type == NODE_AND || tree->node_type == NODE_OR
 		|| tree->node_type == NODE_PIPE)
 	{
 		if (tree->data.pair.left)
-        	ft_free_tree(tree->data.pair.left);
+			ft_free_tree(tree->data.pair.left);
 		if (tree->data.pair.right)
-        	ft_free_tree(tree->data.pair.right);
+			ft_free_tree(tree->data.pair.right);
 		free(tree);
 	}
 }
@@ -104,42 +104,4 @@ int	ft_return_err(char *arg, char *msg)
 		free(ret);
 	}
 	return (0);
-}
-
-int     pipe_fd[2];
-
-void	ft_sig_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		g_prompt.status = 1;
-		write(1, "\n", 1);
-		if (g_prompt.here_doc)
-			g_prompt.here_doc = 0;
-		if (g_prompt.prompt)
-		{
-			rl_replace_line("", 0);
-			rl_on_new_line();
-			rl_redisplay();
-		}
-		else
-			kill(1, SIGINT);
-		g_prompt.prompt = 1;
-	}
-	if (sig == SIGQUIT)
-	{
-		if (g_prompt.here_doc)
-			return ;
-		if (g_prompt.prompt)
-		{
-			rl_on_new_line();
-			rl_redisplay();
-		}
-		else
-		{
-			g_prompt.status = 132;
-			printf("Quit: 3\n");
-			rl_on_new_line();
-		}
-	}
 }

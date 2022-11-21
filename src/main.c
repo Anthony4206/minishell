@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <errno.h>
-#include <time.h>
 #include <termios.h>
 #include <string.h>
 #include <signal.h>
@@ -21,24 +20,27 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+#include "libft.h"
+#include "signal.h"
 #include "parser/parse.h"
 #include "parser/tree.h"
-#include "close.h"
-#include "libft.h"
 #include "lexer/lexer.h"
 #include "builtins/builtin.h" 
 #include "executor/executor.h"
+#include "close.h"
 
 t_prompt	g_prompt;
 
 void	rl_replace_line(const char *text, int clear_undo);
 
-char	**ft_dup(char	**envp)
+char	**ft_dup(char **envp)
 {
 	char	**dup;
-	int	i = 0;
+	int		i;
 
-	while (envp[i++]);
+	i = 0;
+	while (envp[i++])
+		;
 	dup = malloc(sizeof(char *) * (i + i));
 	i = -1;
 	while (envp[++i])
@@ -46,26 +48,6 @@ char	**ft_dup(char	**envp)
 	dup[i] = 0;
 	return (dup);
 }
-
-void	ft_init_sig(struct termios *term, struct termios *sign)
-{
-	struct sigaction	sa;
-
-	g_prompt.prompt = 1;
-	g_prompt.here_doc = 0;
-	g_prompt.status = 0;
-	sa.sa_handler = ft_sig_handler;
-	sa.sa_flags = SA_RESTART;
-	if (sigaction(SIGINT, &sa, NULL) == -1)
-		ft_return_err("sigaction", strerror(errno));
-	if (sigaction(SIGQUIT, &sa, NULL) == -1)
-		ft_return_err("sigaction", strerror(errno));
-	tcgetattr(STDIN_FILENO, sign);
-	sign->c_lflag |= ECHOCTL;
-	*term = *sign;
-	term->c_lflag &= ~ECHOCTL;
-}
-
 
 t_ctx	*ft_init(char **envp)
 {
@@ -92,63 +74,28 @@ void	ft_add_history(char *line)
 	add_history(line);
 }
 
-void	ft_show_list(t_token *list)
+int	ft_shell(t_ctx *ctx, char *line, struct termios *term, struct termios *sign)
 {
-	while (list)
+	if (line && *line)
 	{
-		printf("%s$\n", list->content);
-		printf("%u$\n", list->type);
-		list = list->next;
+		ft_add_history(line);
+		tcsetattr(STDIN_FILENO, TCSANOW, sign);
+		if (ft_lexer(ctx, line) < 0)
+			printf("syntax error\n");
+		else
+		{
+			ctx->exec_tree = ast_parse(ctx->start_lexer);
+			if (ctx->exec_tree)
+				ft_exec(ctx->exec_tree, ctx);
+			if (ctx->exec_tree)
+				ft_free_tree(ctx->exec_tree);
+			ft_free_all(ctx->start_lexer);
+		}
+		ctx->start_lexer = NULL;
+		tcsetattr(STDIN_FILENO, TCSANOW, term);
 	}
+	return (0);
 }
-
-void    ft_visit(t_ast_node *tree)
-{
-	int	i;
-
-    if (tree->node_type == NODE_AND)
-    {
-        printf("Pair AND(	%p\n", tree);
-		printf("left -->	"); 
-        ft_visit(tree->data.pair.left);
-		printf("right -->	"); 
-        ft_visit(tree->data.pair.right);
-        printf(")\n");
-    }
-	else if (tree->node_type == NODE_OR)
-	{
-	    printf("Pair OR(	%p\n", tree);
-		printf("left -->	"); 
-        ft_visit(tree->data.pair.left);
-		printf("right -->	"); 
-        ft_visit(tree->data.pair.right);
-        printf(")\n");
-    }
-	else if (tree->node_type == NODE_PIPE)
-	{
-	    printf("Pair PIPE(	%p\n", tree);
-		printf("left -->	"); 
-        ft_visit(tree->data.pair.left);
-		printf("right -->	"); 
-        ft_visit(tree->data.pair.right);
-        printf(")\n");
-    }
-	else if (tree->node_type == NODE_REDIR)
-	{
-		printf("Redir -->	(\"%s	%p\")\n", tree->data.redir.file, tree->data.redir.file);
-		if (tree->data.redir.cmd)
-			ft_visit(tree->data.redir.cmd);
-	}
-    else if (tree->node_type == NODE_CMD)
-	{
-		i = -1;
-		while (tree->data.cmd.tok_list[++i])
-//			if (tree->data.cmd.tok_list != 0)
-        	printf("Word -->	(\"%s	%p\")\n", tree->data.cmd.tok_list[i], tree->data.cmd.tok_list[i]);
-	}
-}
-
-//clean cjunker_quotes in builtins/env.c ls 23
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -160,36 +107,17 @@ int	main(int argc, char **argv, char **envp)
 	(void)(argc + argv);
 	ft_init_sig(&term, &sign);
 	ctx = ft_init(envp);
-	while (42)
+	while (1)
 	{
 		g_prompt.prompt = 1;
 		if (g_prompt.status == 132)
 			g_prompt.status--;
 		line_read = readline("\033[0;36mminishell-1.0$ \033[0m");
 		if (!line_read)
-			break;
-		if (line_read && *line_read)
-		{
-			ft_add_history(line_read);
-			tcsetattr(STDIN_FILENO, TCSANOW, &sign);
-			if (ft_lexer(ctx, line_read) < 0)
-				printf("syntax error\n");
-			else
-			{
-				ctx->exec_tree = ast_parse(ctx->start_lexer);
-				ft_exec(ctx->exec_tree, ctx);
-				//ft_visit(ctx->exec_tree);
-				if (ctx->exec_tree)
-					ft_free_tree(ctx->exec_tree);
-				ft_free_all(ctx->start_lexer);
-			}
-			ctx->start_lexer = NULL;
-			tcsetattr(STDIN_FILENO, TCSANOW, &term);
-		}
+			break ;
+		ft_shell(ctx, line_read, &term, &sign);
 		free(line_read);
-		//system("leaks minishell");
 	}
 	ft_free_struct(ctx);
-	//system("leaks minishell"); 
 	return (0);
 }
