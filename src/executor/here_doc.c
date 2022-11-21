@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 13:14:06 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 13:29:20 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/21 13:37:24 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,5 +69,7 @@ void	ft_get_heredoc(char *eof)
 			ft_putstr_fd(line, fd);
 		free(line);
 	}
+	close(g_prompt.pipe_fd[0]);
+	close(fd);
 	unlink(".here_doc");
 }
