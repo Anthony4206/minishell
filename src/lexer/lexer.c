@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:05:32 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/16 12:41:31 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/21 06:37:56 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,38 +18,42 @@
 #include "token_list.h"
 #include "parenthesis.h"
 
-void	ft_show_list(t_token *list);
-
-int	ft_count_quotes(char *str)
+void	ft_over_count_quotes(char *str, int *i, int *squotes, int *dquotes)
 {
 	int	state;
-	int	count_squotes;
-	int	count_dquotes;
-	int	i;
 
-	i = -1;
 	state = 0;
-	count_dquotes = 0;
-	count_squotes = 0;
-	while (str[++i])
+	while (str[++(*i)])
 	{
-		if (str[i] == '\'' && state != 2)
+		if (str[*i] == '\'' && state != 2)
 		{
-			count_squotes++;
-			if (count_squotes % 2 != 0)
+			(*squotes)++;
+			if (*squotes % 2 != 0)
 				state = 1;
 			else
 				state = 0;
 		}
-		else if (str[i] == '"' && state != 1)
+		else if (str[*i] == '"' && state != 1)
 		{
-			count_dquotes++;
-			if (count_dquotes % 2 != 0)
+			(*dquotes)++;
+			if (*dquotes % 2 != 0)
 				state = 2;
 			else
 				state = 0;
 		}
 	}
+}
+
+int	ft_count_quotes(char *str)
+{
+	int	count_squotes;
+	int	count_dquotes;
+	int	i;
+
+	i = -1;
+	count_dquotes = 0;
+	count_squotes = 0;
+	ft_over_count_quotes(str, &i, &count_squotes, &count_dquotes);
 	if (count_dquotes % 2 || count_squotes % 2)
 		return (i);
 	return (count_squotes);

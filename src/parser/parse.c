@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 06:03:55 by alevasse          #+#    #+#             */
+/*   Updated: 2022/11/21 06:16:29 by alevasse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <string.h>
 #include <errno.h>
 #include <stdio.h>
@@ -18,10 +30,10 @@ t_ast_node	*ast_parse(t_token *lexer)
 	if (!lexer)
 		return (NULL);
 	cmd = ast_parse_line(&lexer);
-	if (!ast_peek(&lexer, (int[]){TOK_EOF}, 1, 0))
+	if (!ast_peek(&lexer, (int []){TOK_EOF}, 1, 0))
 	{
-        ft_putstr_fd("minishell: syntax error near unexpected token\n", 2);
-        return (0);
+		ft_putstr_fd("minishell: syntax error near unexpected token\n", 2);
+		return (0);
 	}
 	return (cmd);
 }
@@ -31,21 +43,21 @@ t_ast_node	*ast_parse_line(t_token **lexer)
 	t_ast_node	*cmd;
 
 	cmd = ast_parse_pipe(lexer);
-	if (cmd && ast_peek(lexer, (int[]){TOK_AND}, 1, 0))
+	if (cmd && ast_peek(lexer, (int []){TOK_AND}, 1, 0))
 	{
 		if ((*lexer)->next->next->type == TOK_STRING
 			|| (*lexer)->next->next->type == TOK_REDIR
-			|| (*lexer)->next->next->type == TOK_L_PARENTHESIS)
+			|| (*lexer)->next->next->type == TOK_LP)
 		{
 			ast_scanner_next(lexer);
 			cmd = ast_pair_node(cmd, ast_parse_line(lexer), NODE_AND);
 		}
 	}
-	else if (cmd && ast_peek(lexer, (int[]){TOK_OR}, 1, 0))
+	else if (cmd && ast_peek(lexer, (int []){TOK_OR}, 1, 0))
 	{
 		if ((*lexer)->next->next->type == TOK_STRING
 			|| (*lexer)->next->next->type == TOK_REDIR
-			|| (*lexer)->next->next->type == TOK_L_PARENTHESIS)
+			|| (*lexer)->next->next->type == TOK_LP)
 		{
 			ast_scanner_next(lexer);
 			cmd = ast_pair_node(cmd, ast_parse_line(lexer), NODE_OR);
@@ -59,11 +71,11 @@ t_ast_node	*ast_parse_pipe(t_token **lexer)
 	t_ast_node	*cmd;
 
 	cmd = ast_parse_cmd(lexer);
-	if (cmd && ast_peek(lexer, (int[]){TOK_PIPE}, 1, 0))
+	if (cmd && ast_peek(lexer, (int []){TOK_PIPE}, 1, 0))
 	{
-			if ((*lexer)->next->next->type == TOK_STRING
+		if ((*lexer)->next->next->type == TOK_STRING
 			|| (*lexer)->next->next->type == TOK_REDIR
-			|| (*lexer)->next->next->type == TOK_L_PARENTHESIS)
+			|| (*lexer)->next->next->type == TOK_LP)
 		{
 			ast_scanner_next(lexer);
 			cmd = ast_pair_node(cmd, ast_parse_pipe(lexer), NODE_PIPE);
@@ -76,7 +88,7 @@ t_ast_node	*ast_parse_redir(t_ast_node *cmd, t_token **lexer)
 {
 	int	token_type;
 
-	while (ast_peek(lexer, (int[]){TOK_REDIR}, 1, 0))
+	while (ast_peek(lexer, (int []){TOK_REDIR}, 1, 0))
 	{
 		if ((*lexer)->next->next->type != TOK_STRING)
 			return (cmd);
@@ -86,9 +98,11 @@ t_ast_node	*ast_parse_redir(t_ast_node *cmd, t_token **lexer)
 		if (token_type == REDIR_INFILE)
 			cmd = ast_redir_node(cmd, (*lexer)->content, O_RDONLY, 0);
 		else if (token_type == REDIR_OUTFILE)
-			cmd = ast_redir_node(cmd, (*lexer)->content, O_WRONLY | O_CREAT | O_TRUNC, 1);
+			cmd = ast_redir_node(cmd, (*lexer)->content,
+					O_WRONLY | O_CREAT | O_TRUNC, 1);
 		else if (token_type == REDIR_APP_OUTFILE)
-			cmd = ast_redir_node(cmd, (*lexer)->content, O_WRONLY | O_CREAT | O_APPEND, 1);
+			cmd = ast_redir_node(cmd, (*lexer)->content,
+					O_WRONLY | O_CREAT | O_APPEND, 1);
 		else if (token_type == REDIR_HERE_DOC)
 			cmd = ast_redir_node(cmd, (*lexer)->content, O_RDONLY, 2);
 		(*lexer)->type = TOK_ADD;
@@ -96,49 +110,16 @@ t_ast_node	*ast_parse_redir(t_ast_node *cmd, t_token **lexer)
 	return (cmd);
 }
 
-t_ast_node	*ast_parse_cmd(t_token **lexer)
-{
-	int			i;
-	t_ast_node	*ret;
-	t_ast_node	*cmd;
-
-	i = -1;
-	if (ast_peek(lexer, (int[]){TOK_L_PARENTHESIS}, 1, 1))
-		return (ast_parse_parent(lexer));
-	if (ast_peek(lexer, (int[]){TOK_AND, TOK_OR, TOK_PIPE,
-		TOK_R_PARENTHESIS}, 4, 0))
-		return (NULL);
-	ret = ast_cmd_node();
-	cmd = ret;
-	ret = ast_parse_redir(ret, lexer);
-	while (!ast_peek(lexer, (int[]){TOK_AND, TOK_OR, TOK_PIPE,
-		TOK_R_PARENTHESIS}, 4, 0))
-	{
-		if ((*lexer)->type == TOK_ADD && (*lexer)->next->type == TOK_EOF)
-			break;
-		if (!ast_peek(lexer, (int[]){TOK_STRING}, 1, 1))
-			return (ret);
-		if ((*lexer)->type == TOK_STRING)
-			cmd->data.cmd.tok_list[++i] = ft_strdup((*lexer)->content);
-		if (ast_peek(lexer, (int[]){TOK_EOF}, 1, 0))
-			break;
-		ret = ast_parse_redir(ret, lexer);
-	}
-	cmd->data.cmd.tok_list[++i] = 0;
-	return (ret);
-}
-
-
 t_ast_node	*ast_parse_parent(t_token **lexer)
 {
 	t_ast_node	*cmd;
 
-	if ((*lexer)->type != TOK_L_PARENTHESIS)
+	if ((*lexer)->type != TOK_LP)
 		return (NULL);
 	cmd = ast_parse_line(lexer);
-	if (!ast_peek(lexer, (int[]){TOK_R_PARENTHESIS}, 1, 1))
+	if (!ast_peek(lexer, (int []){TOK_RP}, 1, 1))
 		return (cmd);
-	ast_peek(lexer, (int[]){TOK_AND, TOK_OR, TOK_PIPE}, 3, 0);
+	ast_peek(lexer, (int []){TOK_AND, TOK_OR, TOK_PIPE}, 3, 0);
 	cmd = ast_parse_redir(cmd, lexer);
 	return (cmd);
 }

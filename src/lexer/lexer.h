@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:03:39 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/18 09:12:10 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/21 06:58:53 by alevasse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ typedef enum e_token_type
 	TOK_AND,
 	TOK_OR,
 	TOK_PIPE,
-	TOK_L_PARENTHESIS,
-	TOK_R_PARENTHESIS,
+	TOK_LP,
+	TOK_RP,
 	TOK_ADD,
 	TOK_START,
 	TOK_EOF
@@ -36,7 +36,7 @@ typedef enum e_string_type
 	STRING_UNQUOTED = 1,
 	STRING_QUOTED,
 	STRING_DQUOTED
-} t_string_type;
+}	t_string_type;
 
 typedef enum e_redir_type
 {
@@ -44,7 +44,7 @@ typedef enum e_redir_type
 	REDIR_OUTFILE,
 	REDIR_HERE_DOC,
 	REDIR_APP_OUTFILE
-} t_redir_type;
+}	t_redir_type;
 
 typedef struct s_token
 {

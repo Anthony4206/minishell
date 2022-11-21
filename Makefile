@@ -1,10 +1,11 @@
 NAME			= minishell
 
-SRC				=	src/main.c	src/close.c src/signal.c \
+SRC				=	src/main.c src/close.c src/signal.c \
 					src/lexer/lexer.c src/lexer/lexer_utils.c src/lexer/token_list.c src/lexer/parenthesis.c \
+					src/lexer/lexer_utils_bis.c \
 					src/builtins/echo.c src/builtins/pwd.c src/builtins/env.c src/builtins/cd.c \
 					src/builtins/export.c src/builtins/unset.c src/builtins/exit.c src/builtins/builtins.c \
-					src/parser/parse.c src/parser/parse_node.c src/parser/parse_utils.c \
+					src/parser/parse.c src/parser/parse_bis.c src/parser/parse_node.c src/parser/parse_utils.c \
 					src/executor/executor.c src/executor/path.c \
 					src/expander/expand_var.c src/expander/no_random_quote.c src/expander/expand_wildcard.c \
 
@@ -15,14 +16,14 @@ OBJ_B			= ${SRC_B:.c=.o}
 
 INCLUDE 		= -I./include/
 
-RL              = -L/usr/local/Cellar/readline/8.1.2/lib -lreadline
+RL              = -L/Users/${USER}/.brew/opt/readline/lib -lreadline
 
 HEAD			= include/libft.h
 
 LIBS 			= ./libft/
 
 CC 				= gcc -g
-CFLAGS 			= -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS 			= -Wall -Wextra -Werror
 
 AR 				= ar rcs
 RM 				= rm -f

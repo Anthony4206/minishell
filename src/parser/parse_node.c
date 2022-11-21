@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_node.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 06:23:55 by alevasse          #+#    #+#             */
+/*   Updated: 2022/11/21 06:24:09 by alevasse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include "libft.h"
 #include "parse_node.h"
@@ -34,7 +46,7 @@ void	ast_scanner_next(t_token **lexer)
 	*lexer = next;
 }
 
-t_ast_node	*ast_cmd_node()
+t_ast_node	*ast_cmd_node(void)
 {
 	t_ast_node	*node;
 
@@ -62,8 +74,8 @@ t_ast_node	*ast_redir_node(t_ast_node *cmd, char *file, int mode, int fd)
 	return (node);
 }
 
-t_ast_node	*ast_pair_node
-    (t_ast_node *left, t_ast_node *right, int node_type)
+t_ast_node	*ast_pair_node(t_ast_node *left,
+	t_ast_node *right, int node_type)
 {
 	t_ast_node	*node;
 
@@ -74,5 +86,5 @@ t_ast_node	*ast_pair_node
 	node->node_type = node_type;
 	node->data.pair.left = left;
 	node->data.pair.right = right;
-	return (node);	
+	return (node);
 }

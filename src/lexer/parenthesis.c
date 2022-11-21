@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parenthesis.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/11/21 06:59:11 by alevasse          #+#    #+#             */
+/*   Updated: 2022/11/21 06:59:15 by alevasse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 
 #include "libft.h"
@@ -11,9 +23,9 @@ t_token	*ft_find_peer(t_token *l_parenthesis)
 	while (l_parenthesis->next && i != 0)
 	{
 		l_parenthesis = l_parenthesis->next;
-		if (l_parenthesis->type == TOK_L_PARENTHESIS)
+		if (l_parenthesis->type == TOK_LP)
 			i++;
-		else if (l_parenthesis->type == TOK_R_PARENTHESIS)
+		else if (l_parenthesis->type == TOK_RP)
 			i--;
 	}
 	return (l_parenthesis);
@@ -27,10 +39,10 @@ static int	ft_parse_duplicate(t_token *lexer)
 	ptr = lexer;
 	while (ptr && ptr->next)
 	{
-		if (ptr->type == TOK_L_PARENTHESIS && ptr->next->type == ptr->type)
+		if (ptr->type == TOK_LP && ptr->next->type == ptr->type)
 		{
 			tmp1 = ft_find_peer(ptr->next);
-			if (tmp1->next->type == TOK_R_PARENTHESIS)
+			if (tmp1->next->type == TOK_RP)
 				return (-1);
 		}
 		ptr = ptr->next;
@@ -49,9 +61,9 @@ int	ft_parse_parenth(t_token *lexer)
 	count_parenth2 = 0;
 	while (ptr)
 	{
-		if (ptr->type == TOK_L_PARENTHESIS)
+		if (ptr->type == TOK_LP)
 			count_parenth1++;
-		else if (ptr->type == TOK_R_PARENTHESIS)
+		else if (ptr->type == TOK_RP)
 			count_parenth2++;
 		ptr = ptr->next;
 	}

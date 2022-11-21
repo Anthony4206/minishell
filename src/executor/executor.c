@@ -214,9 +214,6 @@ int    ft_exec_and_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 	if (g_prompt.status)
 		return (g_prompt.status);
     waitpid(g_prompt.last_pid, &g_prompt.status, 0);
-//    if (g_prompt.status == 2)
- //       g_prompt.status += 128;
-//    else
     g_prompt.status = WEXITSTATUS(g_prompt.status);
     if (node->node_type == NODE_AND && g_prompt.status == 0)
         ft_exec_node(node->data.pair.right, ctx, fds);
@@ -234,7 +231,7 @@ int    ft_exec_and_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 int	ft_exec_cmd(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
 	char	*cmd_path;
-	int	ret;
+	int		ret;
 
 	g_prompt.prompt = 0;
 	if (ft_expand(node->data.cmd.tok_list, ctx) > 0)
