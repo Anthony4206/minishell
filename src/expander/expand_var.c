@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 08:56:17 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 12:42:04 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/22 08:40:18 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,27 +51,31 @@ char	*ft_find_var(char *cmd, int *i, int *j, char **env)
 
 int	ft_over_expand_var(char *cmd, char **env, char *var, char *ret)
 {
-	int		i;
-	int		j;
-	int		quote;
+	int		vars[4];
 
-	i = 0;
-	j = -1;
-	quote = 0;
-	while (cmd[i])
+	vars[0] = 0;
+	vars[1] = -1;
+	vars[2] = 0;
+	vars[3] = 0;
+	while (cmd[vars[0]])
 	{
-		if (cmd[i] == '\'')
-			ft_quote(&quote);
-		if (cmd[i] == '$' && !quote)
+		if (cmd[vars[0]] == '$' && cmd[vars[0] + 1] != '0'
+			&& ft_isdigit(cmd[vars[0] + 1]))
+			vars[0] += 2;
+		if (cmd[vars[0]] == '"' && !vars[2])
+			ft_quote(&vars[3]);
+		if (cmd[vars[0]] == '\'' && !vars[3])
+			ft_quote(&vars[2]);
+		if (cmd[vars[0]] == '$' && !vars[2])
 		{
-			var = ft_find_var(cmd, &i, &j, env);
+			var = ft_find_var(cmd, &vars[0], &vars[1], env);
 			if (var)
-				ret = ft_join(ret, var, &j);
+				ret = ft_join(ret, var, &vars[1]);
 		}
 		else
-			ret[++j] = cmd[i++];
+			ret[++vars[1]] = cmd[vars[0]++];
 	}
-	return (j);
+	return (vars[1]);
 }
 
 char	*ft_expand_var(char *cmd, char **env)
