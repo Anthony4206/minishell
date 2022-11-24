@@ -82,6 +82,7 @@ int	ft_children(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
 	char	*cmd_path;
 
+    cmd_path = NULL;
 	if (fds->fd_close != fds->fd[STDIN_FILENO])
 		dup2(fds->fd[STDIN_FILENO], STDIN_FILENO);
 	if (fds->fd_close != fds->fd[STDOUT_FILENO])
@@ -94,7 +95,8 @@ int	ft_children(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 		close(fds->fd_close);
 	if (node->data.cmd.tok_list[0] == 0)
 		exit(1);
-	cmd_path = ft_chr_path(node->data.cmd.tok_list[0], ctx->env);
+	if (ctx->env[0] != NULL)
+		cmd_path = ft_chr_path(node->data.cmd.tok_list[0], ctx->env);
 	if (!cmd_path)
 	{
 		ft_return_err(node->data.cmd.tok_list[0], "command not found");
