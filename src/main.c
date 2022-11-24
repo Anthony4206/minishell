@@ -51,10 +51,10 @@ char	**ft_dup(char **envp)
 
 t_ctx	*ft_init(char **envp)
 {
-	t_ctx				*ret;
+	t_ctx	*ret;
 
-    if (!envp)
-        return (NULL);
+	if (!envp)
+		return (NULL);
 	ret = malloc(sizeof(t_ctx));
 	ret->start_lexer = NULL;
 	ret->exec_tree = NULL;

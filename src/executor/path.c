@@ -36,18 +36,11 @@ static char	**ft_envp_path(char **envp)
 	return (ret);
 }
 
-char	*ft_chr_path(char *cmd, char **envp)
+void	ft_build_paths(char **paths)
 {
-	char	**paths;
-	char	*exec_path;
 	char	*tmp;
 	int		i;
 
-	if (ft_strchr(cmd, '/'))
-		return (ft_strdup(cmd));
-	paths = ft_envp_path(envp);
-	if (!paths)
-		return (NULL);
 	i = -1;
 	while (paths[++i])
 	{
@@ -55,6 +48,20 @@ char	*ft_chr_path(char *cmd, char **envp)
 		paths[i] = ft_strjoin(paths[i], "/");
 		free(tmp);
 	}
+}
+
+char	*ft_chr_path(char *cmd, char **envp)
+{
+	char	**paths;
+	char	*exec_path;
+	int		i;
+
+	if (ft_strchr(cmd, '/'))
+		return (ft_strdup(cmd));
+	paths = ft_envp_path(envp);
+	if (!paths)
+		return (NULL);
+	ft_build_paths(paths);
 	i = -1;
 	while (paths[++i])
 	{

@@ -30,7 +30,7 @@ int	ft_over_exec_redir(t_ast_node *node, t_ctx *ctx, t_fd *fds, int fd)
 {
 	if (fd == -1)
 	{
-		fprintf(stderr, "open %s failed\n", node->data.redir.file);
+		ft_return_err("no such file or directory", node->data.redir.file);
 		return (1);
 	}
 	if (fds->first_in && (node->data.redir.fd == 0 || node->data.redir.fd == 2))
@@ -103,7 +103,7 @@ int	ft_children(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 		exit (127);
 	}
 	execve(cmd_path, node->data.cmd.tok_list, ctx->env);
-	dprintf(2, "exec %s failed\n", node->data.cmd.tok_list[0]);
+	ft_return_err("execve", "failled");
 	exit(1);
 }
 
