@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 12:45:43 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 12:45:44 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/24 08:05:37 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ char	*ft_chr_path(char *cmd, char **envp)
 	if (ft_strchr(cmd, '/'))
 		return (ft_strdup(cmd));
 	paths = ft_envp_path(envp);
+	if (!paths)
+		return (NULL);
 	i = -1;
 	while (paths[++i])
 	{

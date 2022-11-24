@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 13:14:06 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 14:20:17 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/24 07:56:07 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,16 @@ void	ft_exec_here_doc(char *line, char *limiter, int fd)
 		ft_putstr_fd("> ", STDOUT_FILENO);
 		line = get_next_line(g_prompt.pipe_fd[1]);
 		if (line == NULL || !g_prompt.here_doc)
+		{
+			free(line);
 			break ;
+		}
 		if (ft_strlen(limiter) + 1 == ft_strlen(line)
 			&& !ft_strncmp(line, limiter, ft_strlen(limiter)))
+		{
+			free(line);
 			break ;
+		}
 		else
 			ft_putstr_fd(line, fd);
 		free(line);
@@ -75,6 +81,7 @@ void	ft_get_heredoc(char *eof)
 	g_prompt.here_doc = 1;
 	ft_exec_here_doc(line, limiter, fd);
 	close(g_prompt.pipe_fd[0]);
+	close(g_prompt.pipe_fd[1]);
 	close(fd);
 	unlink(".here_doc");
 }

@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 13:11:57 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 14:59:54 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/24 08:17:23 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,11 @@ int	ft_exec_redir(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 			fd = open(".here_doc", O_RDONLY);
 	}
 	else
-		fd = open(node->data.redir.file, node->data.redir.mode, 0664);
-	if (ft_over_exec_redir(node, ctx, fds, fd) == 1)
-		return (1);
+	{
+			fd = open(node->data.redir.file, node->data.redir.mode, 0664);
+		if (ft_over_exec_redir(node, ctx, fds, fd) == 1)
+			return (1);
+	}
 	ft_exec_node(node->data.redir.cmd, ctx, fds);
 	return (1);
 }

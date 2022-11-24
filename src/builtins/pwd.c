@@ -6,7 +6,7 @@
 /*   By: mmidon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 12:40:19 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/21 12:40:21 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/24 08:02:39 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -23,8 +23,10 @@ int	built_pwd(t_fd *fds, t_ctx *ctx)
 		return (1);
 	else
 	{
-		while (ft_strncmp(ctx->env[++i], "PWD=", 4) && ctx->env[i])
+		while (ctx->env[++i] && ft_strncmp(ctx->env[i], "PWD=", 4))
 			;
+		if (!ctx->env[i])
+			return (1);
 		ft_putstr_fd(ctx->env[i] + 4, fds->fd[1]);
 		ft_putstr_fd("\n", fds->fd[1]);
 	}

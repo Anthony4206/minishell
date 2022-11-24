@@ -6,7 +6,7 @@
 /*   By: mmidon <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 12:44:54 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/21 12:45:41 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/24 09:53:35 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include <stdio.h>
@@ -39,10 +39,12 @@ char	**ft_unset_env(char **env, char *unseted, int i)
 
 	exist = 0;
 	new_env = malloc(sizeof(char *) * i);
+	if (!new_env)
+		return (NULL);
 	i = -1;
 	while (env[++i])
 	{
-		if (ft_strncmp(unseted, env[i], ft_findchar(unseted, '=')))
+		if (ft_strncmp(unseted, env[i], ft_findchar(env[i], '=')))
 			new_env[i - exist] = ft_strdup(env[i]);
 		else
 			exist++;
@@ -66,7 +68,8 @@ int	built_unset(char **unseted, t_ctx *ctx)
 	while (unseted[++j])
 	{
 		exist = ft_is_setted(ctx->env, unseted[j], &i);
-		if (ft_isdigit(unseted[j][0]))
+		if ((!ft_isalpha(unseted[j][0]) && unseted[j][0] != '_')
+			|| (unseted[j][ft_strlen(unseted[j]) - 1] == '='))
 		{
 			ft_return_err("unset", "not a valid identifier");
 			return (1);
