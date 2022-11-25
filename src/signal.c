@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 05:59:35 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 05:59:37 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/25 09:43:26 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,11 @@ void	ft_sigint(void)
 	g_prompt.status = 1;
 	write(1, "\n", 1);
 	if (g_prompt.here_doc)
+	{
+		close(g_prompt.pipe_fd[1]);
 		g_prompt.here_doc = 0;
-	if (g_prompt.prompt)
+	}
+	else if (g_prompt.prompt)
 	{
 		rl_replace_line("", 0);
 		rl_on_new_line();
