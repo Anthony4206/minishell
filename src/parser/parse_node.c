@@ -17,6 +17,8 @@
 #include "../lexer/lexer.h"
 #include "tree.h"
 
+t_prompt	g_prompt;
+
 int	ast_peek(t_token **lexer, int *tok, int size, int opts)
 {
 	int		i;
@@ -83,6 +85,10 @@ t_ast_node	*ast_pair_node(t_ast_node *left,
 	if (!node)
 		return (NULL);
 	ft_memset(node, 0, sizeof(*node));
+	if (g_prompt.block == 1)
+		node->data.pair.block = 1;
+	else
+		node->data.pair.block = 0;
 	node->node_type = node_type;
 	node->data.pair.left = left;
 	node->data.pair.right = right;

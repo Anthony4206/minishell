@@ -88,19 +88,23 @@ int	ft_exec_node(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 int	ft_exec_and_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
 	ft_exec_node(node->data.pair.left, ctx, fds);
-	if (g_prompt.status)
-		return (g_prompt.status);
+//	fprintf(stderr, "%d\n", g_prompt.status);
+//	if (g_prompt.status)
+//		return (g_prompt.status);
 	waitpid(g_prompt.last_pid, &g_prompt.status, 0);
 	g_prompt.status = WEXITSTATUS(g_prompt.status);
 	if (node->node_type == NODE_AND && g_prompt.status == 0)
+	{
 		ft_exec_node(node->data.pair.right, ctx, fds);
+	}
 	else if (node->node_type == NODE_OR && g_prompt.status != 0)
 		ft_exec_node(node->data.pair.right, ctx, fds);
-	else
+	else if (node->node_type == NODE_OR || node->node_type == NODE_AND)
 	{
-		node = ft_skip_to_pair(node->data.pair.right);
-		if (node)
-			ft_exec_node(node, ctx, fds);
+		node = node->data.pair.right;
+		if (node && node->data.pair.block == 0 &&((node->node_type == NODE_AND && g_prompt.status == 0)
+			|| (node->node_type == NODE_OR && g_prompt.status != 0)))
+			ft_exec_node(node->data.pair.right, ctx, fds);
 	}
 	return (1);
 }

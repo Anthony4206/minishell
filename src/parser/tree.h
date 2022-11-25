@@ -35,6 +35,7 @@ typedef struct s_cmd_content
 
 typedef struct s_pair_content
 {
+    int         block;
 	t_ast_node	*left;
 	t_ast_node	*right;
 }				t_pair_content;

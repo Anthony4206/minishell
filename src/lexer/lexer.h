@@ -72,6 +72,7 @@ typedef struct g_prompt
 	int		here_doc;
 	pid_t	last_pid;
 	int		status;
+    int     block;
 }			t_prompt;
 
 int		ft_parse_quotes(char *str);

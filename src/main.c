@@ -113,6 +113,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		ctx->is_first = 1;
 		g_prompt.prompt = 1;
+        g_prompt.block = 0;
 		if (g_prompt.status == 132)
 			g_prompt.status--;
 		line_read = readline("\033[0;36mminishell-1.0$ \033[0m");

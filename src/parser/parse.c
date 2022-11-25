@@ -23,6 +23,8 @@
 #include "parse_node.h"
 #include "../lexer/lexer.h"
 
+t_prompt	g_prompt;
+
 t_ast_node	*ast_parse(t_token *lexer)
 {
 	t_ast_node	*cmd;
@@ -116,10 +118,12 @@ t_ast_node	*ast_parse_parent(t_token **lexer)
 
 	if ((*lexer)->type != TOK_LP)
 		return (NULL);
+    g_prompt.block = 1;
 	cmd = ast_parse_line(lexer);
 	if (!ast_peek(lexer, (int []){TOK_RP}, 1, 1))
 		return (cmd);
 	ast_peek(lexer, (int []){TOK_AND, TOK_OR, TOK_PIPE}, 3, 0);
 	cmd = ast_parse_redir(cmd, lexer);
+    g_prompt.block = 0;
 	return (cmd);
 }
