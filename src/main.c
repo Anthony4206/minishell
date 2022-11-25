@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/24 08:13:22 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/25 09:48:12 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		ctx->is_first = 1;
+		g_prompt.here_doc = 0;
 		g_prompt.prompt = 1;
         g_prompt.block = 0;
 		if (g_prompt.status == 132)
