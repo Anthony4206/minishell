@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 06:00:51 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 06:03:15 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/29 07:59:23 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ typedef struct s_cmd_content
 
 typedef struct s_pair_content
 {
-    int         block;
+	int			block;
 	t_ast_node	*left;
 	t_ast_node	*right;
 }				t_pair_content;

@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 13:11:57 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/24 08:17:23 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/29 07:58:09 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ int	ft_children(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
 	char	*cmd_path;
 
-    cmd_path = NULL;
+	cmd_path = NULL;
 	if (fds->fd_close != fds->fd[STDIN_FILENO])
 		dup2(fds->fd[STDIN_FILENO], STDIN_FILENO);
 	if (fds->fd_close != fds->fd[STDOUT_FILENO])

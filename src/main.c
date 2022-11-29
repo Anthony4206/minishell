@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/07 11:23:52 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/25 09:48:12 by mmidon           ###   ########.fr       */
+/*   Updated: 2022/11/29 07:56:35 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	main(int argc, char **argv, char **envp)
 		ctx->is_first = 1;
 		g_prompt.here_doc = 0;
 		g_prompt.prompt = 1;
-        g_prompt.block = 0;
+		g_prompt.block = 0;
 		if (g_prompt.status == 132)
 			g_prompt.status--;
 		line_read = readline("\033[0;36mminishell-1.0$ \033[0m");

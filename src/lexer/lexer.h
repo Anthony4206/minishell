@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/12 13:03:39 by mmidon            #+#    #+#             */
-/*   Updated: 2022/11/21 10:35:07 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/29 07:59:36 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct g_prompt
 	int		here_doc;
 	pid_t	last_pid;
 	int		status;
-    int     block;
+	int		block;
 }			t_prompt;
 
 int		ft_parse_quotes(char *str);

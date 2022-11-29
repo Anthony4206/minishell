@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 12:49:16 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 15:03:57 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/29 07:57:39 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,9 +88,6 @@ int	ft_exec_node(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 int	ft_exec_and_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 {
 	ft_exec_node(node->data.pair.left, ctx, fds);
-//	fprintf(stderr, "%d\n", g_prompt.status);
-//	if (g_prompt.status)
-//		return (g_prompt.status);
 	waitpid(g_prompt.last_pid, &g_prompt.status, 0);
 	g_prompt.status = WEXITSTATUS(g_prompt.status);
 	if (node->node_type == NODE_AND && g_prompt.status == 0)
@@ -102,8 +99,9 @@ int	ft_exec_and_or(t_ast_node *node, t_ctx *ctx, t_fd *fds)
 	else if (node->node_type == NODE_OR || node->node_type == NODE_AND)
 	{
 		node = node->data.pair.right;
-		if (node && node->data.pair.block == 0 &&((node->node_type == NODE_AND && g_prompt.status == 0)
-			|| (node->node_type == NODE_OR && g_prompt.status != 0)))
+		if (node && node->data.pair.block == 0
+			&& ((node->node_type == NODE_AND && g_prompt.status == 0)
+				|| (node->node_type == NODE_OR && g_prompt.status != 0)))
 			ft_exec_node(node->data.pair.right, ctx, fds);
 	}
 	return (1);

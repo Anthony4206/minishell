@@ -6,7 +6,7 @@
 /*   By: alevasse <alevasse@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 06:03:55 by alevasse          #+#    #+#             */
-/*   Updated: 2022/11/21 15:26:12 by alevasse         ###   ########.fr       */
+/*   Updated: 2022/11/29 07:58:59 by mmidon           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,12 +118,12 @@ t_ast_node	*ast_parse_parent(t_token **lexer)
 
 	if ((*lexer)->type != TOK_LP)
 		return (NULL);
-    g_prompt.block = 1;
+	g_prompt.block = 1;
 	cmd = ast_parse_line(lexer);
 	if (!ast_peek(lexer, (int []){TOK_RP}, 1, 1))
 		return (cmd);
 	ast_peek(lexer, (int []){TOK_AND, TOK_OR, TOK_PIPE}, 3, 0);
 	cmd = ast_parse_redir(cmd, lexer);
-    g_prompt.block = 0;
+	g_prompt.block = 0;
 	return (cmd);
 }
